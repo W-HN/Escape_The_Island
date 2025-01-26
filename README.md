@@ -24,3 +24,13 @@ Must have features:
 
 Starting point:
 - Create character art
+
+
+New first design 26/1/2024 (game loop)
+- You need to fix the town's defence to defend against the monsters of the night.
+	- Gather resources (wood and stone) and upgrade the town before the night falls.
+- Kill monsters to gather gold.
+	- Use gold to upgrade the player
+ - When night falls, defend the town.
+ - When morning comes, the towns defences is weakend + any damage from monsters.
+ - Repeat the cycle the next day.
