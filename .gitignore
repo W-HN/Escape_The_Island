@@ -1,0 +1,15 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Ignore Godot import files
+*.import
+
+# Ignore the `.godot/` folder (stores editor settings)
+.godot/
+
+# Ignore Godot's `.mono/` folder (if using C#)
+.mono/
+
+# Ignore export templates (optional)
+export_presets.cfg
