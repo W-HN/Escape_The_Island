@@ -1754,11 +1754,13 @@ sources/1 = SubResource("TileSetAtlasSource_0u2m4")
 
 [node name="Game" type="Node2D"]
 position = Vector2(1, 0)
+scale = Vector2(1.00498, 1.02398)
 
 [node name="Player" parent="." instance=ExtResource("1_1lsjk")]
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(4, 4)
+position_smoothing_enabled = true
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_jwlwe")
