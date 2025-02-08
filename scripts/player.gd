@@ -113,18 +113,19 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 # Function to determine correct walk animation based on movement direction
+# Functions for animation selection during movement remain the same
 func _play_walk_animation(direction: Vector2) -> void:
-	if direction.y < 0:  # Moving Up
+	if direction.y < 0:
 		if last_direction == "left":
 			sprite.play("walk_up_left")
 		else:
 			sprite.play("walk_up_right")
-	elif direction.y > 0:  # Moving Down
+	elif direction.y > 0:
 		if last_direction == "left":
 			sprite.play("walk_down_left")
 		else:
 			sprite.play("walk_down_right")
-	else:  # Moving Straight Left/Right
+	else:
 		if last_vertical_direction == "up":
 			if last_direction == "left":
 				sprite.play("walk_up_left")
@@ -136,7 +137,6 @@ func _play_walk_animation(direction: Vector2) -> void:
 			else:
 				sprite.play("walk_down_right")
 
-# Function to determine correct idle animation based on last movement direction
 func _play_idle_animation() -> void:
 	if last_vertical_direction == "up":
 		if last_direction == "left":

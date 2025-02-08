@@ -2,9 +2,10 @@
 .godot/
 /android/
 
-# Ignore Godot import files
+# Ignore Godot import and tmp files
 *.import
-
+*.tmp
+S
 # Ignore the `.godot/` folder (stores editor settings)
 .godot/
 
