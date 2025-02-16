@@ -1400,7 +1400,7 @@ script = ExtResource("1_7da2e")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_ffjxg")
-animation = &"idle_down_left"
+animation = &"attack_down_left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false

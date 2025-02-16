@@ -111,6 +111,8 @@ func _physics_process(delta: float) -> void:
 			velocity = direction * current_speed
 
 	move_and_slide()
+	
+	
 
 # Function to determine correct walk animation based on movement direction
 # Functions for animation selection during movement remain the same
