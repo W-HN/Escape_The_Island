@@ -8,6 +8,14 @@ const DASH_TIME = 0.2  # Duration of the dash
 const RECOVERY_TIME = 1.0  # Time to recover from 20% speed to full speed
 const MIN_SPEED_FACTOR = 0.2  # 20% of normal speed
 
+# Attack variables
+var is_attacking = false
+var attack_timer = 0.0
+var attack_cooldown = 0.0
+const ATTACK_DURATION = 0.3  # Adjust as needed
+const ATTACK_COOLDOWN_DURATION = 0.5  # Adjust as needed
+
+
 var dash_timer = 0.0
 var is_dashing = false
 var recovering = false
@@ -18,90 +26,58 @@ var last_direction = "right"  # Track last horizontal movement direction
 var last_vertical_direction = "down"  # Track last vertical movement direction
 
 func _physics_process(delta: float) -> void:
+	# Update cooldown timers
+	if attack_cooldown > 0:
+		attack_cooldown -= delta
+
+	if is_attacking:
+		attack_timer -= delta
+		velocity = Vector2.ZERO  # Prevent movement during attack
+		if attack_timer <= 0:
+			is_attacking = false
+	else:
+		handle_movement(delta)
+
+	# Prevent attacking while dashing, but allow it in recovery
+	if Input.is_action_just_pressed("attack") and not is_dashing and attack_cooldown <= 0:
+		start_attack()
+
+	move_and_slide()
+
+
+
+func handle_movement(delta: float) -> void:
 	var direction := Vector2.ZERO
-	var is_moving = false  # Track if player is moving
 
 	if is_dashing:
 		dash_timer -= delta
 		velocity = dash_direction * DASH_SPEED
-
-		# Play roll animation only during dash
 		if sprite.animation != "roll":
 			sprite.play("roll")
-
 		if dash_timer <= 0:
 			is_dashing = false
 			recovering = true
 			recovery_timer = RECOVERY_TIME
-			current_speed = SPEED * MIN_SPEED_FACTOR  # Start recovery at 20% speed
+			current_speed = SPEED * MIN_SPEED_FACTOR
 
 	elif recovering:
-		# Allow movement in all directions during recovery
-		if Input.is_action_pressed("move_left"):
-			direction.x -= 1
-			last_direction = "left"
-			is_moving = true
-		elif Input.is_action_pressed("move_right"):
-			direction.x += 1
-			last_direction = "right"
-			is_moving = true
-
-		if Input.is_action_pressed("move_up"):
-			direction.y -= 1
-			last_vertical_direction = "up"
-			is_moving = true
-		if Input.is_action_pressed("move_down"):
-			direction.y += 1
-			last_vertical_direction = "down"
-			is_moving = true
-
-		direction = direction.normalized()
-
-		# Gradually increase speed during recovery
+		direction = get_input_direction()
 		recovery_timer -= delta
 		var recovery_factor = 1.0 - (recovery_timer / RECOVERY_TIME)
 		current_speed = lerp(SPEED * MIN_SPEED_FACTOR, SPEED, recovery_factor)
-
 		if recovery_timer <= 0:
-			recovering = false  # Fully recovered to normal speed
-
-		velocity = direction * current_speed  # Apply movement during recovery
-
-		# Ensure correct animation plays in recovery phase
-		if is_moving:
+			recovering = false
+		velocity = direction * current_speed
+		if direction != Vector2.ZERO:
 			_play_walk_animation(direction)
 		else:
 			_play_idle_animation()
-
 	else:
-		# Normal movement
-		if Input.is_action_pressed("move_left"):
-			direction.x -= 1
-			last_direction = "left"
-			is_moving = true
-		elif Input.is_action_pressed("move_right"):
-			direction.x += 1
-			last_direction = "right"
-			is_moving = true
-
-		if Input.is_action_pressed("move_up"):
-			direction.y -= 1
-			last_vertical_direction = "up"
-			is_moving = true
-		if Input.is_action_pressed("move_down"):
-			direction.y += 1
-			last_vertical_direction = "down"
-			is_moving = true
-
-		direction = direction.normalized()
-
-		# Animation Handling
-		if is_moving:
+		direction = get_input_direction()
+		if direction != Vector2.ZERO:
 			_play_walk_animation(direction)
 		else:
 			_play_idle_animation()
-
-		# Dash Handling
 		if Input.is_action_just_pressed("dash") and direction != Vector2.ZERO:
 			is_dashing = true
 			dash_timer = DASH_TIME
@@ -110,9 +86,6 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity = direction * current_speed
 
-	move_and_slide()
-	
-	
 
 # Function to determine correct walk animation based on movement direction
 # Functions for animation selection during movement remain the same
@@ -138,6 +111,52 @@ func _play_walk_animation(direction: Vector2) -> void:
 				sprite.play("walk_down_left")
 			else:
 				sprite.play("walk_down_right")
+				
+func get_input_direction() -> Vector2:
+	var direction := Vector2.ZERO
+
+	if Input.is_action_pressed("move_left"):
+		direction.x -= 1
+		last_direction = "left"
+	if Input.is_action_pressed("move_right"):
+		direction.x += 1
+		last_direction = "right"
+	if Input.is_action_pressed("move_up"):
+		direction.y -= 1
+		last_vertical_direction = "up"
+	if Input.is_action_pressed("move_down"):
+		direction.y += 1
+		last_vertical_direction = "down"
+
+	return direction.normalized()
+
+func start_attack() -> void:
+	is_attacking = true
+	attack_timer = ATTACK_DURATION
+	velocity = Vector2.ZERO  # Stop movement while attacking
+	attack_cooldown = ATTACK_COOLDOWN_DURATION  # Set cooldown
+
+	# Determine attack direction based on mouse position
+	var mouse_position = get_global_mouse_position()
+	var attack_direction = (mouse_position - global_position).normalized()
+
+	# Determine animation
+	_play_attack_animation(attack_direction)
+
+
+
+func _play_attack_animation(attack_direction: Vector2) -> void:
+	if attack_direction.y < 0:
+		if attack_direction.x < 0:
+			sprite.play("attack_up_left")
+		else:
+			sprite.play("attack_up_right")
+	else:
+		if attack_direction.x < 0:
+			sprite.play("attack_down_left")
+		else:
+			sprite.play("attack_down_right")
+
 
 func _play_idle_animation() -> void:
 	if last_vertical_direction == "up":
