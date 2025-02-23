@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @onready var sprite = $AnimatedSprite2D  # Reference to the sprite
-@onready var Map = get_parent().get_node("Island1/TileMap")
+# @onready var Map = get_parent().get_node("Island1/TileMap")
 
 var SPEED = 75.0
 var DASH_SPEED = 200.0
