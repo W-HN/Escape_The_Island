@@ -1,9 +1,10 @@
 extends CharacterBody2D
 
 @onready var sprite = $AnimatedSprite2D  # Reference to the sprite
+@onready var Map = get_parent().get_node("Island1/TileMap")
 
-const SPEED = 75.0
-const DASH_SPEED = 200.0
+var SPEED = 75.0
+var DASH_SPEED = 200.0
 const DASH_TIME = 0.2  # Duration of the dash
 const RECOVERY_TIME = 1.0  # Time to recover from 20% speed to full speed
 const MIN_SPEED_FACTOR = 0.2  # 20% of normal speed
@@ -25,7 +26,18 @@ var current_speed = SPEED
 var last_direction = "right"  # Track last horizontal movement direction
 var last_vertical_direction = "down"  # Track last vertical movement direction
 
+var dying = false
+var current_floor = 1
+
+
 func _physics_process(delta: float) -> void:
+	#var elevation_map = $"../Island1/Map/Elevation"
+	#var tile_pos = elevation_map.local_to_map(global_position)
+	#var custom_data = elevation_map.get_cell_tile_data(tile_pos)
+	#if custom_data:
+		#var height = custom_data.get_custom_data("height")
+		#print("Height:", height)
+			
 	# Update cooldown timers
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
@@ -48,7 +60,7 @@ func _physics_process(delta: float) -> void:
 
 func handle_movement(delta: float) -> void:
 	var direction := Vector2.ZERO
-
+	
 	if is_dashing:
 		dash_timer -= delta
 		velocity = dash_direction * DASH_SPEED
@@ -113,6 +125,9 @@ func _play_walk_animation(direction: Vector2) -> void:
 				sprite.play("walk_down_right")
 				
 func get_input_direction() -> Vector2:
+	if dying:
+		return Vector2.ZERO
+		
 	var direction := Vector2.ZERO
 
 	if Input.is_action_pressed("move_left"):
@@ -131,6 +146,8 @@ func get_input_direction() -> Vector2:
 	return direction.normalized()
 
 func start_attack() -> void:
+	if dying:
+		return
 	is_attacking = true
 	attack_timer = ATTACK_DURATION
 	velocity = Vector2.ZERO  # Stop movement while attacking
@@ -159,6 +176,8 @@ func _play_attack_animation(attack_direction: Vector2) -> void:
 
 
 func _play_idle_animation() -> void:
+	if dying:
+		return
 	if last_vertical_direction == "up":
 		if last_direction == "left":
 			sprite.play("idle_up_left")
@@ -169,3 +188,30 @@ func _play_idle_animation() -> void:
 			sprite.play("idle_down_left")
 		else:
 			sprite.play("idle_down_right")
+			
+func drown() -> void:
+	if dying:
+		return
+	is_dashing = false
+	dying = true
+	sprite.play("drown")
+	
+	await get_tree().create_timer(1.8).timeout
+	$"../AudioStreamPlayer2D".play()
+
+	var player_scene = load("res://scenes/player.tscn")
+	var player_instance = player_scene.instantiate()
+	
+	#respawn at SpawnPoint
+	var spawn_point = $"../Island1/SpawnPoint"
+	player_instance.global_position = spawn_point.global_position
+	get_parent().add_child(player_instance)
+		
+	queue_free() #free current player mem and rem
+	
+# temp for pond signals
+func enter_pond() -> void:
+	pass
+func leave_pond() -> void:
+	pass
+	
