@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cwxq5rv2odh1i"]
+
+[node name="StaticBody2D" type="StaticBody2D"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+rotation = 3.14159
+polygon = PackedVector2Array(-10, -10, -10, 10, 10, 10, 10, -10)
+one_way_collision = true

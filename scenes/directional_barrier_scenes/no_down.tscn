@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c53eneif17hye"]
+
+[node name="StaticBody2D" type="StaticBody2D"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-10, -10, -10, 10, 10, 10, 10, -10)
+one_way_collision = true

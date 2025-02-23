@@ -1,13 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://554al6en1qio"]
+[gd_scene format=3 uid="uid://wnt5gq351fpg"]
 
-[ext_resource type="Script" path="res://scripts/stairscript.gd" id="1_8vokd"]
+[node name="Node2D" type="Node2D"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kehcm"]
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
 
-[node name="Area2D" type="Area2D"]
-script = ExtResource("1_8vokd")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_kehcm")
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]

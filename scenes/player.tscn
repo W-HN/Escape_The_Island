@@ -1,4 +1,4 @@
-[gd_scene load_steps=218 format=3 uid="uid://fuuv1pq3m1x3"]
+[gd_scene load_steps=219 format=3 uid="uid://fuuv1pq3m1x3"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_7da2e"]
 [ext_resource type="Texture2D" uid="uid://cj6tk4fxrl8yd" path="res://assets/character/idle_down_left.png" id="2_cwkjf"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bp2n6mhfcieae" path="res://assets/character/drown.png" id="6_cvvq8"]
 [ext_resource type="Texture2D" uid="uid://6ihf6qrcm4ut" path="res://assets/character/walk_up_left.png" id="7_jqjkc"]
 [ext_resource type="Texture2D" uid="uid://dtykyxe7whq5o" path="res://assets/character/walk_up_right.png" id="8_0h2xq"]
+[ext_resource type="Script" path="res://scenes/camera_2d.gd" id="15_ce4ey"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_37tfr"]
 atlas = ExtResource("2_ueluq")
@@ -1519,7 +1520,7 @@ script = ExtResource("1_7da2e")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["Player"]]
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_ffjxg")
-animation = &"drown"
+animation = &"idle_down_left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
@@ -1529,3 +1530,4 @@ shape = SubResource("RectangleShape2D_vkbsi")
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(4, 4)
 position_smoothing_enabled = true
+script = ExtResource("15_ce4ey")
