@@ -10,6 +10,7 @@ const RECOVERY_TIME = 1.0  # Time to recover from 20% speed to full speed
 const MIN_SPEED_FACTOR = 0.2  # 20% of normal speed
 
 # Attack variables
+var slash_scene = preload("res://scenes/slash_effect.tscn")
 var is_attacking = false
 var attack_timer = 0.0
 var attack_cooldown = 0.0
@@ -30,32 +31,33 @@ var first_move = false
 var dying = false
 var current_floor = 1
 
+# fireball
+var fireball_scene = preload("res://scenes/fireball.tscn")
+
+
 
 func _physics_process(delta: float) -> void:
-	#var elevation_map = $"../Island1/Map/Elevation"
-	#var tile_pos = elevation_map.local_to_map(global_position)
-	#var custom_data = elevation_map.get_cell_tile_data(tile_pos)
-	#if custom_data:
-		#var height = custom_data.get_custom_data("height")
-		#print("Height:", height)
-			
-	# Update cooldown timers
+	# Prevent movement updates if attacking (so animations don't get overridden)
+	if is_attacking:
+		velocity = Vector2.ZERO  # Stop movement while attacking
+		move_and_slide()
+		return
+
+	# Normal movement handling
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
 
-	if is_attacking:
-		attack_timer -= delta
-		velocity = Vector2.ZERO  # Prevent movement during attack
-		if attack_timer <= 0:
-			is_attacking = false
-	else:
-		handle_movement(delta)
+	handle_movement(delta)
 
 	# Prevent attacking while dashing, but allow it in recovery
 	if Input.is_action_just_pressed("attack") and not is_dashing and attack_cooldown <= 0:
 		start_attack()
+		
+	if Input.is_action_just_pressed("fireball") and not is_dashing:
+		cast_fireball()
 
 	move_and_slide()
+
 
 
 
@@ -151,7 +153,7 @@ func get_input_direction() -> Vector2:
 	return direction.normalized()
 
 func start_attack() -> void:
-	if dying:
+	if dying or is_attacking:
 		return
 	is_attacking = true
 	attack_timer = ATTACK_DURATION
@@ -162,8 +164,59 @@ func start_attack() -> void:
 	var mouse_position = get_global_mouse_position()
 	var attack_direction = (mouse_position - global_position).normalized()
 
-	# Determine animation
+	# Play correct attack animation
 	_play_attack_animation(attack_direction)
+	
+	await get_tree().create_timer(0.2).timeout
+
+	# Spawn the slash effect slightly in front of the player
+	var slash = slash_scene.instantiate()
+	slash.global_position = global_position + (attack_direction * 10)  # Offset
+	slash.rotation = attack_direction.angle()  # Rotate slash based on attack direction
+	get_parent().add_child(slash)
+
+	# Wait for animation to finish before allowing movement again
+	await sprite.animation_finished
+	slash.queue_free()  # Remove slash effect
+
+	is_attacking = false
+	
+	
+func cast_fireball():
+	if dying or is_attacking:
+		return  # Don't cast if dead
+
+	# Prevent movement during attack
+	is_attacking = true
+	velocity = Vector2.ZERO  
+	
+	# Determine direction towards the mouse
+	var mouse_position = get_global_mouse_position()
+	var attack_direction = (mouse_position - global_position).normalized()
+
+	# Play the correct animation
+	var animation_name = _get_special_attack_animation(attack_direction)
+	sprite.play(animation_name)
+
+	# Wait for 3 frames before spawning fireball
+	await get_tree().create_timer(0.3).timeout
+
+	# Spawn fireball after animation delay
+	var fireball = fireball_scene.instantiate()
+	
+	# Fireball offset
+	var fireball_offset = attack_direction * 8
+	
+	fireball.global_position = global_position + fireball_offset # Spawn at player’s position
+	fireball.direction = attack_direction  # Set direction
+	get_parent().add_child(fireball)
+	
+	# Wait for the full animation to complete before allowwing movement
+	await sprite.animation_finished
+
+	# Reset attack state after fireball is spawned
+	is_attacking = false
+
 
 
 
@@ -178,9 +231,21 @@ func _play_attack_animation(attack_direction: Vector2) -> void:
 			sprite.play("attack_down_left")
 		else:
 			sprite.play("attack_down_right")
+			
+
+func _get_special_attack_animation(attack_direction: Vector2) -> String:
+	if attack_direction.y < 0:
+		return "attack_special_up_left" if attack_direction.x < 0 else "attack_special_up_right"
+	else:
+		return "attack_special_down_left" if attack_direction.x < 0 else "attack_special_down_right"
+
+
 
 
 func _play_idle_animation() -> void:
+	if is_attacking:
+		return
+	
 	if dying:
 		return
 	if first_move == false:

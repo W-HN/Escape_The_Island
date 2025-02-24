@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=3 uid="uid://dftffpc1x0d0r"]
+
+[ext_resource type="Script" path="res://scripts/slash_effect.gd" id="1_x2cbc"]
+[ext_resource type="Texture2D" uid="uid://dmggg3aq5mqkw" path="res://assets/character/slash.png" id="2_du2j1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rkqmt"]
+atlas = ExtResource("2_du2j1")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpiob"]
+atlas = ExtResource("2_du2j1")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g51px"]
+atlas = ExtResource("2_du2j1")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kw6ao"]
+atlas = ExtResource("2_du2j1")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_avpkv"]
+atlas = ExtResource("2_du2j1")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j72mx"]
+atlas = ExtResource("2_du2j1")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5503g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkqmt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kpiob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g51px")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kw6ao")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_avpkv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j72mx")
+}],
+"loop": true,
+"name": &"slash_effect",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_522xy"]
+radius = 10.63
+height = 29.9431
+
+[node name="slash_effect" type="CharacterBody2D"]
+z_index = 6
+z_as_relative = false
+y_sort_enabled = true
+collision_layer = 32
+collision_mask = 32
+script = ExtResource("1_x2cbc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5503g")
+animation = &"slash_effect"
+frame = 2
+frame_progress = 0.998699
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(4, 5)
+rotation = 4.00728
+shape = SubResource("CapsuleShape2D_522xy")

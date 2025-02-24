@@ -1,17 +1,17 @@
 [gd_scene load_steps=24 format=4 uid="uid://ch2atmvjook07"]
 
 [ext_resource type="PackedScene" uid="uid://fuuv1pq3m1x3" path="res://scenes/player.tscn" id="1_1lsjk"]
-[ext_resource type="Texture2D" uid="uid://b17awi8qfe04y" path="res://assets/tileset/our_tileset.png" id="2_12406"]
+[ext_resource type="Texture2D" uid="uid://dml2jvtg84yl7" path="res://assets/tileset/our_tileset.png" id="2_12406"]
 [ext_resource type="Script" path="res://scripts/MapScripts/deep_water.gd" id="3_jqqwp"]
 [ext_resource type="Script" path="res://scripts/MapScripts/ocean.gd" id="4_l6u4l"]
 [ext_resource type="Script" path="res://scripts/MapScripts/pond.gd" id="5_c5tjr"]
-[ext_resource type="Texture2D" uid="uid://dl5k8tp745gnk" path="res://assets/tileset/elevationMap/elevation.png" id="6_er17l"]
-[ext_resource type="AudioStream" uid="uid://py7vuvfwtmqk" path="res://sounds/respawn.mp3" id="6_g37dn"]
+[ext_resource type="Texture2D" uid="uid://de2ky5wv44yi5" path="res://assets/tileset/elevationMap/elevation.png" id="6_er17l"]
+[ext_resource type="AudioStream" uid="uid://d33ks2wv1tbsu" path="res://sounds/respawn.mp3" id="6_g37dn"]
 [ext_resource type="PackedScene" uid="uid://c53eneif17hye" path="res://scenes/directional_barrier_scenes/no_down.tscn" id="6_kwfo8"]
 [ext_resource type="PackedScene" uid="uid://cwxq5rv2odh1i" path="res://scenes/directional_barrier_scenes/no_up.tscn" id="7_r50ox"]
 [ext_resource type="PackedScene" uid="uid://sh2skmnlbnta" path="res://scenes/directional_barrier_scenes/no_left.tscn" id="8_tk14n"]
 [ext_resource type="PackedScene" uid="uid://okoid3ii3es2" path="res://scenes/directional_barrier_scenes/no_right.tscn" id="9_671pa"]
-[ext_resource type="TileSet" uid="uid://c7praotpviv1b" path="res://assets/tileset/floor2_tileset.tres" id="11_xqqgc"]
+[ext_resource type="TileSet" uid="uid://kknctiyh62qx" path="res://assets/tileset/floor2_tileset.tres" id="11_xqqgc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dfrg5"]
 texture = ExtResource("2_12406")

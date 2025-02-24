@@ -1,8 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dfevk5c16bsud"]
+[gd_scene load_steps=11 format=3 uid="uid://cq2b14yvk44jd"]
 
 [ext_resource type="Script" path="res://scripts/sword.gd" id="1_5pkkp"]
 [ext_resource type="Texture2D" uid="uid://b2wxyrn58rsdg" path="res://assets/character/sword_basic.png" id="2_cx5lj"]
-[ext_resource type="Texture2D" uid="uid://b82uoouba5lkm" path="res://assets/character/attack_slash.png" id="3_oervm"]
+[ext_resource type="Texture2D" path="res://assets/character/attack_slash.png" id="3_oervm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gsb1a"]
 atlas = ExtResource("3_oervm")
