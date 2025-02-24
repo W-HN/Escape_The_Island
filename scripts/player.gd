@@ -26,6 +26,7 @@ var current_speed = SPEED
 var last_direction = "right"  # Track last horizontal movement direction
 var last_vertical_direction = "down"  # Track last vertical movement direction
 
+var first_move = false
 var dying = false
 var current_floor = 1
 
@@ -142,7 +143,11 @@ func get_input_direction() -> Vector2:
 	if Input.is_action_pressed("move_down"):
 		direction.y += 1
 		last_vertical_direction = "down"
-
+	
+	if first_move == false and direction != Vector2.ZERO:
+		$Sleep_particles.queue_free()
+		first_move = true
+		
 	return direction.normalized()
 
 func start_attack() -> void:
@@ -178,6 +183,9 @@ func _play_attack_animation(attack_direction: Vector2) -> void:
 func _play_idle_animation() -> void:
 	if dying:
 		return
+	if first_move == false:
+		return
+		
 	if last_vertical_direction == "up":
 		if last_direction == "left":
 			sprite.play("idle_up_left")
