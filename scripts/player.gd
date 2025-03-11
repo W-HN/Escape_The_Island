@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var sprite = $AnimatedSprite2D  # Reference to the sprite
 # @onready var Map = get_parent().get_node("Island1/TileMap")
 
+
 var SPEED = 75.0
 var DASH_SPEED = 200.0
 const DASH_TIME = 0.2  # Duration of the dash
@@ -34,6 +35,56 @@ var current_floor = 1
 # fireball
 var fireball_scene = preload("res://scenes/fireball.tscn")
 
+func process_tile_collision(collision: KinematicCollision2D) -> bool:
+	if collision.get_collider() is TileMapLayer:
+		var tilemap = collision.get_collider() as TileMapLayer
+		# Convert the collision point to tile coordinates.
+		var tile_coords = tilemap.local_to_map(collision.get_position())
+		# Get the cell’s tile data (which holds custom data)
+		var cell_data = tilemap.get_cell_tile_data(tile_coords)
+		if cell_data:
+			# Retrieve the custom data; adjust the key name as needed.
+			var is_water = cell_data.get_custom_data("is_water")
+			if is_water:
+				
+				print("Water tile collision detected; ignoring collision.")
+				return true  # Tell the caller to ignore this collision.
+	return false
+
+func custom_move_and_slide(delta: float) -> void:
+	var displacement = velocity * delta
+	var max_collisions = 4
+	var collision_count = 0
+
+	while collision_count < max_collisions and displacement.length() > 0.01:
+		var collision = move_and_collide(displacement)
+		if collision:
+			# 1) Ask if we should ignore this collision
+			var ignore_collision = process_tile_collision(collision)
+			
+			if ignore_collision:
+				# Simply ignore the collision: we do not slide, nor do we add the collision normal.
+				# But we increment collision_count so we don’t get stuck repeating this infinitely.
+				collision_count += 1
+				continue
+
+			else:
+				# Normal collision and slide
+				if displacement.dot(collision.get_normal()) < 0:
+					displacement = displacement.slide(collision.get_normal())
+				else:
+					# Not moving into the surface anymore
+					break
+			collision_count += 1
+		else:
+			# No collision => we can safely exit
+			break
+
+	
+	# Optionally update velocity based on the actual displacement moved this frame.
+	# (Uncomment the next line if you want to carry the slide direction forward.)
+	# velocity = displacement / delta
+
 
 
 func _physics_process(delta: float) -> void:
@@ -56,7 +107,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("fireball") and not is_dashing:
 		cast_fireball()
 
-	move_and_slide()
+	# move_and_slide()
+	custom_move_and_slide(delta)
+	
 
 
 
@@ -100,6 +153,7 @@ func handle_movement(delta: float) -> void:
 			velocity = dash_direction * DASH_SPEED
 		else:
 			velocity = direction * current_speed
+		
 
 
 # Function to determine correct walk animation based on movement direction
@@ -149,7 +203,6 @@ func get_input_direction() -> Vector2:
 	if first_move == false and direction != Vector2.ZERO:
 		$Sleep_particles.queue_free()
 		first_move = true
-		
 	return direction.normalized()
 
 func start_attack() -> void:
@@ -282,9 +335,8 @@ func drown() -> void:
 		
 	queue_free() #free current player mem and rem
 	
-# temp for pond signals
-func enter_pond() -> void:
-	pass
-func leave_pond() -> void:
-	pass
 	
+
+
+func _on_collisiondetector_drown() -> void:
+	drown()
