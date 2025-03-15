@@ -3,12 +3,23 @@ extends CharacterBody2D
 @onready var sprite = $AnimatedSprite2D  # Reference to the sprite
 # @onready var Map = get_parent().get_node("Island1/TileMap")
 
+@export var knockback_strength: float = 1000.0
+@export var hit_recovery_time: float = 1.0  # Time to recover speed
+@export var invincibility_time: float = 1.0  # Time to be invincible
 
 var SPEED = 75.0
 var DASH_SPEED = 200.0
 const DASH_TIME = 0.2  # Duration of the dash
 const RECOVERY_TIME = 1.0  # Time to recover from 20% speed to full speed
 const MIN_SPEED_FACTOR = 0.2  # 20% of normal speed
+
+# Health
+var health = 3 # number of hits
+var is_invincible = false
+var hit_recovery = false
+var hit_recovery_timer = 0.0
+var original_speed = SPEED
+var blink_timer = 0.1  # Time between each blink (adjust as needed)
 
 # Attack variables
 var slash_scene = preload("res://scenes/slash_effect.tscn")
@@ -80,11 +91,6 @@ func custom_move_and_slide(delta: float) -> void:
 			# No collision => we can safely exit
 			break
 
-	
-	# Optionally update velocity based on the actual displacement moved this frame.
-	# (Uncomment the next line if you want to carry the slide direction forward.)
-	# velocity = displacement / delta
-
 
 
 func _physics_process(delta: float) -> void:
@@ -93,6 +99,15 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO  # Stop movement while attacking
 		move_and_slide()
 		return
+	
+	if hit_recovery:
+		hit_recovery_timer -= delta
+		var recovery_factor = 1.0 - (hit_recovery_timer / hit_recovery_time)
+		SPEED = lerp(original_speed * 0.5, original_speed, clamp(recovery_factor, 0.0, 1.0))
+		
+		if recovery_timer <= 0:
+			recovering = false
+			SPEED = original_speed  # Fully restore speed
 
 	# Normal movement handling
 	if attack_cooldown > 0:
@@ -116,17 +131,26 @@ func _physics_process(delta: float) -> void:
 
 func handle_movement(delta: float) -> void:
 	var direction := Vector2.ZERO
-	
+
 	if is_dashing:
 		dash_timer -= delta
 		velocity = dash_direction * DASH_SPEED
 		if sprite.animation != "roll":
 			sprite.play("roll")
+
+		# 🔥 Make player invincible during dash
+		is_invincible = true
+		$CollisionShape2D.set_deferred("disabled", true)  
+
 		if dash_timer <= 0:
 			is_dashing = false
 			recovering = true
 			recovery_timer = RECOVERY_TIME
 			current_speed = SPEED * MIN_SPEED_FACTOR
+
+			# 🔥 Remove invincibility after dash ends
+			is_invincible = false
+			$CollisionShape2D.set_deferred("disabled", false)
 
 	elif recovering:
 		direction = get_input_direction()
@@ -153,10 +177,8 @@ func handle_movement(delta: float) -> void:
 			velocity = dash_direction * DASH_SPEED
 		else:
 			velocity = direction * current_speed
-		
 
 
-# Function to determine correct walk animation based on movement direction
 # Functions for animation selection during movement remain the same
 func _play_walk_animation(direction: Vector2) -> void:
 	if direction.y < 0:
@@ -230,7 +252,6 @@ func start_attack() -> void:
 
 	# Wait for animation to finish before allowing movement again
 	await sprite.animation_finished
-	slash.queue_free()  # Remove slash effect
 
 	is_attacking = false
 	
@@ -340,3 +361,82 @@ func drown() -> void:
 
 func _on_collisiondetector_drown() -> void:
 	drown()
+	
+
+func take_damage(source_position):
+	if is_invincible:
+		return
+		
+	health -= 1
+
+	# Calculate knockback direction
+	var knockback_direction = (global_position - source_position).normalized()
+	velocity = knockback_direction * knockback_strength  # Adjust knockback strength as needed
+
+	# Play hurt animation if you have one
+	#if sprite.has_animation("hurt"):
+		#sprite.play("hurt")
+		
+	SPEED *= 0.5
+	hit_recovery = true
+	hit_recovery_timer = hit_recovery_time
+	
+	# Invincibility timer
+	is_invincible = true
+	$CollisionShape2D.set_deferred("disabled", true)
+	
+	# Optional: Flash effect during invincibility
+	_start_invincibility_effect()
+
+	# If the player dies, call die()
+	if health <= 0:
+		die()
+	
+	move_and_slide()  # Apply knockback movement
+	
+	# Restore collisions and invincibility after timeout
+	await get_tree().create_timer(invincibility_time).timeout
+	is_invincible = false
+	$CollisionShape2D.set_deferred("disabled", false)  # Re-enable collisions
+	_stop_invincibility_effect()
+
+		
+func die():
+	if dying:
+		return  # Prevent multiple deaths
+	dying = true  # Mark player as dead
+	is_dashing = false
+	is_attacking = false
+	velocity = Vector2.ZERO  # Stop movement
+
+	# Play the correct death animation
+	if last_direction == "left":
+		sprite.play("death_left")
+	else:
+		sprite.play("death_right")
+
+	# Wait for the death animation to finish
+	await sprite.animation_finished  
+
+	# Play death sound effect (optional)
+	$"../AudioStreamPlayer2D".play()
+
+	# Respawn player at SpawnPoint
+	var player_scene = load("res://scenes/player.tscn")
+	var player_instance = player_scene.instantiate()
+	
+	var spawn_point = $"../Island1/SpawnPoint"
+	player_instance.global_position = spawn_point.global_position
+	get_parent().add_child(player_instance)
+
+	# Remove the current (dead) player instance
+	queue_free()
+	
+func _start_invincibility_effect():
+	var blink_tween = get_tree().create_tween()
+	blink_tween.set_loops(invincibility_time / (blink_timer * 2))
+	blink_tween.tween_property($AnimatedSprite2D, "modulate:a", 0.2, blink_timer)
+	blink_tween.tween_property($AnimatedSprite2D, "modulate:a", 1.0, blink_timer)
+
+func _stop_invincibility_effect():
+	$AnimatedSprite2D.modulate.a = 1.0  # Reset transparency

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dksskfvbvlo8o"]
 
-[ext_resource type="Script" path="res://scripts/MapScripts/collision_detector.gd" id="1_pyehf"]
+[ext_resource type="Script" uid="uid://cg67c1mqj7gd3" path="res://scripts/MapScripts/collision_detector.gd" id="1_pyehf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbp40"]
 
