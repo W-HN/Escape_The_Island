@@ -1,6 +1,5 @@
 extends Camera2D
-
-
+	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -11,7 +10,6 @@ func _ready() -> void:
 @export var pan_speed: float = 1.          
 
 func _process(delta: float) -> void:
-	
 	#lerp to mouse
 	var mouse_pos = get_global_mouse_position()
 	var target_offset = (mouse_pos - global_position) * pan_factor

@@ -17,33 +17,42 @@ var last_direction = "right"  # Track last horizontal movement direction
 var last_vertical_direction = "down"  # Track last vertical movement direction
 
 func _ready():
+	set_multiplayer_authority(1)
+
+
 	if not attack_area.body_entered.is_connected(_on_attack_area_body_entered):
 		attack_area.body_entered.connect(_on_attack_area_body_entered)
 
 func _physics_process(delta):
 	if dying:
 		return
-	if player:
-		var distance_to_player = global_position.distance_to(player.global_position)
+		
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.size() == 0:
+		return  # No players available
 
-		if distance_to_player <= follow_range:
-			# Follow the player
-			var direction = (player.global_position - global_position).normalized()
-			velocity = direction * speed
-			move_and_slide()
+	# Choose the closest player
+	var target_player = players[0]
+	for p in players:
+		if global_position.distance_to(p.global_position) < global_position.distance_to(target_player.global_position):
+			target_player = p
 
-			# Play animations based on movement
-			if velocity.length() > 0:
-				_play_walk_animation(direction)
-		else:
-			# Stay idle when player is out of follow range
-			velocity = Vector2.ZERO
-			move_and_slide()
-			_play_idle_animation()
+	var distance_to_player = global_position.distance_to(target_player.global_position)
+	if distance_to_player <= follow_range:
+		var direction = (target_player.global_position - global_position).normalized()
+		velocity = direction * speed
+		move_and_slide()
+
+		if velocity.length() > 0:
+			_play_walk_animation(direction)
+	else:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		_play_idle_animation()
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
-		body.take_damage(global_position)  # Call damage function on player
+		body.take_damage.rpc(global_position)  # Call damage function on player
 
 # Function to handle walking animations
 func _play_walk_animation(direction: Vector2) -> void:
@@ -90,7 +99,7 @@ func _play_idle_animation() -> void:
 		else:
 			sprite.play("idle_down_right")
 			
-			
+@rpc
 func take_damage(amount):
 	if dying or is_invincible:
 		return

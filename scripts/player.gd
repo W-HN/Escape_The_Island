@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody2D
 
 @onready var sprite = $AnimatedSprite2D  # Reference to the sprite
@@ -45,6 +46,18 @@ var current_floor = 1
 
 # fireball
 var fireball_scene = preload("res://scenes/fireball.tscn")
+
+@onready var camera = $Camera2D as Camera2D
+#authority for multiplayer, so each player can control themselves
+#the pid is written to the player's name property, so we just read it
+func _enter_tree() -> void:
+	set_multiplayer_authority(int(str(name)))
+	
+func _ready() -> void:
+	#let each player use their own camera
+	if is_multiplayer_authority(): 
+		camera.make_current()
+
 
 func process_tile_collision(collision: KinematicCollision2D) -> bool:
 	if collision.get_collider() is TileMapLayer:
@@ -94,6 +107,8 @@ func custom_move_and_slide(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if !is_multiplayer_authority():
+		return
 	# Prevent movement updates if attacking (so animations don't get overridden)
 	if is_attacking:
 		velocity = Vector2.ZERO  # Stop movement while attacking
@@ -117,10 +132,15 @@ func _physics_process(delta: float) -> void:
 
 	# Prevent attacking while dashing, but allow it in recovery
 	if Input.is_action_just_pressed("attack") and not is_dashing and attack_cooldown <= 0:
-		start_attack()
+		var mouse_position = get_global_mouse_position()
+		var attack_direction = (mouse_position - global_position).normalized()
+		rpc("start_attack", attack_direction)
 		
 	if Input.is_action_just_pressed("fireball") and not is_dashing:
-		cast_fireball()
+		var mouse_position = get_global_mouse_position()
+		var attack_direction = (mouse_position - global_position).normalized()
+		rpc("cast_fireball", attack_direction)
+
 
 	# move_and_slide()
 	custom_move_and_slide(delta)
@@ -227,7 +247,8 @@ func get_input_direction() -> Vector2:
 		first_move = true
 	return direction.normalized()
 
-func start_attack() -> void:
+@rpc("call_local")
+func start_attack(attack_direction: Vector2) -> void:
 	if dying or is_attacking:
 		return
 	is_attacking = true
@@ -235,62 +256,50 @@ func start_attack() -> void:
 	velocity = Vector2.ZERO  # Stop movement while attacking
 	attack_cooldown = ATTACK_COOLDOWN_DURATION  # Set cooldown
 
-	# Determine attack direction based on mouse position
-	var mouse_position = get_global_mouse_position()
-	var attack_direction = (mouse_position - global_position).normalized()
-
-	# Play correct attack animation
+	# Play correct attack animation using the synced direction
 	_play_attack_animation(attack_direction)
 	
+	# Delay for the effect
 	await get_tree().create_timer(0.2).timeout
 
-	# Spawn the slash effect slightly in front of the player
+	# Spawn the slash effect in front of the player
 	var slash = slash_scene.instantiate()
 	slash.global_position = global_position + (attack_direction * 10)  # Offset
-	slash.rotation = attack_direction.angle()  # Rotate slash based on attack direction
+	slash.rotation = attack_direction.angle()  # Rotate based on direction
 	get_parent().add_child(slash)
 
 	# Wait for animation to finish before allowing movement again
 	await sprite.animation_finished
-
 	is_attacking = false
+
 	
-	
-func cast_fireball():
+
+@rpc("call_local")
+func cast_fireball(attack_direction: Vector2) -> void:
 	if dying or is_attacking:
-		return  # Don't cast if dead
+		return  # Don't cast if dead or busy
 
-	# Prevent movement during attack
 	is_attacking = true
-	velocity = Vector2.ZERO  
-	
-	# Determine direction towards the mouse
-	var mouse_position = get_global_mouse_position()
-	var attack_direction = (mouse_position - global_position).normalized()
+	velocity = Vector2.ZERO
 
-	# Play the correct animation
+	# Play the correct animation using the passed attack_direction
 	var animation_name = _get_special_attack_animation(attack_direction)
 	sprite.play(animation_name)
 
-	# Wait for 3 frames before spawning fireball
+	# Wait a few frames before spawning the fireball
 	await get_tree().create_timer(0.3).timeout
 
-	# Spawn fireball after animation delay
+	# Spawn the fireball using the synced direction
 	var fireball = fireball_scene.instantiate()
-	
-	# Fireball offset
 	var fireball_offset = attack_direction * 8
-	
-	fireball.global_position = global_position + fireball_offset # Spawn at player’s position
-	fireball.direction = attack_direction  # Set direction
+	fireball.global_position = global_position + fireball_offset
+	fireball.direction = attack_direction  # Set the synced direction
 	get_parent().add_child(fireball)
-	
-	# Wait for the full animation to complete before allowwing movement
+
+	# Wait for the animation to complete
 	await sprite.animation_finished
 
-	# Reset attack state after fireball is spawned
 	is_attacking = false
-
 
 
 
