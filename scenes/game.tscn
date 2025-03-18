@@ -1,8 +1,9 @@
-[gd_scene load_steps=25 format=4 uid="uid://ch2atmvjook07"]
+[gd_scene load_steps=27 format=4 uid="uid://ch2atmvjook07"]
 
 [ext_resource type="PackedScene" uid="uid://fuuv1pq3m1x3" path="res://scenes/player.tscn" id="1_1lsjk"]
 [ext_resource type="Texture2D" uid="uid://dml2jvtg84yl7" path="res://assets/tileset/our_tileset.png" id="2_12406"]
 [ext_resource type="PackedScene" uid="uid://bkb1jw5ceksdv" path="res://scenes/skeleton.tscn" id="2_kvpfn"]
+[ext_resource type="PackedScene" uid="uid://bm41tp5jqd68j" path="res://scenes/box.tscn" id="3_dinhu"]
 [ext_resource type="Texture2D" uid="uid://de2ky5wv44yi5" path="res://assets/tileset/elevationMap/elevation.png" id="6_er17l"]
 [ext_resource type="AudioStream" uid="uid://d33ks2wv1tbsu" path="res://sounds/respawn.mp3" id="6_g37dn"]
 [ext_resource type="PackedScene" uid="uid://c53eneif17hye" path="res://scenes/directional_barrier_scenes/no_down.tscn" id="6_kwfo8"]
@@ -11,6 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://okoid3ii3es2" path="res://scenes/directional_barrier_scenes/no_right.tscn" id="9_671pa"]
 [ext_resource type="PackedScene" uid="uid://bpnimlbxtcvu0" path="res://scenes/directional_barrier_scenes/water_test_collision.tscn" id="10_y255w"]
 [ext_resource type="TileSet" uid="uid://kknctiyh62qx" path="res://assets/tileset/floor2_tileset.tres" id="11_xqqgc"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dinhu"]
+friction = 0.0
+rough = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dfrg5"]
 texture = ExtResource("2_12406")
@@ -944,14 +949,17 @@ tile_proxies/coords_level = [[2, Vector2i(0, 0)], [5, Vector2i(0, 0)], [3, Vecto
 polygon = PackedVector2Array(173.138, 84.9626, 193.039, 86.9158, 193.039, 102.541, 171.148, 102.541)
 
 [node name="Game" type="Node2D"]
+y_sort_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1_1lsjk")]
 position = Vector2(286.573, 271.49)
 
 [node name="skeleton" parent="." instance=ExtResource("2_kvpfn")]
-z_index = 1
-z_as_relative = false
 position = Vector2(300, 200)
+
+[node name="box" parent="." instance=ExtResource("3_dinhu")]
+position = Vector2(300, 330)
+physics_material_override = SubResource("PhysicsMaterial_dinhu")
 
 [node name="Island1" type="Node" parent="."]
 

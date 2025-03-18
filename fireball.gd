@@ -1,31 +1,50 @@
-extends CharacterBody2D
+extends Area2D
 
 @export var speed: float = 100.0
 @export var direction: Vector2 = Vector2.RIGHT  # Will be set by the player
 @export var lifetime: float = 2.0  # Time before disappearing
+@export var damage: int = 1  # Damage amount
+@export var knockback_force: float = 500.0  # Adjust knockback strength
+
+var source  # Reference to the player
 
 @onready var sprite = $AnimatedSprite2D
 @onready var timer = $Timer
 
 func _ready():
-	sprite.play("fireball_stage_2")  # Start with smallest animation
+	sprite.play("fireball_stage_2")  # Start with default animation
 	timer.wait_time = lifetime
 	timer.start()
+	
+	# Enable monitoring for collision detection
+	connect("body_entered", _on_body_entered)  # Connect signal for enemy collision
+	$CollisionShape2D.set_deferred("disabled", false)
 
 func _process(delta):
-	velocity = direction * speed
-	move_and_slide()
+	# Move fireball forward
+	position += direction * speed * delta
+
+	# 🔥 Make the fireball spin while moving
+	sprite.rotation += delta * 10  # Adjust rotation speed as needed
 
 func _on_timer_timeout():
 	queue_free()  # Destroy the fireball after a while
 
 func _on_body_entered(body):
+	# Fireball hits an enemy
 	if body.is_in_group("enemies"):
-		body.take_damage(10)  # Example damage function
-		queue_free()  # Destroy fireball on hit
+		print("🔥 Fireball hit an enemy!")  # Debugging message
+		if body.has_method("apply_knockback"):
+			apply_knockback(body)  # Apply knockback effect
+		if body.has_method("take_damage"):
+			body.take_damage(damage)  # Apply damage
 
-func grow_fireball():
-	if sprite.animation == "fireball_stage_1":
-		sprite.play("fireball_stage_2")
-	elif sprite.animation == "fireball_stage_2":
-		sprite.play("fireball_stage_3")
+	# Fireball hits any object (wall, environment, etc.)
+	else:
+		print("💥 Fireball hit an object and disappeared!")
+
+	queue_free()  # Destroy fireball on impact
+
+func apply_knockback(enemy):
+	var knockback_direction = (enemy.global_position - global_position).normalized()
+	enemy.apply_knockback(knockback_direction * knockback_force)

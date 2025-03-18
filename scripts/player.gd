@@ -7,7 +7,11 @@ extends CharacterBody2D
 @export var hit_recovery_time: float = 1.0  # Time to recover speed
 @export var invincibility_time: float = 1.0  # Time to be invincible
 
-var SPEED = 75.0
+var is_pushing = false
+var pushable_object: RigidBody2D = null  # Store the box reference
+
+
+var SPEED = 35.0
 var DASH_SPEED = 200.0
 const DASH_TIME = 0.2  # Duration of the dash
 const RECOVERY_TIME = 1.0  # Time to recover from 20% speed to full speed
@@ -130,7 +134,28 @@ func _physics_process(delta: float) -> void:
 
 
 func handle_movement(delta: float) -> void:
-	var direction := Vector2.ZERO
+	var direction := get_input_direction()  # Get player input direction
+	var movement_velocity = direction * current_speed  # Normal movement speed
+
+	# Check for collisions BEFORE moving the player
+	var collision = move_and_collide(movement_velocity * delta)
+
+	if collision:
+		var collider = collision.get_collider()
+
+		# If colliding with a pushable RigidBody2D, apply force to it
+		if collider is RigidBody2D and collider.is_in_group("pushable"):
+			pushable_object = collider
+
+			# Apply force to the box WITHOUT changing player speed
+			pushable_object.apply_central_force(direction * 1500)  # Adjust force
+
+			# Do NOT modify movement_velocity at all
+		else:
+			pushable_object = null  # No pushable object in contact
+
+	# Move the player normally, without modifying their velocity
+	velocity = movement_velocity
 
 	if is_dashing:
 		dash_timer -= delta
@@ -283,13 +308,15 @@ func cast_fireball():
 	
 	fireball.global_position = global_position + fireball_offset # Spawn at player’s position
 	fireball.direction = attack_direction  # Set direction
+	fireball.source = self  # Set the player as the source of the fireball
 	get_parent().add_child(fireball)
 	
-	# Wait for the full animation to complete before allowwing movement
+	# Wait for the full animation to complete before allowing movement
 	await sprite.animation_finished
 
 	# Reset attack state after fireball is spawned
 	is_attacking = false
+
 
 
 
@@ -440,3 +467,4 @@ func _start_invincibility_effect():
 
 func _stop_invincibility_effect():
 	$AnimatedSprite2D.modulate.a = 1.0  # Reset transparency
+	

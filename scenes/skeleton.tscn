@@ -466,10 +466,14 @@ size = Vector2(14, 7)
 size = Vector2(16, 9)
 
 [node name="skeleton" type="CharacterBody2D" groups=["enemies"]]
+z_index = 10
+y_sort_enabled = true
 collision_layer = 4
 script = ExtResource("1_txkty")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 10
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_6yhqa")
 animation = &"death_down_left"
 

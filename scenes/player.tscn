@@ -1834,12 +1834,14 @@ turbulence_noise_strength = 16.37
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 10
-scale = Vector2(0.936708, 0.952172)
+y_sort_enabled = true
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_7da2e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["Player"]]
+z_index = 10
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ffjxg")
 animation = &"death_right"
 autoplay = "laying_left"
@@ -1848,6 +1850,8 @@ frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visibility_layer = 3
+z_index = 10
+y_sort_enabled = true
 position = Vector2(0, 4.20092)
 scale = Vector2(0.658379, 1)
 shape = SubResource("RectangleShape2D_vkbsi")
