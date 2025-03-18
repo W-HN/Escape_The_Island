@@ -60,6 +60,11 @@ fireball={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="hard walls"
+2d_physics/layer_7="water/terrain detection"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
