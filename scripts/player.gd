@@ -172,7 +172,7 @@ func handle_movement(delta: float) -> void:
 		# Keep colliding with terrain (since terrain has layer 1 and 2)
 		set_collision_mask_value(1, true)  # Still collide with terrain
 		set_collision_mask_value(2, false) # Ignore enemies
-		set_collision_mask_value(3, false) # Ignore enemies
+		#set_collision_mask_value(3, false) # Ignore enemies
 
 
 		if dash_timer <= 0:
@@ -190,7 +190,6 @@ func handle_movement(delta: float) -> void:
 
 			# Restore interaction with enemies
 			set_collision_mask_value(2, true)  # Detect enemies again
-			set_collision_mask_value(3, true)  # Detect enemies again
 
 
 	elif recovering:
@@ -442,7 +441,7 @@ func take_damage(source_position):
 	is_invincible = false
 	$CollisionShape2D.set_deferred("disabled", false)  # Re-enable collisions
 	_stop_invincibility_effect()
-
+	
 		
 func die():
 	if dying:
