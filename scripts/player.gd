@@ -165,7 +165,15 @@ func handle_movement(delta: float) -> void:
 
 		# 🔥 Make player invincible during dash
 		is_invincible = true
-		$CollisionShape2D.set_deferred("disabled", true)  
+		# Change player to a temporary layer (so enemies don't detect it)
+		set_collision_layer_value(1, false)  # Remove from default player layer
+		set_collision_layer_value(4, true)   # Assign to a new "dashing" layer
+
+		# Keep colliding with terrain (since terrain has layer 1 and 2)
+		set_collision_mask_value(1, true)  # Still collide with terrain
+		set_collision_mask_value(2, false) # Ignore enemies
+		set_collision_mask_value(3, false) # Ignore enemies
+
 
 		if dash_timer <= 0:
 			is_dashing = false
@@ -175,7 +183,15 @@ func handle_movement(delta: float) -> void:
 
 			# 🔥 Remove invincibility after dash ends
 			is_invincible = false
-			$CollisionShape2D.set_deferred("disabled", false)
+			# Restore collision with terrain & enemies
+			# Move player back to its original layer
+			set_collision_layer_value(1, true)  # Restore default player layer
+			set_collision_layer_value(4, false) # Remove dashing layer
+
+			# Restore interaction with enemies
+			set_collision_mask_value(2, true)  # Detect enemies again
+			set_collision_mask_value(3, true)  # Detect enemies again
+
 
 	elif recovering:
 		direction = get_input_direction()
