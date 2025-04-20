@@ -1,31 +1,28 @@
-[gd_scene load_steps=267 format=3 uid="uid://fuuv1pq3m1x3"]
+[gd_scene load_steps=264 format=3 uid="uid://fuuv1pq3m1x3"]
 
 [ext_resource type="Script" uid="uid://b8tj6k0jqm80o" path="res://scripts/player.gd" id="1_7da2e"]
-[ext_resource type="Texture2D" uid="uid://cbwjkvhsciihr" path="res://assets/character/attack.png" id="2_4ymhu"]
-[ext_resource type="Texture2D" uid="uid://d0x0ng6h1irtt" path="res://assets/character/idle_down_left.png" id="2_cwkjf"]
-[ext_resource type="Texture2D" uid="uid://dpwa8i22l6474" path="res://assets/character/attack_down_left.png" id="2_ueluq"]
-[ext_resource type="Texture2D" uid="uid://o0x6w6r5kqdh" path="res://assets/character/idle_down_right.png" id="3_b48xk"]
-[ext_resource type="Texture2D" uid="uid://dh0cp5qbrxxvw" path="res://assets/character/attack_down_right.png" id="3_uapiy"]
-[ext_resource type="Texture2D" uid="uid://c2e7wkolbnnpb" path="res://assets/character/walk_down_left.png" id="3_vl1of"]
-[ext_resource type="Texture2D" uid="uid://cq2s8rui5crrt" path="res://assets/character/attack_up_left.png" id="4_c8a31"]
-[ext_resource type="Texture2D" uid="uid://cqs02gkst7yqq" path="res://assets/character/walk_down_right.png" id="4_hls0f"]
-[ext_resource type="Texture2D" uid="uid://0k0fyny76omn" path="res://assets/character/roll.png" id="4_sowig"]
-[ext_resource type="Texture2D" uid="uid://cf7335f0k018n" path="res://assets/character/idle_up_left_right.png" id="4_wbi4v"]
-[ext_resource type="Texture2D" uid="uid://jk6vvrujkuit" path="res://assets/character/attack_up_right.png" id="5_asgak"]
-[ext_resource type="Texture2D" uid="uid://1ck7qlnscm10" path="res://assets/character/death_left.png" id="6_0jd1q"]
-[ext_resource type="Texture2D" uid="uid://djvy4vmln7qvb" path="res://assets/character/drown.png" id="6_cvvq8"]
-[ext_resource type="Texture2D" uid="uid://cl18p2af50soj" path="res://assets/character/walk_up_left.png" id="7_jqjkc"]
-[ext_resource type="Texture2D" uid="uid://b71v1pqv8tyrf" path="res://assets/character/death_right.png" id="7_vjpod"]
-[ext_resource type="Texture2D" uid="uid://bj6e1xl6myk0s" path="res://assets/character/walk_up_right.png" id="8_0h2xq"]
-[ext_resource type="Texture2D" uid="uid://sdlvoiwbs7pj" path="res://assets/character/laying_left.png" id="12_bmdhk"]
-[ext_resource type="Texture2D" uid="uid://1c3t2abnmqi1" path="res://assets/character/laying_right.png" id="13_7qac5"]
+[ext_resource type="Texture2D" uid="uid://bkyaxm2r5b8lr" path="res://assets/character/attack.png" id="2_4ymhu"]
+[ext_resource type="Texture2D" uid="uid://cgpuap0xqbeti" path="res://assets/character/idle_down_left.png" id="2_cwkjf"]
+[ext_resource type="Texture2D" uid="uid://cehk61dudc3k5" path="res://assets/character/attack_down_left.png" id="2_ueluq"]
+[ext_resource type="Texture2D" uid="uid://20d5veonns0r" path="res://assets/character/idle_down_right.png" id="3_b48xk"]
+[ext_resource type="Texture2D" uid="uid://dpm11v2pqbomj" path="res://assets/character/attack_down_right.png" id="3_uapiy"]
+[ext_resource type="Texture2D" uid="uid://bpjxlmg4gst0j" path="res://assets/character/walk_down_left.png" id="3_vl1of"]
+[ext_resource type="Texture2D" uid="uid://bcwv73h3c7m41" path="res://assets/character/attack_up_left.png" id="4_c8a31"]
+[ext_resource type="Texture2D" uid="uid://34j3mr45e70a" path="res://assets/character/walk_down_right.png" id="4_hls0f"]
+[ext_resource type="Texture2D" uid="uid://1qska1bujdr0" path="res://assets/character/roll.png" id="4_sowig"]
+[ext_resource type="Texture2D" uid="uid://dn3u55dpu3wv5" path="res://assets/character/idle_up_left_right.png" id="4_wbi4v"]
+[ext_resource type="Texture2D" uid="uid://bco2hx8icfyk7" path="res://assets/character/attack_up_right.png" id="5_asgak"]
+[ext_resource type="Texture2D" uid="uid://by5rny5vkdo7e" path="res://assets/character/death_left.png" id="6_0jd1q"]
+[ext_resource type="Texture2D" uid="uid://cxst47v75su5x" path="res://assets/character/drown.png" id="6_cvvq8"]
+[ext_resource type="Texture2D" uid="uid://bmck7csn5w8se" path="res://assets/character/walk_up_left.png" id="7_jqjkc"]
+[ext_resource type="Texture2D" uid="uid://o3ft6gjqell3" path="res://assets/character/death_right.png" id="7_vjpod"]
+[ext_resource type="Texture2D" uid="uid://c1q7b7giq17df" path="res://assets/character/walk_up_right.png" id="8_0h2xq"]
+[ext_resource type="Texture2D" uid="uid://go6eylosg0pa" path="res://assets/character/laying_left.png" id="12_bmdhk"]
+[ext_resource type="Texture2D" uid="uid://tje3sm02h4kg" path="res://assets/character/laying_right.png" id="13_7qac5"]
 [ext_resource type="Script" uid="uid://dmwrghhrofh6g" path="res://scenes/camera_2d.gd" id="15_ce4ey"]
-[ext_resource type="Texture2D" uid="uid://cuvoyfh24hwwr" path="res://assets/particles/z.png" id="20_obhut"]
+[ext_resource type="Texture2D" uid="uid://dwhfa6e0mkgeu" path="res://assets/particles/z.png" id="20_obhut"]
 [ext_resource type="PackedScene" uid="uid://dksskfvbvlo8o" path="res://scenes/collision_detector.tscn" id="22_jua2n"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_37tfr"]
-atlas = ExtResource("2_ueluq")
-region = Rect2(180, 0, 36, 32)
+[ext_resource type="Texture2D" uid="uid://cd6c4ci4hrp3c" path="res://assets/character/cursor_pointer.png" id="23_4ni07"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_45pgr"]
 atlas = ExtResource("2_ueluq")
@@ -42,10 +39,6 @@ region = Rect2(72, 0, 36, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_aw8yj"]
 atlas = ExtResource("2_ueluq")
 region = Rect2(36, 0, 36, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7cysa"]
-atlas = ExtResource("3_uapiy")
-region = Rect2(0, 0, 36, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xluur"]
 atlas = ExtResource("3_uapiy")
@@ -127,10 +120,6 @@ region = Rect2(34, 35, 17, 17)
 atlas = ExtResource("2_4ymhu")
 region = Rect2(51, 35, 17, 17)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hor8e"]
-atlas = ExtResource("4_c8a31")
-region = Rect2(180, 0, 36, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_bptqk"]
 atlas = ExtResource("4_c8a31")
 region = Rect2(144, 0, 36, 32)
@@ -146,10 +135,6 @@ region = Rect2(72, 0, 36, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_upvek"]
 atlas = ExtResource("4_c8a31")
 region = Rect2(36, 0, 36, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cbxrd"]
-atlas = ExtResource("5_asgak")
-region = Rect2(0, 0, 36, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w8qtv"]
 atlas = ExtResource("5_asgak")
@@ -990,10 +975,7 @@ region = Rect2(102, 18, 17, 17)
 [sub_resource type="SpriteFrames" id="SpriteFrames_ffjxg"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_37tfr")
-}, {
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_45pgr")
 }, {
 "duration": 1.0,
@@ -1010,10 +992,7 @@ animations = [{
 "speed": 10.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7cysa")
-}, {
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_xluur")
 }, {
 "duration": 1.0,
@@ -1098,10 +1077,7 @@ animations = [{
 "speed": 10.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hor8e")
-}, {
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_bptqk")
 }, {
 "duration": 1.0,
@@ -1118,10 +1094,7 @@ animations = [{
 "speed": 10.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cbxrd")
-}, {
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_w8qtv")
 }, {
 "duration": 1.0,
@@ -1835,8 +1808,9 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_vkbsi"]
-size = Vector2(16, 8)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a38lo"]
+radius = 2.0
+height = 8.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ti2ta"]
 particle_flag_disable_z = true
@@ -1862,9 +1836,9 @@ offset = Vector2(0, -8)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visibility_layer = 3
 y_sort_enabled = true
-position = Vector2(0, -4)
-scale = Vector2(0.658379, 1)
-shape = SubResource("RectangleShape2D_vkbsi")
+position = Vector2(0, -2)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_a38lo")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 y_sort_enabled = true
@@ -1885,8 +1859,11 @@ process_material = SubResource("ParticleProcessMaterial_ti2ta")
 
 [node name="Collisiondetector" parent="." instance=ExtResource("22_jua2n")]
 y_sort_enabled = true
-position = Vector2(0, -1)
-scale = Vector2(0.154963, 0.154963)
+position = Vector2(0, -2)
 collision_layer = 1
+
+[node name="CursorPointer" type="Sprite2D" parent="."]
+position = Vector2(0, -5)
+texture = ExtResource("23_4ni07")
 
 [connection signal="drown" from="Collisiondetector" to="." method="_on_collisiondetector_drown"]

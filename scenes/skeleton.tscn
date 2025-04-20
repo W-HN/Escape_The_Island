@@ -1,8 +1,8 @@
 [gd_scene load_steps=63 format=3 uid="uid://bkb1jw5ceksdv"]
 
-[ext_resource type="Texture2D" uid="uid://de08qftuln6f4" path="res://assets/enemies/skeleton/skeleton_walk.png" id="1_pbvs3"]
+[ext_resource type="Texture2D" uid="uid://d3taqm07q5uws" path="res://assets/enemies/skeleton/skeleton_walk.png" id="1_pbvs3"]
 [ext_resource type="Script" uid="uid://cm8r5ggey7tnc" path="res://scripts/skeleton.gd" id="1_txkty"]
-[ext_resource type="Texture2D" uid="uid://b21x5sqrvhk7c" path="res://assets/enemies/skeleton/skeleton_death.png" id="2_ivqcw"]
+[ext_resource type="Texture2D" uid="uid://bp58225qd2epr" path="res://assets/enemies/skeleton/skeleton_death.png" id="2_ivqcw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ulcnj"]
 atlas = ExtResource("2_ivqcw")
@@ -459,28 +459,34 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2iffn"]
-size = Vector2(14, 7)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ivqcw"]
+radius = 2.0
+height = 10.6667
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_txkty"]
-size = Vector2(16, 9)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bnirc"]
+radius = 2.0
+height = 10.0
 
 [node name="skeleton" type="CharacterBody2D" groups=["enemies"]]
 y_sort_enabled = true
-collision_layer = 6
-collision_mask = 65
+collision_layer = 4
+collision_mask = 66
 script = ExtResource("1_txkty")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_6yhqa")
-animation = &"walk_down_right"
+animation = &"idle_down_right"
+autoplay = "idle_down_right"
+frame_progress = 0.471624
 offset = Vector2(0, -7)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 y_sort_enabled = true
-position = Vector2(0, -3)
-shape = SubResource("RectangleShape2D_2iffn")
+position = Vector2(0, -2)
+rotation = 1.5708
+scale = Vector2(2, 1.5)
+shape = SubResource("CapsuleShape2D_ivqcw")
 
 [node name="AttackArea" type="Area2D" parent="."]
 position = Vector2(0, -7)
@@ -488,7 +494,8 @@ collision_layer = 8
 
 [node name="Hitbox" type="CollisionShape2D" parent="AttackArea"]
 visibility_layer = 3
-position = Vector2(0, 3.5)
-shape = SubResource("RectangleShape2D_txkty")
+position = Vector2(0, 5)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_bnirc")
 
 [connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]

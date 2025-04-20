@@ -10,15 +10,18 @@ extends CharacterBody2D
 var is_pushing = false
 var pushable_object: RigidBody2D = null  # Store the box reference
 
+var knockback_velocity := Vector2.ZERO
+const KNOCKBACK_DECAY := 2000.0  # Higher = faster slide stop
 
 var SPEED = 35.0
 var DASH_SPEED = 200.0
 const DASH_TIME = 0.2  # Duration of the dash
 const RECOVERY_TIME = 1.0  # Time to recover from 20% speed to full speed
 const MIN_SPEED_FACTOR = 0.2  # 20% of normal speed
+const MAX_VELOCITY := 200.0  # Tune this to feel right
 
 # Health
-var health = 3 # number of hits
+var health = 100 # number of hits
 var is_invincible = false
 var hit_recovery = false
 var hit_recovery_timer = 0.0
@@ -32,6 +35,11 @@ var attack_timer = 0.0
 var attack_cooldown = 0.0
 const ATTACK_DURATION = 0.3  # Adjust as needed
 const ATTACK_COOLDOWN_DURATION = 0.5  # Adjust as needed
+var attack_dash_timer := 0.0
+var attack_velocity := Vector2.ZERO
+const ATTACK_DASH_DURATION := 0.15
+const ATTACK_DASH_SPEED := 100.0
+
 
 
 var dash_timer = 0.0
@@ -95,67 +103,83 @@ func custom_move_and_slide(delta: float) -> void:
 			# No collision => we can safely exit
 			break
 
-
-
 func _physics_process(delta: float) -> void:
-	# Prevent movement updates if attacking (so animations don't get overridden)
-	if is_attacking:
-		velocity = Vector2.ZERO  # Stop movement while attacking
-		move_and_slide()
-		return
+	# === 1. Decay knockback naturally
+	var resistance_dir := get_input_direction()
+	if resistance_dir != Vector2.ZERO and knockback_velocity.length() > 0:
+		var opposing_strength: float = resistance_dir.normalized().dot(-knockback_velocity.normalized())
+		if opposing_strength > 0.1:
+			# Reduce knockback more if walking against it
+			knockback_velocity -= knockback_velocity.normalized() * opposing_strength * 500.0 * delta
 	
+	# Faster at start, slower at end (tunable factor)
+	var knockback_drag := 30.0  # Higher = faster decay at start, lower = more slide
+	knockback_velocity *= pow(0.5, knockback_drag * delta)
+
+
+	# === 2. Handle base movement
+	var input_dir := get_input_direction()
+	var base_velocity: Vector2 = Vector2.ZERO
+
+	if is_attacking and attack_dash_timer > 0:
+		attack_dash_timer -= delta
+		base_velocity += attack_velocity.lerp(Vector2.ZERO, 1.0 - (attack_dash_timer / ATTACK_DASH_DURATION))
+	elif is_dashing:
+		base_velocity += dash_direction * DASH_SPEED
+	else:
+		base_velocity += input_dir * current_speed
+
+	# === 3. Combine everything into final velocity
+	velocity = base_velocity + knockback_velocity
+
+	# Clamp if needed
+	if velocity.length() > MAX_VELOCITY:
+		velocity = velocity.normalized() * MAX_VELOCITY
+
+	# === 4. Apply movement
+	custom_move_and_slide(delta)
+
+	# === 5. Handle animations and state timers
+	if attack_cooldown > 0:
+		attack_cooldown -= delta
+
 	if hit_recovery:
 		hit_recovery_timer -= delta
 		var recovery_factor = 1.0 - (hit_recovery_timer / hit_recovery_time)
 		SPEED = lerp(original_speed * 0.5, original_speed, clamp(recovery_factor, 0.0, 1.0))
-		
-		if recovery_timer <= 0:
-			recovering = false
-			SPEED = original_speed  # Fully restore speed
+		if hit_recovery_timer <= 0:
+			hit_recovery = false
+			SPEED = original_speed
 
-	# Normal movement handling
-	if attack_cooldown > 0:
-		attack_cooldown -= delta
+	if not is_attacking:
+		handle_movement(delta)
 
-	handle_movement(delta)
-
-	# Prevent attacking while dashing, but allow it in recovery
 	if Input.is_action_just_pressed("attack") and not is_dashing and attack_cooldown <= 0:
 		start_attack()
-		
+
 	if Input.is_action_just_pressed("fireball") and not is_dashing:
 		cast_fireball()
 
-	# move_and_slide()
-	custom_move_and_slide(delta)
-	
+	update_cursor_pointer()
 
 
 
 
 func handle_movement(delta: float) -> void:
-	var direction := get_input_direction()  # Get player input direction
-	var movement_velocity = direction * current_speed  # Normal movement speed
+	_update_facing_direction()
+	var direction := get_input_direction()
+	var movement_velocity = direction * current_speed
 
 	# Check for collisions BEFORE moving the player
 	var collision = move_and_collide(movement_velocity * delta)
 
 	if collision:
 		var collider = collision.get_collider()
-
-		# If colliding with a pushable RigidBody2D, apply force to it
 		if collider is RigidBody2D and collider.is_in_group("pushable"):
 			pushable_object = collider
-
-			# Apply force to the box WITHOUT changing player speed
-			pushable_object.apply_central_force(direction * 1500)  # Adjust force
-
-			# Do NOT modify movement_velocity at all
+			pushable_object.apply_central_force(direction * 1500)
 		else:
-			pushable_object = null  # No pushable object in contact
-
-	# Move the player normally, without modifying their velocity
-	velocity = movement_velocity
+			pushable_object = null
 
 	if is_dashing:
 		dash_timer -= delta
@@ -163,34 +187,21 @@ func handle_movement(delta: float) -> void:
 		if sprite.animation != "roll":
 			sprite.play("roll")
 
-		# 🔥 Make player invincible during dash
 		is_invincible = true
-		# Change player to a temporary layer (so enemies don't detect it)
-		set_collision_layer_value(1, false)  # Remove from default player layer
-		set_collision_layer_value(4, true)   # Assign to a new "dashing" layer
-
-		# Keep colliding with terrain (since terrain has layer 1 and 2)
-		set_collision_mask_value(1, true)  # Still collide with terrain
-		set_collision_mask_value(2, false) # Ignore enemies
-		#set_collision_mask_value(3, false) # Ignore enemies
-
+		set_collision_layer_value(1, false)
+		set_collision_layer_value(4, true)
+		set_collision_mask_value(1, true)
+		set_collision_mask_value(2, false)
 
 		if dash_timer <= 0:
 			is_dashing = false
 			recovering = true
 			recovery_timer = RECOVERY_TIME
 			current_speed = SPEED * MIN_SPEED_FACTOR
-
-			# 🔥 Remove invincibility after dash ends
 			is_invincible = false
-			# Restore collision with terrain & enemies
-			# Move player back to its original layer
-			set_collision_layer_value(1, true)  # Restore default player layer
-			set_collision_layer_value(4, false) # Remove dashing layer
-
-			# Restore interaction with enemies
-			set_collision_mask_value(2, true)  # Detect enemies again
-
+			set_collision_layer_value(1, true)
+			set_collision_layer_value(4, false)
+			set_collision_mask_value(2, true)
 
 	elif recovering:
 		direction = get_input_direction()
@@ -199,49 +210,50 @@ func handle_movement(delta: float) -> void:
 		current_speed = lerp(SPEED * MIN_SPEED_FACTOR, SPEED, recovery_factor)
 		if recovery_timer <= 0:
 			recovering = false
+
 		velocity = direction * current_speed
 		if direction != Vector2.ZERO:
 			_play_walk_animation(direction)
 		else:
 			_play_idle_animation()
+
 	else:
 		direction = get_input_direction()
 		if direction != Vector2.ZERO:
-			_play_walk_animation(direction)
-		else:
-			_play_idle_animation()
-		if Input.is_action_just_pressed("dash") and direction != Vector2.ZERO:
-			is_dashing = true
-			dash_timer = DASH_TIME
-			dash_direction = direction
-			velocity = dash_direction * DASH_SPEED
-		else:
 			velocity = direction * current_speed
+			_play_walk_animation(direction)
+
+			if Input.is_action_just_pressed("dash"):
+				is_dashing = true
+				dash_timer = DASH_TIME
+				dash_direction = direction
+				velocity = dash_direction * DASH_SPEED
+		else:
+			if velocity.length() > 0:
+				velocity = velocity.lerp(Vector2.ZERO, 5 * delta)
+				_play_idle_animation()
+				if velocity.length() < 1:
+					velocity = Vector2.ZERO
+			else:
+				_play_idle_animation()
 
 
-# Functions for animation selection during movement remain the same
-func _play_walk_animation(direction: Vector2) -> void:
-	if direction.y < 0:
-		if last_direction == "left":
+
+func _play_walk_animation(_direction: Vector2) -> void:
+	var mouse_direction = (get_global_mouse_position() - global_position).normalized()
+
+	if mouse_direction.y < 0:
+		if mouse_direction.x < 0:
 			sprite.play("walk_up_left")
 		else:
 			sprite.play("walk_up_right")
-	elif direction.y > 0:
-		if last_direction == "left":
+	else:
+		if mouse_direction.x < 0:
 			sprite.play("walk_down_left")
 		else:
 			sprite.play("walk_down_right")
-	else:
-		if last_vertical_direction == "up":
-			if last_direction == "left":
-				sprite.play("walk_up_left")
-			else:
-				sprite.play("walk_up_right")
-		else:
-			if last_direction == "left":
-				sprite.play("walk_down_left")
-			else:
-				sprite.play("walk_down_right")
+
+
 				
 func get_input_direction() -> Vector2:
 	if dying:
@@ -268,16 +280,25 @@ func get_input_direction() -> Vector2:
 	return direction.normalized()
 
 func start_attack() -> void:
+	_update_facing_direction()
 	if dying or is_attacking:
 		return
 	is_attacking = true
-	attack_timer = ATTACK_DURATION
 	velocity = Vector2.ZERO  # Stop movement while attacking
 	attack_cooldown = ATTACK_COOLDOWN_DURATION  # Set cooldown
 
 	# Determine attack direction based on mouse position
 	var mouse_position = get_global_mouse_position()
 	var attack_direction = (mouse_position - global_position).normalized()
+	
+		# Attack slide with tween (starts fast and slows down quickly)
+	var attack_dash_distance := 10.0
+	var attack_dash_duration := 0.15  # Dash ends fast
+
+	attack_velocity = attack_direction * ATTACK_DASH_SPEED
+	attack_dash_timer = ATTACK_DASH_DURATION
+
+	
 
 	# Play correct attack animation
 	_play_attack_animation(attack_direction)
@@ -297,6 +318,7 @@ func start_attack() -> void:
 	
 	
 func cast_fireball():
+	_update_facing_direction()
 	if dying or is_attacking:
 		return  # Don't cast if dead
 
@@ -331,10 +353,6 @@ func cast_fireball():
 
 	# Reset attack state after fireball is spawned
 	is_attacking = false
-
-
-
-
 
 func _play_attack_animation(attack_direction: Vector2) -> void:
 	if attack_direction.y < 0:
@@ -408,39 +426,40 @@ func _on_collisiondetector_drown() -> void:
 func take_damage(source_position):
 	if is_invincible:
 		return
-		
+
 	health -= 1
 
 	# Calculate knockback direction
 	var knockback_direction = (global_position - source_position).normalized()
-	velocity = knockback_direction * knockback_strength  # Adjust knockback strength as needed
+	knockback_velocity = knockback_direction * knockback_strength
 
-	# Play hurt animation if you have one
-	#if sprite.has_animation("hurt"):
-		#sprite.play("hurt")
-		
+
 	SPEED *= 0.5
 	hit_recovery = true
 	hit_recovery_timer = hit_recovery_time
-	
+
 	# Invincibility timer
 	is_invincible = true
-	$CollisionShape2D.set_deferred("disabled", true)
-	
+	# Disable enemy detection
+	set_collision_mask_value(2, false)
+
+
 	# Optional: Flash effect during invincibility
 	_start_invincibility_effect()
 
 	# If the player dies, call die()
 	if health <= 0:
 		die()
-	
+
 	move_and_slide()  # Apply knockback movement
-	
+
 	# Restore collisions and invincibility after timeout
 	await get_tree().create_timer(invincibility_time).timeout
 	is_invincible = false
-	$CollisionShape2D.set_deferred("disabled", false)  # Re-enable collisions
+	# Re-enable enemy detection
+	set_collision_mask_value(2, true)
 	_stop_invincibility_effect()
+
 	
 		
 func die():
@@ -483,3 +502,14 @@ func _start_invincibility_effect():
 func _stop_invincibility_effect():
 	$AnimatedSprite2D.modulate.a = 1.0  # Reset transparency
 	
+	
+func _update_facing_direction():
+	var mouse_direction = (get_global_mouse_position() - global_position).normalized()
+	
+	last_direction = "right" if mouse_direction.x > 0 else "left"
+	last_vertical_direction = "down" if mouse_direction.y > 0 else "up"
+	
+func update_cursor_pointer() -> void:
+	var cursor = get_global_mouse_position()
+	var to_cursor = (cursor - global_position).angle()
+	$CursorPointer.rotation = to_cursor - PI / 4  # or to_cursor - deg2rad(90))

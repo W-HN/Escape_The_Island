@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://5e2tkyrjy6i5"]
+
+[ext_resource type="Texture2D" uid="uid://dmhmcx54foxwr" path="res://assets/enemies/mage/mage_fireball.png" id="1_tvg7o"]
+[ext_resource type="Script" uid="uid://dmw3vokago2lk" path="res://scripts/mage_projectile.gd" id="2_tps1m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tps1m"]
+atlas = ExtResource("1_tvg7o")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7tf3w"]
+atlas = ExtResource("1_tvg7o")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gy4b3"]
+atlas = ExtResource("1_tvg7o")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_r4ahi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tps1m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7tf3w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gy4b3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7tf3w")
+}],
+"loop": true,
+"name": &"projectile",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lb24m"]
+radius = 4.12311
+
+[node name="mage_projectile" type="Area2D"]
+script = ExtResource("2_tps1m")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_r4ahi")
+animation = &"projectile"
+frame_progress = 0.283527
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_lb24m")
+
+[node name="Timer" type="Timer" parent="."]
