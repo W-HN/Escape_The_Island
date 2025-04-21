@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqyjbvk4ue8y6"]
+
+[ext_resource type="Script" uid="uid://c84k4p6wmgbn1" path="res://scripts/door.gd" id="1_83dcw"]
+[ext_resource type="Texture2D" uid="uid://bmcnyb52gc701" path="res://assets/objects/door_stone_closed.png" id="2_la1wf"]
+[ext_resource type="Texture2D" uid="uid://whjhnwgkstlh" path="res://assets/objects/door_stone_open.png" id="3_18pbm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_83dcw"]
+size = Vector2(16, 8)
+
+[node name="door" type="StaticBody2D"]
+y_sort_enabled = true
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_83dcw")
+
+[node name="Closed" type="Sprite2D" parent="."]
+y_sort_enabled = true
+texture = ExtResource("2_la1wf")
+offset = Vector2(0, -4)
+
+[node name="Open" type="Sprite2D" parent="."]
+visible = false
+y_sort_enabled = true
+position = Vector2(0, 2)
+texture = ExtResource("3_18pbm")
+offset = Vector2(0, -6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+y_sort_enabled = true
+shape = SubResource("RectangleShape2D_83dcw")

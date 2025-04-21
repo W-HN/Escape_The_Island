@@ -21,6 +21,8 @@ Player=""
 enemies=""
 objects=""
 pushable=""
+lever=""
+attack=""
 
 [input]
 

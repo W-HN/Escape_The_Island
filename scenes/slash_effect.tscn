@@ -57,21 +57,21 @@ animations = [{
 radius = 10.63
 height = 29.9431
 
-[node name="slash_effect" type="Area2D"]
+[node name="slash_effect" type="Area2D" groups=["attack"]]
 z_as_relative = false
 y_sort_enabled = true
 collision_layer = 8
 collision_mask = 4
 script = ExtResource("1_x2cbc")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["attack"]]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_5503g")
 animation = &"slash_effect"
 frame = 2
 frame_progress = 0.998699
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["attack"]]
 y_sort_enabled = true
 position = Vector2(4, 5)
 rotation = -2.27591

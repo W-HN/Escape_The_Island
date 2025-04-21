@@ -6,6 +6,7 @@ extends Area2D
 @onready var sprite = $AnimatedSprite2D
 
 func _ready():
+	add_to_group("attack")
 	sprite.play("slash_effect")  # Play the slash animation
 	connect("body_entered", _on_body_entered)  # Connect `body_entered` event
 	await sprite.animation_finished

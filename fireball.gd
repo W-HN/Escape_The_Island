@@ -12,6 +12,7 @@ var source  # Reference to the player
 @onready var timer = $Timer
 
 func _ready():
+	add_to_group("attack")
 	sprite.play("fireball_stage_2")  # Start with default animation
 	timer.wait_time = lifetime
 	timer.start()
