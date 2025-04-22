@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dftffpc1x0d0r"]
+[gd_scene load_steps=18 format=3 uid="uid://dftffpc1x0d0r"]
 
 [ext_resource type="Script" uid="uid://cudy8q31qqpc8" path="res://scripts/slash_effect.gd" id="1_x2cbc"]
 [ext_resource type="Texture2D" uid="uid://dmggg3aq5mqkw" path="res://assets/character/slash.png" id="2_du2j1"]
+[ext_resource type="Texture2D" uid="uid://c120gvnd2r7kl" path="res://assets/character/slash2.png" id="3_evnw6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rkqmt"]
 atlas = ExtResource("2_du2j1")
@@ -27,6 +28,30 @@ region = Rect2(128, 0, 32, 32)
 atlas = ExtResource("2_du2j1")
 region = Rect2(160, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_e26hf"]
+atlas = ExtResource("3_evnw6")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56rvc"]
+atlas = ExtResource("3_evnw6")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgyk6"]
+atlas = ExtResource("3_evnw6")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sd5tj"]
+atlas = ExtResource("3_evnw6")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_25xdg"]
+atlas = ExtResource("3_evnw6")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ncoi"]
+atlas = ExtResource("3_evnw6")
+region = Rect2(160, 0, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_5503g"]
 animations = [{
 "frames": [{
@@ -50,7 +75,30 @@ animations = [{
 }],
 "loop": false,
 "name": &"slash_effect",
-"speed": 10.0
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e26hf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56rvc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vgyk6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sd5tj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_25xdg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ncoi")
+}],
+"loop": false,
+"name": &"slash_effect2",
+"speed": 20.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_522xy"]
@@ -68,8 +116,6 @@ script = ExtResource("1_x2cbc")
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_5503g")
 animation = &"slash_effect"
-frame = 2
-frame_progress = 0.998699
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["attack"]]
 y_sort_enabled = true

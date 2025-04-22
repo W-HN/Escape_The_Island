@@ -1,26 +1,24 @@
 extends Area2D
 
-@export var attack_damage: int = 1  # Damage value
-@export var knockback_force: float = 1000  # Adjust knockback strength
+@export var attack_damage: int = 1
+@export var knockback_force: float = 1000
+@export var animation_name: String = "slash_effect"  # Set from player script
 
 @onready var sprite = $AnimatedSprite2D
 
 func _ready():
 	add_to_group("attack")
-	sprite.play("slash_effect")  # Play the slash animation
-	connect("body_entered", _on_body_entered)  # Connect `body_entered` event
+	sprite.play(animation_name)
+	connect("body_entered", _on_body_entered)
 	await sprite.animation_finished
-	queue_free()  # Destroy the slash effect after animation finishes
+	queue_free()
 
-func _on_body_entered(body):  # Detect `CharacterBody2D` enemies
+func _on_body_entered(body):
 	if body.is_in_group("enemies"):
-
 		if body.has_method("apply_knockback"):
-			apply_knockback(body)  # Apply knockback effect
-		
+			apply_knockback(body)
 		if body.has_method("take_damage"):
-			body.take_damage(attack_damage)  # Apply damage
-		
+			body.take_damage(attack_damage)
 
 func apply_knockback(enemy):
 	var knockback_direction = (enemy.global_position - global_position).normalized()

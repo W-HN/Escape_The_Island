@@ -40,6 +40,12 @@ var attack_velocity := Vector2.ZERO
 const ATTACK_DASH_DURATION := 0.15
 const ATTACK_DASH_SPEED := 100.0
 
+# Attack combo variables
+var combo_step = 0
+var combo_timer = 0.0
+const COMBO_MAX_DELAY = 0.5  # 0.5 seconds window to input next attack
+
+
 
 
 var dash_timer = 0.0
@@ -159,6 +165,14 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("fireball") and not is_dashing:
 		cast_fireball()
+		
+	# Handle combo timeout
+	if combo_step > 0 and not is_attacking:
+		combo_timer -= delta
+		if combo_timer <= 0.0:
+			print("Combo timeout. Resetting combo.")
+			combo_step = 0
+
 
 	update_cursor_pointer()
 
@@ -278,44 +292,69 @@ func get_input_direction() -> Vector2:
 		$Sleep_particles.queue_free()
 		first_move = true
 	return direction.normalized()
-
+	
 func start_attack() -> void:
 	_update_facing_direction()
+
 	if dying or is_attacking:
 		return
-	is_attacking = true
-	velocity = Vector2.ZERO  # Stop movement while attacking
-	attack_cooldown = ATTACK_COOLDOWN_DURATION  # Set cooldown
 
-	# Determine attack direction based on mouse position
+	is_attacking = true
+	velocity = Vector2.ZERO
+	attack_cooldown = ATTACK_COOLDOWN_DURATION
+
 	var mouse_position = get_global_mouse_position()
 	var attack_direction = (mouse_position - global_position).normalized()
-	
-		# Attack slide with tween (starts fast and slows down quickly)
-	var attack_dash_distance := 10.0
-	var attack_dash_duration := 0.15  # Dash ends fast
-
 	attack_velocity = attack_direction * ATTACK_DASH_SPEED
 	attack_dash_timer = ATTACK_DASH_DURATION
 
-	
+	var anim_suffix = ""
+	match combo_step:
+		0:
+			anim_suffix = ""
+		1:
+			anim_suffix = "2"
+		2:
+			anim_suffix = "3"
+		_:
+			anim_suffix = ""
 
-	# Play correct attack animation
-	_play_attack_animation(attack_direction)
-	
+
+	print("Attack combo step:", combo_step + 1)
+
+	_play_attack_animation(attack_direction, anim_suffix)
+
 	await get_tree().create_timer(0.2).timeout
 
-	# Spawn the slash effect slightly in front of the player
+	# Instantiate slash effect
 	var slash = slash_scene.instantiate()
-	slash.global_position = global_position + (attack_direction * 10)  # Offset
-	slash.rotation = attack_direction.angle()  # Rotate slash based on attack direction
+
+	# Choose animation name based on combo
+	var slash_anim = "slash_effect"
+	match combo_step:
+		1:
+			slash_anim = "slash_effect2"
+
+
+
+	slash.animation_name = slash_anim  # Pass to slash_effect
+
+	# Consistent offset, as it was before
+	slash.global_position = global_position + (attack_direction * 10) + Vector2(0, -4)
+	slash.rotation = (get_global_mouse_position() - global_position).angle() - PI / 4
 	get_parent().add_child(slash)
 
-	# Wait for animation to finish before allowing movement again
 	await sprite.animation_finished
 
 	is_attacking = false
-	
+
+	# === Only increment combo_step if it's less than 2 (third attack)
+	if combo_step < 2:
+		combo_step += 1
+		combo_timer = COMBO_MAX_DELAY
+	else:
+		combo_step = 0  # Reset combo after the third hit
+
 	
 func cast_fireball():
 	_update_facing_direction()
@@ -354,18 +393,16 @@ func cast_fireball():
 	# Reset attack state after fireball is spawned
 	is_attacking = false
 
-func _play_attack_animation(attack_direction: Vector2) -> void:
+func _play_attack_animation(attack_direction: Vector2, suffix := "") -> void:
+	var anim = ""
+
 	if attack_direction.y < 0:
-		if attack_direction.x < 0:
-			sprite.play("attack_up_left")
-		else:
-			sprite.play("attack_up_right")
+		anim = "attack_up_left" if attack_direction.x < 0 else "attack_up_right"
 	else:
-		if attack_direction.x < 0:
-			sprite.play("attack_down_left")
-		else:
-			sprite.play("attack_down_right")
-			
+		anim = "attack_down_left" if attack_direction.x < 0 else "attack_down_right"
+
+	sprite.play(anim + suffix)
+
 
 func _get_special_attack_animation(attack_direction: Vector2) -> String:
 	if attack_direction.y < 0:
