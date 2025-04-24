@@ -1,10 +1,9 @@
 extends CharacterBody2D
 
-@export var speed: float = 25.0
+@export var speed: float = 30.0
 @export var follow_range: float = 100.0  # Distance at which the skeleton starts following the player
 @export var invincibility_time: float = 0.3
 
-@onready var player = get_tree().get_first_node_in_group("Player")
 @onready var attack_area = $AttackArea  # Reference to Area2D
 @onready var sprite = $AnimatedSprite2D
 
@@ -16,14 +15,15 @@ extends CharacterBody2D
 @export var wander_cooldown_min: float = 1.0
 @export var wander_cooldown_max: float = 2.0
 var wander_cooldown_timer: float = 0.0
+var player: Node2D = null
 
 enum CombatMode { STALK, CHARGE }
 var combat_mode: CombatMode = CombatMode.STALK
 var mode_timer: float = 0.0
 var circling_direction := 1  # 1 = clockwise, -1 = counter-clockwise
 
-@export var stalk_speed: float = 20.0
-@export var charge_speed: float = 50.0
+@export var stalk_speed: float = 30.0
+@export var charge_speed: float = 60.0
 @export var charge_duration: float = 0.8
 @export var combat_swap_min: float = 2.0
 @export var combat_swap_max: float = 4.0
@@ -56,24 +56,27 @@ func _ready():
 
 
 func _physics_process(delta):
+	# Reacquire player if missing or freed
+	if not is_instance_valid(player):
+		player = get_tree().get_first_node_in_group("Player")
+
 	if dying:
 		return
 
-	# Decay knockback velocity (exponential)
-	knockback_velocity *= pow(0.5, 50.0 * delta)  # Fast decay at first, smooth slide
+	# Decay knockback velocity
+	knockback_velocity *= pow(0.5, 50.0 * delta)
 
-	# Follow player if not dying
-	if player:
+	var base_velocity = Vector2.ZERO
+
+	if is_instance_valid(player) and not dying:
 		var distance_to_player = global_position.distance_to(player.global_position)
-		var base_velocity = Vector2.ZERO
 
 		if distance_to_player <= follow_range:
-			# Swap modes if timer is done
+			# Combat mode swap logic
 			mode_timer -= delta
 			if mode_timer <= 0:
 				var next_mode = CombatMode.STALK if randi() % 2 == 0 else CombatMode.CHARGE
 				if next_mode == CombatMode.STALK:
-					# Flip circling direction randomly
 					circling_direction = -1 if randi() % 2 == 0 else 1
 					mode_timer = randf_range(combat_swap_min, combat_swap_max)
 				else:
@@ -82,26 +85,32 @@ func _physics_process(delta):
 				combat_mode = next_mode
 
 			if combat_mode == CombatMode.STALK:
-				# Direction to player
 				var to_player = (player.global_position - global_position).normalized()
-
-				# Perpendicular to the player direction (creates side-walking)
 				var side_dir = to_player.orthogonal() * circling_direction
-				
-				# Bias slightly toward the player so we don't drift away
 				var stalk_direction = (side_dir * 0.5 + to_player * 1.0).normalized()
-				
 				base_velocity = stalk_direction * stalk_speed
 			else:
 				var direction = (player.global_position - global_position).normalized()
 				base_velocity = direction * charge_speed
 
 			_play_walk_animation(base_velocity)
+		else:
+			handle_wandering(delta)
+	else:
+		handle_wandering(delta)
+
+	if is_instance_valid(player):
+		var min_distance = 8.0
+		var to_player = player.global_position - global_position
+		var distance = to_player.length()
+
+		if distance < min_distance and distance > 0:
+			var push_direction = -to_player.normalized()
+			base_velocity += push_direction * (min_distance - distance) * 10.0
 
 
-
-		velocity = base_velocity + knockback_velocity
-		move_and_slide()
+	velocity = base_velocity + knockback_velocity
+	move_and_slide()
 
 
 

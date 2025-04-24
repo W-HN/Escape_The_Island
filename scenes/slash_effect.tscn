@@ -106,14 +106,13 @@ radius = 10.63
 height = 29.9431
 
 [node name="slash_effect" type="Area2D" groups=["attack"]]
-z_as_relative = false
-y_sort_enabled = true
+z_index = 2
 collision_layer = 8
 collision_mask = 4
 script = ExtResource("1_x2cbc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["attack"]]
-y_sort_enabled = true
+z_index = 2
 sprite_frames = SubResource("SpriteFrames_5503g")
 animation = &"slash_effect"
 

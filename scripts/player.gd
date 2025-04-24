@@ -1,7 +1,10 @@
 extends CharacterBody2D
 
 @onready var sprite = $AnimatedSprite2D  # Reference to the sprite
+@onready var heart_container = get_node("/root/Game/UI/HeartContainer")
+
 # @onready var Map = get_parent().get_node("Island1/TileMap")
+
 
 @export var knockback_strength: float = 1000.0
 @export var hit_recovery_time: float = 1.0  # Time to recover speed
@@ -21,7 +24,7 @@ const MIN_SPEED_FACTOR = 0.2  # 20% of normal speed
 const MAX_VELOCITY := 200.0  # Tune this to feel right
 
 # Health
-var health = 100 # number of hits
+var health = 6 # number of hits (3 full hearts (2 hits each) )
 var is_invincible = false
 var hit_recovery = false
 var hit_recovery_timer = 0.0
@@ -63,6 +66,12 @@ var current_floor = 1
 
 # fireball
 var fireball_scene = preload("res://scenes/fireball.tscn")
+
+func reset():
+	health = 6
+	if is_instance_valid(heart_container):
+		heart_container.update_hearts(health)
+
 
 func process_tile_collision(collision: KinematicCollision2D) -> bool:
 	if collision.get_collider() is TileMapLayer:
@@ -119,7 +128,7 @@ func _physics_process(delta: float) -> void:
 			knockback_velocity -= knockback_velocity.normalized() * opposing_strength * 500.0 * delta
 	
 	# Faster at start, slower at end (tunable factor)
-	var knockback_drag := 30.0  # Higher = faster decay at start, lower = more slide
+	var knockback_drag := 20.0  # Higher = faster decay at start, lower = more slide
 	knockback_velocity *= pow(0.5, knockback_drag * delta)
 
 
@@ -135,6 +144,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		base_velocity += input_dir * current_speed
 
+
+	
 	# === 3. Combine everything into final velocity
 	velocity = base_velocity + knockback_velocity
 
@@ -203,7 +214,7 @@ func handle_movement(delta: float) -> void:
 
 		is_invincible = true
 		set_collision_layer_value(1, false)
-		set_collision_layer_value(4, true)
+		set_collision_layer_value(8, true)
 		set_collision_mask_value(1, true)
 		set_collision_mask_value(2, false)
 
@@ -214,7 +225,7 @@ func handle_movement(delta: float) -> void:
 			current_speed = SPEED * MIN_SPEED_FACTOR
 			is_invincible = false
 			set_collision_layer_value(1, true)
-			set_collision_layer_value(4, false)
+			set_collision_layer_value(8, false)
 			set_collision_mask_value(2, true)
 
 	elif recovering:
@@ -316,9 +327,6 @@ func start_attack() -> void:
 			anim_suffix = "2"
 		2:
 			anim_suffix = "3"
-		_:
-			anim_suffix = ""
-
 
 	print("Attack combo step:", combo_step + 1)
 
@@ -329,31 +337,42 @@ func start_attack() -> void:
 	# Instantiate slash effect
 	var slash = slash_scene.instantiate()
 
-	# Choose animation name based on combo
-	var slash_anim = "slash_effect"
-	match combo_step:
-		1:
-			slash_anim = "slash_effect2"
+	# Determine if direction should swap effect
+	var should_swap := false
+	if attack_direction.x < 0 and attack_direction.y > 0:
+		should_swap = true  # down-left
+	elif attack_direction.x > 0 and attack_direction.y < 0:
+		should_swap = true  # up-right
 
+	# Choose animation
+	var slash_anim := "slash_effect"
+	if combo_step == 0:
+		slash_anim = "slash_effect2" if should_swap else "slash_effect"
+	elif combo_step == 1:
+		slash_anim = "slash_effect" if should_swap else "slash_effect2"
+	elif combo_step == 2:
+		slash_anim = "slash_effect2" if should_swap else "slash_effect"
 
-
-	slash.animation_name = slash_anim  # Pass to slash_effect
-
-	# Consistent offset, as it was before
+	slash.animation_name = slash_anim
 	slash.global_position = global_position + (attack_direction * 10) + Vector2(0, -4)
-	slash.rotation = (get_global_mouse_position() - global_position).angle() - PI / 4
+	slash.rotation = attack_direction.angle() - PI / 4
+	
+	# Scale up the third attack effect
+	if combo_step == 2:
+		slash.scale = Vector2(1.4, 1.4)  # Adjust scale as needed
+		
 	get_parent().add_child(slash)
 
 	await sprite.animation_finished
 
 	is_attacking = false
 
-	# === Only increment combo_step if it's less than 2 (third attack)
+	# Combo logic
 	if combo_step < 2:
 		combo_step += 1
 		combo_timer = COMBO_MAX_DELAY
 	else:
-		combo_step = 0  # Reset combo after the third hit
+		combo_step = 0  # Reset after third attack
 
 	
 func cast_fireball():
@@ -445,11 +464,14 @@ func drown() -> void:
 
 	var player_scene = load("res://scenes/player.tscn")
 	var player_instance = player_scene.instantiate()
-	
+	player_instance.health = 6  # Full hearts
+	player_instance.heart_container.update_hearts(6)  # Update heart UI
 	#respawn at SpawnPoint
 	var spawn_point = $"../Island1/SpawnPoint"
 	player_instance.global_position = spawn_point.global_position
 	get_parent().add_child(player_instance)
+	player_instance.call_deferred("reset")
+
 		
 	queue_free() #free current player mem and rem
 	
@@ -465,6 +487,8 @@ func take_damage(source_position):
 		return
 
 	health -= 1
+	heart_container.update_hearts(health)
+
 
 	# Calculate knockback direction
 	var knockback_direction = (global_position - source_position).normalized()
@@ -526,6 +550,8 @@ func die():
 	var spawn_point = $"../Island1/SpawnPoint"
 	player_instance.global_position = spawn_point.global_position
 	get_parent().add_child(player_instance)
+	player_instance.call_deferred("reset")
+
 
 	# Remove the current (dead) player instance
 	queue_free()
