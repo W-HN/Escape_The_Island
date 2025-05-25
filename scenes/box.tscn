@@ -1,11 +1,41 @@
-[gd_scene load_steps=4 format=3 uid="uid://bm41tp5jqd68j"]
+[gd_scene load_steps=15 format=3 uid="uid://bm41tp5jqd68j"]
 
 [ext_resource type="Texture2D" uid="uid://chfkr2x6k7hb1" path="res://assets/objects/box.png" id="1_3inec"]
+[ext_resource type="Script" uid="uid://c1l688l4lg54o" path="res://scripts/box.gd" id="1_faous"]
+[ext_resource type="Texture2D" uid="uid://762fkttss3ke" path="res://assets/objects/box_particles/bp1.png" id="2_dijgj"]
+[ext_resource type="Texture2D" uid="uid://d2owd1g64u60g" path="res://assets/objects/box_particles/bp2.png" id="3_faous"]
+[ext_resource type="Texture2D" uid="uid://cxak4kityq5ie" path="res://assets/objects/box_particles/bp3.png" id="4_wavyb"]
+[ext_resource type="Texture2D" uid="uid://cwri66qqd6b7v" path="res://assets/objects/box_particles/bp4.png" id="5_igdtg"]
+[ext_resource type="Texture2D" uid="uid://cg2ndehmvoqw8" path="res://assets/objects/box_particles/bp5.png" id="6_anxlp"]
+[ext_resource type="Texture2D" uid="uid://dc0fj6iyrgwx5" path="res://assets/objects/box_particles/bp6.png" id="7_yches"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3inec"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ks2v0"]
 size = Vector2(14, 5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_faous"]
+size = Vector2(14, 11)
+
+[sub_resource type="Curve" id="Curve_h6rpn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.614085, 0.662058), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_son5n"]
+curve = SubResource("Curve_h6rpn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gu2bm"]
+particle_flag_disable_z = true
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, -1, 0)
+spread = 100.0
+initial_velocity_min = 20.0
+initial_velocity_max = 50.0
+angular_velocity_min = -720.0
+angular_velocity_max = 720.0
+gravity = Vector3(0, 98, 0)
+alpha_curve = SubResource("CurveTexture_son5n")
 
 [node name="box" type="RigidBody2D" groups=["objects", "pushable"]]
 y_sort_enabled = true
@@ -18,6 +48,8 @@ contact_monitor = true
 max_contacts_reported = 1
 linear_damp = 50.0
 angular_damp = 50.0
+script = ExtResource("1_faous")
+box_texture = ExtResource("1_3inec")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 y_sort_enabled = true
@@ -28,3 +60,61 @@ shape = SubResource("RectangleShape2D_ks2v0")
 y_sort_enabled = true
 texture = ExtResource("1_3inec")
 offset = Vector2(0, -2)
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 27
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_faous")
+
+[node name="Bp1" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1
+texture = ExtResource("2_dijgj")
+lifetime = 0.5
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_gu2bm")
+
+[node name="Bp2" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1
+texture = ExtResource("3_faous")
+lifetime = 0.5
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_gu2bm")
+
+[node name="Bp3" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1
+texture = ExtResource("4_wavyb")
+lifetime = 0.5
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_gu2bm")
+
+[node name="Bp4" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1
+texture = ExtResource("5_igdtg")
+lifetime = 0.5
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_gu2bm")
+
+[node name="Bp5" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1
+texture = ExtResource("6_anxlp")
+lifetime = 0.5
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_gu2bm")
+
+[node name="Bp6" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1
+texture = ExtResource("7_yches")
+lifetime = 0.5
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_gu2bm")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

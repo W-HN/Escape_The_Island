@@ -202,7 +202,7 @@ position = Vector2(1220, -696)
 y_sort_enabled = true
 
 [node name="box3" parent="Objects" instance=ExtResource("3_dinhu")]
-position = Vector2(216, -617)
+position = Vector2(297, -435)
 
 [node name="lever" parent="Objects" instance=ExtResource("9_vtaks")]
 position = Vector2(1113, -1277)
@@ -228,5 +228,13 @@ position = Vector2(1297, -1223)
 position = Vector2(1425, -1158)
 connected_door = NodePath("../door2")
 
-[node name="bush" parent="." instance=ExtResource("15_ir15t")]
+[node name="Bushes" type="Node2D" parent="."]
+
+[node name="bush" parent="Bushes" instance=ExtResource("15_ir15t")]
 position = Vector2(361, -439)
+
+[node name="bush2" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(375, -451)
+
+[node name="bush3" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(365, -466)

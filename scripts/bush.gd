@@ -14,10 +14,13 @@ func cut_bush():
 		is_cut = true
 		$Sprite2D.texture = bush_cut
 		$Sprite2D.z_index = -1
-		
+		$Bp1.restart()
+		$Bp2.restart()
+		$Bp3.restart()
+		$Bp4.restart()
+		$Bp5.restart()
+		$Bp6.restart()
 
 func _on_area_entered(area: Area2D) -> void:
-	print("entered")
 	if area.is_in_group("attack"):
-		print("cut")
 		cut_bush()
