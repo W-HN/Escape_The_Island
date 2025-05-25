@@ -1041,6 +1041,7 @@ atlas = ExtResource("8_0h2xq")
 region = Rect2(102, 18, 17, 17)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ffjxg"]
+resource_local_to_scene = true
 animations = [{
 "frames": [{
 "duration": 1.5,
@@ -2033,7 +2034,7 @@ script = ExtResource("1_7da2e")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["Player"]]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ffjxg")
-animation = &"attack_up_right3"
+animation = &"attack_special_up_left"
 autoplay = "laying_left"
 offset = Vector2(0, -8)
 
