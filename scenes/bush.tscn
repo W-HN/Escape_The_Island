@@ -1,7 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://ddae0ht5i0kkc"]
+[gd_scene load_steps=15 format=3 uid="uid://ddae0ht5i0kkc"]
 
 [ext_resource type="Script" uid="uid://b32wcbsy4gshx" path="res://scripts/bush.gd" id="1_ehqem"]
+[ext_resource type="PackedScene" uid="uid://dkuxhp4vvm43b" path="res://scenes/gold.tscn" id="2_f8bao"]
 [ext_resource type="Texture2D" uid="uid://7ph1wowd6gcr" path="res://assets/objects/bush.png" id="2_tu87o"]
+[ext_resource type="PackedScene" uid="uid://bcwc4r74fj64g" path="res://scenes/heart.tscn" id="3_bgeb0"]
 [ext_resource type="Texture2D" uid="uid://dponn5dush5mk" path="res://assets/objects/bush_particles/bp1.png" id="3_ch4if"]
 [ext_resource type="Texture2D" uid="uid://duyf44e50fera" path="res://assets/objects/bush_particles/bp2.png" id="4_f8bao"]
 [ext_resource type="Texture2D" uid="uid://dcx24ks2hrh5b" path="res://assets/objects/bush_particles/bp3.png" id="5_bgeb0"]
@@ -38,6 +40,8 @@ y_sort_enabled = true
 collision_layer = 3
 collision_mask = 27
 script = ExtResource("1_ehqem")
+gold_pickup_scene = ExtResource("2_f8bao")
+heart_pickup_scene = ExtResource("3_bgeb0")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 y_sort_enabled = true

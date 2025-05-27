@@ -576,3 +576,8 @@ func update_cursor_pointer() -> void:
 	var cursor = get_global_mouse_position()
 	var to_cursor = (cursor - global_position).angle()
 	$CursorPointer.rotation = to_cursor - PI / 4  # or to_cursor - deg2rad(90))
+
+func heal(amount: int):
+	health = min(health + amount, 6)  # Don't allow more than 6 health
+	if is_instance_valid(heart_container):
+		heart_container.update_hearts(health)

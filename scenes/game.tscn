@@ -273,6 +273,7 @@ position = Vector2(1425, -1158)
 connected_door = NodePath("../door2")
 
 [node name="Bushes" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="bush" parent="Bushes" instance=ExtResource("15_ir15t")]
 position = Vector2(361, -439)

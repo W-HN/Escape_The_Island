@@ -1,7 +1,9 @@
 extends RigidBody2D
 
 @export var box_texture: Texture2D      # Whole box
-@export var box_chunk_particles: Array  # Array of GPUParticles2D nodes (optional)
+@export var box_chunk_particles: Array  # Array of GPUParticles2D nodes
+@export var gold_pickup_scene: PackedScene
+
 
 var is_broken = false
 
@@ -20,6 +22,16 @@ func break_box():
 		$Bp4.restart()
 		$Bp5.restart()
 		$Bp6.restart()
+		# Drop 1–3 gold coins
+		if gold_pickup_scene:
+			var num_gold = randi_range(1, 3)
+			for i in num_gold:
+				var gold_pickup = gold_pickup_scene.instantiate()
+				gold_pickup.position = position
+				var angle = randf_range(0, TAU)
+				var speed = randf_range(20, 30)
+				gold_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
+				get_parent().call_deferred("add_child", gold_pickup)
 		await get_tree().create_timer(1.0).timeout
 		queue_free()
 

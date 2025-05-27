@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkuxhp4vvm43b"]
+
+[ext_resource type="Script" uid="uid://bpbbjy14yd0i5" path="res://scripts/gold.gd" id="1_yna14"]
+[ext_resource type="Texture2D" uid="uid://b4c6hldxyym53" path="res://assets/objects/pickups/coin.png" id="2_afqnf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wgxkh"]
+radius = 3.16228
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yna14"]
+radius = 20.0
+
+[node name="Gold" type="Area2D"]
+script = ExtResource("1_yna14")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_afqnf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_wgxkh")
+
+[node name="MagnetArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MagnetArea2D"]
+shape = SubResource("CircleShape2D_yna14")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
