@@ -24,7 +24,16 @@ var magnet_grace_time := 0.25
 var magnet_timer := 0.0
 var magnet_pending := false
 
+var tween: Tween = null
+
 func _ready():
+	
+	tween = get_tree().create_tween()
+	tween.set_loops(30) 
+	tween.tween_property(sprite, "scale", Vector2(1.2, 1.2), 0.5).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(sprite, "scale", Vector2(1, 1), 0.5).set_trans(Tween.TRANS_SINE)
+
+	
 	bounce_velocity = randf_range(BOUNCE_INITIAL, BOUNCE_INITIAL * 1.15)
 	bouncing = true
 	# Connect signal for magnet
@@ -63,6 +72,8 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	if body.is_in_group("Player"):
+		if tween and tween.is_running():
+			tween.kill()
 		if body.has_method("heal"):
 			body.heal(1)
 		queue_free()

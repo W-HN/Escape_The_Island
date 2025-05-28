@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://2205ayior07y"]
+
+[ext_resource type="Script" uid="uid://c8872rrxwnf4h" path="res://scripts/door_key.gd" id="1_jw4ut"]
+[ext_resource type="Texture2D" uid="uid://b6uomn5flrxm7" path="res://assets/objects/door_stone_key.png" id="1_si2ci"]
+[ext_resource type="Texture2D" uid="uid://whjhnwgkstlh" path="res://assets/objects/door_stone_open.png" id="2_jw4ut"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3hk56"]
+size = Vector2(16, 8)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uaa2a"]
+radius = 13.0384
+
+[node name="door_key" type="StaticBody2D"]
+collision_layer = 3
+collision_mask = 19
+script = ExtResource("1_jw4ut")
+
+[node name="Closed" type="Sprite2D" parent="."]
+texture = ExtResource("1_si2ci")
+
+[node name="Open" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_jw4ut")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_3hk56")
+
+[node name="OpenArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OpenArea"]
+shape = SubResource("CircleShape2D_uaa2a")

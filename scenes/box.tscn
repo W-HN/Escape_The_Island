@@ -1,14 +1,15 @@
-[gd_scene load_steps=16 format=3 uid="uid://bm41tp5jqd68j"]
+[gd_scene load_steps=17 format=3 uid="uid://bm41tp5jqd68j"]
 
-[ext_resource type="Texture2D" uid="uid://dwnknydqnrx50" path="res://assets/objects/box.png" id="1_3inec"]
+[ext_resource type="Texture2D" uid="uid://chfkr2x6k7hb1" path="res://assets/objects/box.png" id="1_3inec"]
 [ext_resource type="Script" uid="uid://c1l688l4lg54o" path="res://scripts/box.gd" id="1_faous"]
-[ext_resource type="Texture2D" uid="uid://chrr11a3pj856" path="res://assets/objects/box_particles/bp1.png" id="2_dijgj"]
-[ext_resource type="Texture2D" uid="uid://b1eylfgxfogj5" path="res://assets/objects/box_particles/bp2.png" id="3_faous"]
+[ext_resource type="Texture2D" uid="uid://762fkttss3ke" path="res://assets/objects/box_particles/bp1.png" id="2_dijgj"]
+[ext_resource type="Texture2D" uid="uid://d2owd1g64u60g" path="res://assets/objects/box_particles/bp2.png" id="3_faous"]
 [ext_resource type="PackedScene" uid="uid://dkuxhp4vvm43b" path="res://scenes/gold.tscn" id="3_wavyb"]
-[ext_resource type="Texture2D" uid="uid://c0vxwmlwcflpv" path="res://assets/objects/box_particles/bp3.png" id="4_wavyb"]
-[ext_resource type="Texture2D" uid="uid://dbncm6l5la3jy" path="res://assets/objects/box_particles/bp4.png" id="5_igdtg"]
-[ext_resource type="Texture2D" uid="uid://kf7daqf0qq3q" path="res://assets/objects/box_particles/bp5.png" id="6_anxlp"]
-[ext_resource type="Texture2D" uid="uid://c1f5bkhp5s026" path="res://assets/objects/box_particles/bp6.png" id="7_yches"]
+[ext_resource type="PackedScene" uid="uid://bcwc4r74fj64g" path="res://scenes/heart.tscn" id="4_igdtg"]
+[ext_resource type="Texture2D" uid="uid://cxak4kityq5ie" path="res://assets/objects/box_particles/bp3.png" id="4_wavyb"]
+[ext_resource type="Texture2D" uid="uid://cwri66qqd6b7v" path="res://assets/objects/box_particles/bp4.png" id="5_igdtg"]
+[ext_resource type="Texture2D" uid="uid://cg2ndehmvoqw8" path="res://assets/objects/box_particles/bp5.png" id="6_anxlp"]
+[ext_resource type="Texture2D" uid="uid://dc0fj6iyrgwx5" path="res://assets/objects/box_particles/bp6.png" id="7_yches"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3inec"]
 
@@ -52,6 +53,7 @@ angular_damp = 50.0
 script = ExtResource("1_faous")
 box_texture = ExtResource("1_3inec")
 gold_pickup_scene = ExtResource("3_wavyb")
+heart_pickup_scene = ExtResource("4_igdtg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 y_sort_enabled = true

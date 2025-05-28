@@ -4,6 +4,9 @@ extends CharacterBody2D
 @export var follow_range: float = 100.0  # Distance at which the skeleton starts following the player
 @export var invincibility_time: float = 0.3
 
+@export var gold_pickup_scene: PackedScene
+@export var heart_pickup_scene: PackedScene
+
 @onready var attack_area = $AttackArea  # Reference to Area2D
 @onready var sprite = $AnimatedSprite2D
 
@@ -192,6 +195,27 @@ func die():
 
 	dying = true  # Mark skeleton as dead
 	velocity = Vector2.ZERO  # Stop movement
+	
+	# --- DROP GOLD (1-3) ---
+	if gold_pickup_scene:
+		var num_gold = randi_range(1, 3)
+		for i in num_gold:
+			var gold_pickup = gold_pickup_scene.instantiate()
+			gold_pickup.position = position
+			var angle = randf_range(0, TAU)
+			var speed = randf_range(20, 30)
+			gold_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
+			get_parent().call_deferred("add_child", gold_pickup)
+	# --- DROP HEART (1 in 5 chance) ---
+	if heart_pickup_scene and randi_range(1, 5) == 1:
+		var heart_pickup = heart_pickup_scene.instantiate()
+		heart_pickup.position = position
+		var angle = randf_range(0, TAU)
+		var speed = randf_range(20, 30)
+		heart_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
+		heart_pickup.bounce_velocity = randf_range(40.0, 46.0)
+		heart_pickup.bouncing = true
+		get_parent().call_deferred("add_child", heart_pickup)
 
 	# Disable collisions so no more hits can register
 	$CollisionShape2D.set_deferred("disabled", true)

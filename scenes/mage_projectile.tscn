@@ -39,6 +39,8 @@ animations = [{
 radius = 4.12311
 
 [node name="mage_projectile" type="Area2D"]
+collision_layer = 0
+collision_mask = 260
 script = ExtResource("2_tps1m")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

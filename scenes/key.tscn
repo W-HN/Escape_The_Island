@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://j1htna3rwb1l"]
+
+[ext_resource type="Script" uid="uid://c8bovmyp7365x" path="res://scripts/key.gd" id="1_fttkb"]
+[ext_resource type="Texture2D" uid="uid://d2h57ksvhxim3" path="res://assets/objects/pickups/key.png" id="1_yk2u2"]
+[ext_resource type="Shader" uid="uid://d0uqguahud07t" path="res://scripts/shaders/key.gdshader" id="2_wy8tx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_brs3p"]
+shader = ExtResource("2_wy8tx")
+shader_parameter/shine_width = 0.18
+shader_parameter/shine_speed = 1.5
+shader_parameter/shine_strength = 2.2
+shader_parameter/shine_wait = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yk2u2"]
+radius = 5.09902
+
+[node name="Key" type="Area2D"]
+script = ExtResource("1_fttkb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_brs3p")
+texture = ExtResource("1_yk2u2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_yk2u2")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

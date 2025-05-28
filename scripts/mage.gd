@@ -4,6 +4,8 @@ extends CharacterBody2D
 @export var follow_range: float = 100.0  # Distance at which the enemy starts following the player
 @export var invincibility_time: float = 0.3
 
+@export var gold_pickup_scene: PackedScene
+@export var heart_pickup_scene: PackedScene
 
 @onready var attack_area = $AttackArea  # Reference to Area2D
 @onready var sprite = $AnimatedSprite2D
@@ -32,6 +34,9 @@ const KNOCKBACK_DECAY := 2000.0  # Similar to player
 var reposition_timer: float = 0.0
 var combat_moving = false
 var combat_target_position: Vector2
+
+var combat_progress_timer: float = 0.0
+var last_combat_distance: float = 0.0
 
 var spawn_position: Vector2
 var is_wandering = false
@@ -98,7 +103,23 @@ func handle_combat_attack(delta: float) -> void:
 
 	if combat_moving:
 		var move_vector = combat_target_position - global_position
-		if move_vector.length() < 1.0:
+		var distance = move_vector.length()
+		
+		# -- Progress check: if we're not getting closer, increment stuck timer
+		if abs(distance - last_combat_distance) < 0.2:
+			combat_progress_timer += delta
+		else:
+			combat_progress_timer = 0.0
+		last_combat_distance = distance
+		
+		# -- If stuck >0.5s, abort and pick a new reposition
+		if combat_progress_timer > 0.5:
+			combat_moving = false
+			combat_progress_timer = 0.0
+			# Optional: Pick a new reposition target immediately or just wait for next cycle
+			return
+
+		if distance < 1.0:
 			velocity = Vector2.ZERO
 			velocity += knockback_velocity
 			combat_moving = false
@@ -112,6 +133,7 @@ func handle_combat_attack(delta: float) -> void:
 		else:
 			face_player()
 			_play_idle_animation()
+
 	else:
 		velocity = Vector2.ZERO
 		velocity += knockback_velocity
@@ -197,9 +219,15 @@ func handle_combat_chase(delta: float) -> void:
 	_play_walk_animation(direction)
 
 func pick_combat_reposition():
-	combat_target_position = global_position + Vector2(randf_range(-reposition_radius, reposition_radius), randf_range(-reposition_radius, reposition_radius))
+	combat_target_position = global_position + Vector2(
+		randf_range(-reposition_radius, reposition_radius),
+		randf_range(-reposition_radius, reposition_radius)
+	)
 	combat_moving = true
 	reposition_timer = randf_range(reposition_min_delay, reposition_max_delay)
+	combat_progress_timer = 0.0
+	last_combat_distance = global_position.distance_to(combat_target_position)
+
 	
 func attack():
 	is_attacking = true
@@ -403,6 +431,27 @@ func die():
 
 	dying = true  # Mark skeleton as dead
 	velocity = Vector2.ZERO  # Stop movement
+	
+	# --- DROP GOLD (1-3) ---
+	if gold_pickup_scene:
+		var num_gold = randi_range(1, 3)
+		for i in num_gold:
+			var gold_pickup = gold_pickup_scene.instantiate()
+			gold_pickup.position = position
+			var angle = randf_range(0, TAU)
+			var speed = randf_range(20, 30)
+			gold_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
+			get_parent().call_deferred("add_child", gold_pickup)
+	# --- DROP HEART (1 in 5 chance) ---
+	if heart_pickup_scene and randi_range(1, 5) == 1:
+		var heart_pickup = heart_pickup_scene.instantiate()
+		heart_pickup.position = position
+		var angle = randf_range(0, TAU)
+		var speed = randf_range(20, 30)
+		heart_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
+		heart_pickup.bounce_velocity = randf_range(40.0, 46.0)
+		heart_pickup.bouncing = true
+		get_parent().call_deferred("add_child", heart_pickup)
 
 	# Disable collisions so no more hits can register
 	$CollisionShape2D.set_deferred("disabled", true)
