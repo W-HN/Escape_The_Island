@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://b32wcbsy4gshx" path="res://scripts/bush.gd" id="1_ehqem"]
 [ext_resource type="PackedScene" uid="uid://dkuxhp4vvm43b" path="res://scenes/gold.tscn" id="2_f8bao"]
-[ext_resource type="Texture2D" uid="uid://dy618f4npythb" path="res://assets/objects/bush.png" id="2_tu87o"]
+[ext_resource type="Texture2D" uid="uid://7ph1wowd6gcr" path="res://assets/objects/bush.png" id="2_tu87o"]
 [ext_resource type="PackedScene" uid="uid://bcwc4r74fj64g" path="res://scenes/heart.tscn" id="3_bgeb0"]
-[ext_resource type="Texture2D" uid="uid://k4u5qf6t3br3" path="res://assets/objects/bush_particles/bp1.png" id="3_ch4if"]
-[ext_resource type="Texture2D" uid="uid://cnkyd0t71kuy2" path="res://assets/objects/bush_particles/bp2.png" id="4_f8bao"]
-[ext_resource type="Texture2D" uid="uid://cscnprddfl78p" path="res://assets/objects/bush_particles/bp3.png" id="5_bgeb0"]
-[ext_resource type="Texture2D" uid="uid://35obdl3qbdpj" path="res://assets/objects/bush_particles/bp4.png" id="6_wyjij"]
-[ext_resource type="Texture2D" uid="uid://crx360bik1k8j" path="res://assets/objects/bush_particles/bp5.png" id="7_w7cau"]
-[ext_resource type="Texture2D" uid="uid://ce3v4bp4naipv" path="res://assets/objects/bush_particles/bp6.png" id="8_bnnoo"]
+[ext_resource type="Texture2D" uid="uid://dponn5dush5mk" path="res://assets/objects/bush_particles/bp1.png" id="3_ch4if"]
+[ext_resource type="Texture2D" uid="uid://duyf44e50fera" path="res://assets/objects/bush_particles/bp2.png" id="4_f8bao"]
+[ext_resource type="Texture2D" uid="uid://dcx24ks2hrh5b" path="res://assets/objects/bush_particles/bp3.png" id="5_bgeb0"]
+[ext_resource type="Texture2D" uid="uid://dsqgqyfmqhmjl" path="res://assets/objects/bush_particles/bp4.png" id="6_wyjij"]
+[ext_resource type="Texture2D" uid="uid://d32as8auvpujy" path="res://assets/objects/bush_particles/bp5.png" id="7_w7cau"]
+[ext_resource type="Texture2D" uid="uid://bi1pp37gpp7rn" path="res://assets/objects/bush_particles/bp6.png" id="8_bnnoo"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ftm5"]
 radius = 6.0
