@@ -1,12 +1,12 @@
 [gd_scene load_steps=84 format=3 uid="uid://yhqtpruxoadd"]
 
-[ext_resource type="Texture2D" uid="uid://cvcaqrwn22qbg" path="res://assets/enemies/mage/mage_death.png" id="1_j2dsb"]
-[ext_resource type="Texture2D" uid="uid://ciot5w2sbhkto" path="res://assets/enemies/mage/mage_attack.png" id="1_r5lxc"]
+[ext_resource type="Texture2D" uid="uid://2lq1vhsmydg0" path="res://assets/enemies/mage/mage_death.png" id="1_j2dsb"]
+[ext_resource type="Texture2D" uid="uid://df1sflyoco7nf" path="res://assets/enemies/mage/mage_attack.png" id="1_r5lxc"]
 [ext_resource type="Script" uid="uid://bccbqhd2s35ko" path="res://scripts/mage.gd" id="1_yb71v"]
 [ext_resource type="PackedScene" uid="uid://dkuxhp4vvm43b" path="res://scenes/gold.tscn" id="2_p0roq"]
 [ext_resource type="PackedScene" uid="uid://bcwc4r74fj64g" path="res://scenes/heart.tscn" id="3_66amf"]
-[ext_resource type="Texture2D" uid="uid://debm7ylccic6m" path="res://assets/enemies/mage/mage_idle.png" id="3_yb71v"]
-[ext_resource type="Texture2D" uid="uid://b3ddhbspsy878" path="res://assets/enemies/mage/mage_walk.png" id="4_nc4w5"]
+[ext_resource type="Texture2D" uid="uid://bcdoaxut7wkky" path="res://assets/enemies/mage/mage_idle.png" id="3_yb71v"]
+[ext_resource type="Texture2D" uid="uid://u7sjptmx6m30" path="res://assets/enemies/mage/mage_walk.png" id="4_nc4w5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v7jpn"]
 atlas = ExtResource("1_r5lxc")

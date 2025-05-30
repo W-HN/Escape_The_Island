@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bv5daqxy4yf2k"]
 
 [ext_resource type="Script" uid="uid://b4jau4rkain71" path="res://scripts/heart_container.gd" id="1_srcrn"]
-[ext_resource type="Texture2D" uid="uid://bvnmsefj06cp3" path="res://assets/UI/health_heart_full.png" id="2_qsesa"]
+[ext_resource type="Texture2D" uid="uid://bbyy52egumjxi" path="res://assets/UI/health_heart_full.png" id="2_qsesa"]
 
 [node name="HeartContainer" type="HBoxContainer"]
 offset_right = 40.0

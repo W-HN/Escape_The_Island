@@ -42,10 +42,12 @@ var keys: int = 0
 signal gold_changed(new_gold)
 signal keys_changed(new_keys)
 
+@rpc("any_peer")
 func add_gold(amount: int):
 	gold += amount
 	emit_signal("gold_changed", gold)
 
+@rpc("any_peer")
 func add_key():
 	keys += 1
 	emit_signal("keys_changed", keys)

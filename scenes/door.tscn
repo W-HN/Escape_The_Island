@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dqyjbvk4ue8y6"]
 
 [ext_resource type="Script" uid="uid://c84k4p6wmgbn1" path="res://scripts/door.gd" id="1_83dcw"]
-[ext_resource type="Texture2D" uid="uid://yssneqsxf7dp" path="res://assets/objects/door_stone_closed.png" id="2_la1wf"]
-[ext_resource type="Texture2D" uid="uid://dd6tym1xx7c6r" path="res://assets/objects/door_stone_open.png" id="3_18pbm"]
+[ext_resource type="Texture2D" uid="uid://bmcnyb52gc701" path="res://assets/objects/door_stone_closed.png" id="2_la1wf"]
+[ext_resource type="Texture2D" uid="uid://whjhnwgkstlh" path="res://assets/objects/door_stone_open.png" id="3_18pbm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83dcw"]
 size = Vector2(16, 8)
