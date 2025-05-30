@@ -48,8 +48,8 @@ var combo_step = 0
 var combo_timer = 0.0
 const COMBO_MAX_DELAY = 0.5  # 0.5 seconds window to input next attack
 
-
-
+var my_id
+var root
 
 var dash_timer = 0.0
 var is_dashing = false
@@ -64,8 +64,21 @@ var first_move = false
 var dying = false
 var current_floor = 1
 
+
 # fireball
 var fireball_scene = preload("res://scenes/fireball.tscn")
+
+func _enter_tree():
+	set_multiplayer_authority(int(str(name)))
+	my_id = int(str(name))
+	root = get_tree().get_current_scene() 
+	
+func _ready() -> void:
+	if is_multiplayer_authority():
+		print("isauth")
+		$Camera2D.make_current()
+	
+
 
 func reset():
 	health = 6
@@ -119,6 +132,9 @@ func custom_move_and_slide(delta: float) -> void:
 			break
 
 func _physics_process(delta: float) -> void:
+	if not is_multiplayer_authority():
+		return
+		
 	# === 1. Decay knockback naturally
 	var resistance_dir := get_input_direction()
 	if resistance_dir != Vector2.ZERO and knockback_velocity.length() > 0:
@@ -304,9 +320,35 @@ func get_input_direction() -> Vector2:
 		first_move = true
 	return direction.normalized()
 	
+# 1) Declare the RPC to run on every peer
+@rpc("call_local", "any_peer", "reliable")
+func spawn_slash(origin: Vector2, direction: Vector2, combo_step: int) -> void:
+	var slash = slash_scene.instantiate()
+	slash.global_position = origin + (direction * 10) + Vector2(0, -4)
+	slash.rotation = direction.angle() - PI / 4
+	slash.direction = direction
+	
+	# decide whether to swap
+	var should_swap = false
+	if (direction.x < 0 and direction.y > 0) or (direction.x > 0 and direction.y < 0):
+		should_swap = true
+
+	# pick animation & scale based on combo_step
+	var slash_anim = ""
+	if combo_step == 0:
+		slash_anim = "slash_effect2" if should_swap else "slash_effect"
+	elif combo_step == 1:
+		slash_anim = "slash_effect"  if should_swap else "slash_effect2"
+	elif combo_step == 2:
+		slash_anim = "slash_effect2" if should_swap else "slash_effect"
+		slash.scale = Vector2(1.4, 1.4)
+
+	slash.animation_name = slash_anim
+	get_parent().add_child(slash)
+
+
 func start_attack() -> void:
 	_update_facing_direction()
-
 	if dying or is_attacking:
 		return
 
@@ -314,103 +356,62 @@ func start_attack() -> void:
 	velocity = Vector2.ZERO
 	attack_cooldown = ATTACK_COOLDOWN_DURATION
 
-	var mouse_position = get_global_mouse_position()
-	var attack_direction = (mouse_position - global_position).normalized()
-	attack_velocity = attack_direction * ATTACK_DASH_SPEED
+	var mouse_pos = get_global_mouse_position()
+	var attack_dir = (mouse_pos - global_position).normalized()
+	attack_velocity = attack_dir * ATTACK_DASH_SPEED
 	attack_dash_timer = ATTACK_DASH_DURATION
 
+	# figure out combo suffix
 	var anim_suffix = ""
-	match combo_step:
-		0:
-			anim_suffix = ""
-		1:
-			anim_suffix = "2"
-		2:
-			anim_suffix = "3"
+	if combo_step == 1:
+		anim_suffix = "2"
+	elif combo_step == 2:
+		anim_suffix = "3"
 
-	print("Attack combo step:", combo_step + 1)
-
-	_play_attack_animation(attack_direction, anim_suffix)
-
+	# play your local animation
+	_play_attack_animation(attack_dir, anim_suffix)
 	await get_tree().create_timer(0.2).timeout
 
-	# Instantiate slash effect
-	var slash = slash_scene.instantiate()
-
-	# Determine if direction should swap effect
-	var should_swap := false
-	if attack_direction.x < 0 and attack_direction.y > 0:
-		should_swap = true  # down-left
-	elif attack_direction.x > 0 and attack_direction.y < 0:
-		should_swap = true  # up-right
-
-	# Choose animation
-	var slash_anim := "slash_effect"
-	if combo_step == 0:
-		slash_anim = "slash_effect2" if should_swap else "slash_effect"
-	elif combo_step == 1:
-		slash_anim = "slash_effect" if should_swap else "slash_effect2"
-	elif combo_step == 2:
-		slash_anim = "slash_effect2" if should_swap else "slash_effect"
-
-	slash.animation_name = slash_anim
-	slash.global_position = global_position + (attack_direction * 10) + Vector2(0, -4)
-	slash.rotation = attack_direction.angle() - PI / 4
-	
-	# Scale up the third attack effect
-	if combo_step == 2:
-		slash.scale = Vector2(1.4, 1.4)  # Adjust scale as needed
-		
-	get_parent().add_child(slash)
+	# broadcast to all peers
+	rpc("spawn_slash", global_position, attack_dir, combo_step)
 
 	await sprite.animation_finished
-
 	is_attacking = false
 
-	# Combo logic
+	# advance/reset combo
 	if combo_step < 2:
 		combo_step += 1
 		combo_timer = COMBO_MAX_DELAY
 	else:
-		combo_step = 0  # Reset after third attack
+		combo_step = 0
+
+
 
 	
 func cast_fireball():
-	_update_facing_direction()
 	if dying or is_attacking:
-		return  # Don't cast if dead
+		return
 
-	# Prevent movement during attack
 	is_attacking = true
-	velocity = Vector2.ZERO  
-	
-	# Determine direction towards the mouse
-	var mouse_position = get_global_mouse_position()
-	var attack_direction = (mouse_position - global_position).normalized()
+	velocity = Vector2.ZERO
+	_update_facing_direction()
 
-	# Play the correct animation
-	var animation_name = _get_special_attack_animation(attack_direction)
-	sprite.play(animation_name)
+	var attack_direction = (get_global_mouse_position() - global_position).normalized()
+	sprite.play(_get_special_attack_animation(attack_direction))
 
-	# Wait for 3 frames before spawning fireball
+	# Tell everyone (including self) to spawn a fireball
+	rpc("spawn_fireball", global_position, attack_direction)
+
 	await get_tree().create_timer(0.3).timeout
-
-	# Spawn fireball after animation delay
-	var fireball = fireball_scene.instantiate()
-	
-	# Fireball offset
-	var fireball_offset = attack_direction * 8
-	
-	fireball.global_position = global_position + fireball_offset # Spawn at player’s position
-	fireball.direction = attack_direction  # Set direction
-	fireball.source = self  # Set the player as the source of the fireball
-	get_parent().add_child(fireball)
-	
-	# Wait for the full animation to complete before allowing movement
-	await sprite.animation_finished
-
-	# Reset attack state after fireball is spawned
 	is_attacking = false
+
+@rpc("call_local", "reliable")
+func spawn_fireball(origin: Vector2, direction: Vector2) -> void:
+	var fireball = fireball_scene.instantiate()
+	fireball.global_position = origin + direction * 8
+	fireball.direction = direction
+	get_parent().add_child(fireball)
+
 
 func _play_attack_animation(attack_direction: Vector2, suffix := "") -> void:
 	var anim = ""

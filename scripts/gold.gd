@@ -63,7 +63,7 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	if body.is_in_group("Player"):
 		var game = get_tree().root.get_node("Game")
-		game.add_gold(1)
+		game.add_gold.rpc(1)
 		queue_free()
 
 func _on_magnet_body_entered(body):

@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var speed: float = 30.0
-@export var follow_range: float = 100.0  # Distance at which the skeleton starts following the player
+@export var follow_range: float = 100.0  # Distance at which the skeleton starts following the closest player
 @export var invincibility_time: float = 0.3
 
 @export var gold_pickup_scene: PackedScene
@@ -18,7 +18,14 @@ extends CharacterBody2D
 @export var wander_cooldown_min: float = 1.0
 @export var wander_cooldown_max: float = 2.0
 var wander_cooldown_timer: float = 0.0
-var player: Node2D = null
+var is_wandering = false
+var is_idle_wandering = false
+var wandering_timer = 0.0
+var wander_target_position: Vector2
+var wandering_direction: Vector2 = Vector2.ZERO
+
+var players: Array = []
+var target: Node2D = null
 
 enum CombatMode { STALK, CHARGE }
 var combat_mode: CombatMode = CombatMode.STALK
@@ -31,51 +38,53 @@ var circling_direction := 1  # 1 = clockwise, -1 = counter-clockwise
 @export var combat_swap_min: float = 2.0
 @export var combat_swap_max: float = 4.0
 
-
-
 var spawn_position: Vector2
-var is_wandering = false
-var wandering_timer = 0.0
-var is_idle_wandering = false
-var wandering_direction = Vector2.ZERO
-var wander_target_position: Vector2
-
 var health = 3
 var dying = false
 var is_invincible = false
 var blink_timer = 0.05
-
 var knockback_velocity := Vector2.ZERO
-const KNOCKBACK_DECAY := 2000.0  # Tune to control how fast the knockback slows
-
-var last_direction = "right"  # Track last horizontal movement direction
-var last_vertical_direction = "down"  # Track last vertical movement direction
+const KNOCKBACK_DECAY := 2000.0
+var last_direction = "right"
+var last_vertical_direction = "down"
 
 func _ready():
+	# Connect attack signal
 	if not attack_area.body_entered.is_connected(_on_attack_area_body_entered):
 		attack_area.body_entered.connect(_on_attack_area_body_entered)
 	spawn_position = global_position
 	start_idle_wandering()
-
+	RandomNumberGenerator.new().seed = 12345
 
 func _physics_process(delta):
-	# Reacquire player if missing or freed
-	if not is_instance_valid(player):
-		player = get_tree().get_first_node_in_group("Player")
-
 	if dying:
 		return
 
-	# Decay knockback velocity
-	knockback_velocity *= pow(0.5, 50.0 * delta)
+	# Gather all Player nodes
+	players.clear()
+	for obj in get_tree().get_nodes_in_group("Player"):
+		if obj is Node2D:
+			players.append(obj)
+	# Pick the closest target
+	if players.size() > 0:
+		target = players[0]
+		var min_d = global_position.distance_to(target.global_position)
+		for p in players:
+			var d = global_position.distance_to(p.global_position)
+			if d < min_d:
+				min_d = d
+				target = p
+	else:
+		target = null
 
+	# Decay knockback
+	knockback_velocity *= pow(0.5, 50.0 * delta)
 	var base_velocity = Vector2.ZERO
 
-	if is_instance_valid(player) and not dying:
-		var distance_to_player = global_position.distance_to(player.global_position)
-
-		if distance_to_player <= follow_range:
-			# Combat mode swap logic
+	if is_instance_valid(target):
+		var dist = global_position.distance_to(target.global_position)
+		if dist <= follow_range:
+			# Swap combat modes
 			mode_timer -= delta
 			if mode_timer <= 0:
 				var next_mode = CombatMode.STALK if randi() % 2 == 0 else CombatMode.CHARGE
@@ -84,42 +93,36 @@ func _physics_process(delta):
 					mode_timer = randf_range(combat_swap_min, combat_swap_max)
 				else:
 					mode_timer = charge_duration
-
 				combat_mode = next_mode
 
-			if combat_mode == CombatMode.STALK:
-				var to_player = (player.global_position - global_position).normalized()
-				var side_dir = to_player.orthogonal() * circling_direction
-				var stalk_direction = (side_dir * 0.5 + to_player * 1.0).normalized()
-				base_velocity = stalk_direction * stalk_speed
-			else:
-				var direction = (player.global_position - global_position).normalized()
-				base_velocity = direction * charge_speed
 
+			# Movement
+			if combat_mode == CombatMode.STALK:
+				var to_t = (target.global_position - global_position).normalized()
+				var side = to_t.orthogonal() * circling_direction
+				var dir = (side * 0.5 + to_t).normalized()
+				base_velocity = dir * stalk_speed
+			else:
+				base_velocity = (target.global_position - global_position).normalized() * charge_speed
 			_play_walk_animation(base_velocity)
 		else:
 			handle_wandering(delta)
+
+		# Pushback if too close
+		var min_dist = 8.0
+		if dist < min_dist and dist > 0:
+			base_velocity += -(target.global_position - global_position).normalized() * (min_dist - dist) * 10.0
 	else:
 		handle_wandering(delta)
-
-	if is_instance_valid(player):
-		var min_distance = 8.0
-		var to_player = player.global_position - global_position
-		var distance = to_player.length()
-
-		if distance < min_distance and distance > 0:
-			var push_direction = -to_player.normalized()
-			base_velocity += push_direction * (min_distance - distance) * 10.0
-
 
 	velocity = base_velocity + knockback_velocity
 	move_and_slide()
 
-
-
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
-		body.take_damage(global_position)  # Call damage function on player
+		# Damage any player entering attack area
+		body.take_damage(global_position)
+
 
 # Function to handle walking animations
 func _play_walk_animation(direction: Vector2) -> void:
@@ -167,6 +170,7 @@ func _play_idle_animation() -> void:
 			sprite.play("idle_down_right")
 			
 			
+@rpc('authority', 'reliable', 'call_local')
 func take_damage(amount):
 	if dying or is_invincible:
 		return

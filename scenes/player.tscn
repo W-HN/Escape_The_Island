@@ -1,32 +1,32 @@
-[gd_scene load_steps=284 format=3 uid="uid://fuuv1pq3m1x3"]
+[gd_scene load_steps=285 format=3 uid="uid://fuuv1pq3m1x3"]
 
 [ext_resource type="Script" uid="uid://b8tj6k0jqm80o" path="res://scripts/player.gd" id="1_7da2e"]
-[ext_resource type="Texture2D" uid="uid://bkyaxm2r5b8lr" path="res://assets/character/attack.png" id="2_4ymhu"]
-[ext_resource type="Texture2D" uid="uid://es6mlkvpp6yh" path="res://assets/character/attack2_down_left.png" id="2_31cv2"]
-[ext_resource type="Texture2D" uid="uid://cgpuap0xqbeti" path="res://assets/character/idle_down_left.png" id="2_cwkjf"]
-[ext_resource type="Texture2D" uid="uid://cehk61dudc3k5" path="res://assets/character/attack_down_left.png" id="2_ueluq"]
-[ext_resource type="Texture2D" uid="uid://20d5veonns0r" path="res://assets/character/idle_down_right.png" id="3_b48xk"]
-[ext_resource type="Texture2D" uid="uid://blhb8775fmu0c" path="res://assets/character/attack2_down_right.png" id="3_pf23h"]
-[ext_resource type="Texture2D" uid="uid://dpm11v2pqbomj" path="res://assets/character/attack_down_right.png" id="3_uapiy"]
-[ext_resource type="Texture2D" uid="uid://bpjxlmg4gst0j" path="res://assets/character/walk_down_left.png" id="3_vl1of"]
-[ext_resource type="Texture2D" uid="uid://bcwv73h3c7m41" path="res://assets/character/attack_up_left.png" id="4_c8a31"]
-[ext_resource type="Texture2D" uid="uid://bp2fscj7f6p7h" path="res://assets/character/attack2_up_left.png" id="4_dt7fs"]
-[ext_resource type="Texture2D" uid="uid://34j3mr45e70a" path="res://assets/character/walk_down_right.png" id="4_hls0f"]
-[ext_resource type="Texture2D" uid="uid://1qska1bujdr0" path="res://assets/character/roll.png" id="4_sowig"]
-[ext_resource type="Texture2D" uid="uid://dn3u55dpu3wv5" path="res://assets/character/idle_up_left_right.png" id="4_wbi4v"]
-[ext_resource type="Texture2D" uid="uid://bco2hx8icfyk7" path="res://assets/character/attack_up_right.png" id="5_asgak"]
-[ext_resource type="Texture2D" uid="uid://cjvx0dos3ei3g" path="res://assets/character/attack2_up_right.png" id="5_wqfne"]
-[ext_resource type="Texture2D" uid="uid://by5rny5vkdo7e" path="res://assets/character/death_left.png" id="6_0jd1q"]
-[ext_resource type="Texture2D" uid="uid://cxst47v75su5x" path="res://assets/character/drown.png" id="6_cvvq8"]
-[ext_resource type="Texture2D" uid="uid://bmck7csn5w8se" path="res://assets/character/walk_up_left.png" id="7_jqjkc"]
-[ext_resource type="Texture2D" uid="uid://o3ft6gjqell3" path="res://assets/character/death_right.png" id="7_vjpod"]
-[ext_resource type="Texture2D" uid="uid://c1q7b7giq17df" path="res://assets/character/walk_up_right.png" id="8_0h2xq"]
-[ext_resource type="Texture2D" uid="uid://go6eylosg0pa" path="res://assets/character/laying_left.png" id="12_bmdhk"]
-[ext_resource type="Texture2D" uid="uid://tje3sm02h4kg" path="res://assets/character/laying_right.png" id="13_7qac5"]
+[ext_resource type="Texture2D" uid="uid://cdnwrju36l2v6" path="res://assets/character/attack.png" id="2_4ymhu"]
+[ext_resource type="Texture2D" uid="uid://j4c1op5dc17a" path="res://assets/character/attack2_down_left.png" id="2_31cv2"]
+[ext_resource type="Texture2D" uid="uid://drrc7wu5t5e04" path="res://assets/character/idle_down_left.png" id="2_cwkjf"]
+[ext_resource type="Texture2D" uid="uid://b83yfpyk53dai" path="res://assets/character/attack_down_left.png" id="2_ueluq"]
+[ext_resource type="Texture2D" uid="uid://crfyheisrvufv" path="res://assets/character/idle_down_right.png" id="3_b48xk"]
+[ext_resource type="Texture2D" uid="uid://sj6hdhpi07u6" path="res://assets/character/attack2_down_right.png" id="3_pf23h"]
+[ext_resource type="Texture2D" uid="uid://u3278pvfn137" path="res://assets/character/attack_down_right.png" id="3_uapiy"]
+[ext_resource type="Texture2D" uid="uid://cbww4awrg0j03" path="res://assets/character/walk_down_left.png" id="3_vl1of"]
+[ext_resource type="Texture2D" uid="uid://cy2b0tdc3ktbb" path="res://assets/character/attack_up_left.png" id="4_c8a31"]
+[ext_resource type="Texture2D" uid="uid://d2vx44qlmq5tx" path="res://assets/character/attack2_up_left.png" id="4_dt7fs"]
+[ext_resource type="Texture2D" uid="uid://evv36qyroqrx" path="res://assets/character/walk_down_right.png" id="4_hls0f"]
+[ext_resource type="Texture2D" uid="uid://bs3acd4jmir4h" path="res://assets/character/roll.png" id="4_sowig"]
+[ext_resource type="Texture2D" uid="uid://bevgay8ijr5ky" path="res://assets/character/idle_up_left_right.png" id="4_wbi4v"]
+[ext_resource type="Texture2D" uid="uid://4mv16vfg1t5a" path="res://assets/character/attack_up_right.png" id="5_asgak"]
+[ext_resource type="Texture2D" uid="uid://c4y6vsinhuxyj" path="res://assets/character/attack2_up_right.png" id="5_wqfne"]
+[ext_resource type="Texture2D" uid="uid://8itihukotes2" path="res://assets/character/death_left.png" id="6_0jd1q"]
+[ext_resource type="Texture2D" uid="uid://mpmlwgdoadob" path="res://assets/character/drown.png" id="6_cvvq8"]
+[ext_resource type="Texture2D" uid="uid://cu6hhvobn42a6" path="res://assets/character/walk_up_left.png" id="7_jqjkc"]
+[ext_resource type="Texture2D" uid="uid://dhp7euam4esd2" path="res://assets/character/death_right.png" id="7_vjpod"]
+[ext_resource type="Texture2D" uid="uid://cxr3lb2vwu2n7" path="res://assets/character/walk_up_right.png" id="8_0h2xq"]
+[ext_resource type="Texture2D" uid="uid://blhqb3yidwpqj" path="res://assets/character/laying_left.png" id="12_bmdhk"]
+[ext_resource type="Texture2D" uid="uid://ivr41b2dw11w" path="res://assets/character/laying_right.png" id="13_7qac5"]
 [ext_resource type="Script" uid="uid://dmwrghhrofh6g" path="res://scenes/camera_2d.gd" id="15_ce4ey"]
-[ext_resource type="Texture2D" uid="uid://dwhfa6e0mkgeu" path="res://assets/particles/z.png" id="20_obhut"]
+[ext_resource type="Texture2D" uid="uid://cbolvmtbuotee" path="res://assets/particles/z.png" id="20_obhut"]
 [ext_resource type="PackedScene" uid="uid://dksskfvbvlo8o" path="res://scenes/collision_detector.tscn" id="22_jua2n"]
-[ext_resource type="Texture2D" uid="uid://cd6c4ci4hrp3c" path="res://assets/character/cursor_pointer.png" id="23_4ni07"]
+[ext_resource type="Texture2D" uid="uid://dxkyy35qhjnnd" path="res://assets/character/cursor_pointer.png" id="23_4ni07"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_45pgr"]
 atlas = ExtResource("2_ueluq")
@@ -2025,6 +2025,17 @@ initial_velocity_max = 5.0
 gravity = Vector3(0, -38, 0)
 turbulence_noise_strength = 16.37
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_31cv2"]
+properties/0/path = NodePath("AnimatedSprite2D:animation")
+properties/0/spawn = false
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:position")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("CursorPointer:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 y_sort_enabled = true
 collision_layer = 257
@@ -2035,7 +2046,7 @@ script = ExtResource("1_7da2e")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["Player"]]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ffjxg")
-animation = &"attack_special_up_left"
+animation = &"attack_down_left"
 autoplay = "laying_left"
 offset = Vector2(0, -8)
 
@@ -2071,5 +2082,8 @@ collision_layer = 1
 [node name="CursorPointer" type="Sprite2D" parent="."]
 position = Vector2(0, -5)
 texture = ExtResource("23_4ni07")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_31cv2")
 
 [connection signal="drown" from="Collisiondetector" to="." method="_on_collisiondetector_drown"]

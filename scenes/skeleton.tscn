@@ -1,9 +1,9 @@
-[gd_scene load_steps=65 format=3 uid="uid://bkb1jw5ceksdv"]
+[gd_scene load_steps=66 format=3 uid="uid://bkb1jw5ceksdv"]
 
-[ext_resource type="Texture2D" uid="uid://d3taqm07q5uws" path="res://assets/enemies/skeleton/skeleton_walk.png" id="1_pbvs3"]
+[ext_resource type="Texture2D" uid="uid://belt5k7qf8gfx" path="res://assets/enemies/skeleton/skeleton_walk.png" id="1_pbvs3"]
 [ext_resource type="Script" uid="uid://cm8r5ggey7tnc" path="res://scripts/skeleton.gd" id="1_txkty"]
 [ext_resource type="PackedScene" uid="uid://dkuxhp4vvm43b" path="res://scenes/gold.tscn" id="2_5pgwy"]
-[ext_resource type="Texture2D" uid="uid://bp58225qd2epr" path="res://assets/enemies/skeleton/skeleton_death.png" id="2_ivqcw"]
+[ext_resource type="Texture2D" uid="uid://bf3tt0wyda2am" path="res://assets/enemies/skeleton/skeleton_death.png" id="2_ivqcw"]
 [ext_resource type="PackedScene" uid="uid://bcwc4r74fj64g" path="res://scenes/heart.tscn" id="3_ssl1b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ulcnj"]
@@ -469,6 +469,11 @@ height = 10.6667
 radius = 2.0
 height = 10.0
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5pgwy"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="skeleton" type="CharacterBody2D" groups=["enemies"]]
 y_sort_enabled = true
 collision_layer = 4
@@ -501,5 +506,8 @@ visibility_layer = 3
 position = Vector2(0, 5)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_bnirc")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_5pgwy")
 
 [connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]

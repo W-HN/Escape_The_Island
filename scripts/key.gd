@@ -10,5 +10,5 @@ func _on_body_entered(body):
 		# Find the Game node and increment keys
 		var game = get_tree().root.get_node("Game")
 		if game and game.has_method("add_key"):
-			game.add_key()
+			game.add_key.rpc()
 		queue_free()

@@ -23,8 +23,8 @@ extends CharacterBody2D
 @export var reposition_radius: float = 30.0
 @export var reposition_min_delay: float = 1.0
 @export var reposition_max_delay: float = 2.5
-var player: Node2D = null
-
+var players: Array = []
+var target: Node2D = null
 
 var wander_target_position: Vector2
 	
@@ -56,35 +56,46 @@ var last_direction = "right"  # Track last horizontal movement direction
 var last_vertical_direction = "down"  # Track last vertical movement direction
 
 func _ready():
+	set_multiplayer_authority(1)
 	spawn_position = global_position
 	if not attack_area.body_entered.is_connected(_on_attack_area_body_entered):
 		attack_area.body_entered.connect(_on_attack_area_body_entered)
+	RandomNumberGenerator.new().seed = 12345
+
 	start_idle_wandering()  # Begin wandering logic on spawn
 
 func _physics_process(delta):
-	# Reacquire player if missing or freed
-	if not is_instance_valid(player):
-		player = get_tree().get_first_node_in_group("Player")
-
 	if dying:
 		return
 
-	# Knockback decay
+	# — grab only actual Node2D players —
+	var players := []
+	for obj in get_tree().get_nodes_in_group("Player"):
+		if obj is Node2D:
+			players.append(obj)
+	if players.size() == 0:
+		return
+
+	# — pick the closest —
+	target = players[0]
+	var min_dist = global_position.distance_to(target.global_position)
+	for p in players:
+		var d = global_position.distance_to(p.global_position)
+		if d < min_dist:
+			min_dist = d
+			target = p
+
+	# — then use target.global_position everywhere —
 	if knockback_velocity.length() > 0:
-		var knockback_drag := 50.0  # Same as player
-		knockback_velocity *= pow(0.5, knockback_drag * delta)
+		knockback_velocity *= pow(0.5, 50.0 * delta)
 
-	if player:
-		var distance_to_player = global_position.distance_to(player.global_position)
+	if is_attacking or min_dist <= attack_range:
+		handle_combat_attack(delta)
+	elif min_dist <= follow_range:
+		handle_combat_chase(delta)
+	else:
+		handle_wandering(delta)
 
-		if is_attacking:
-			handle_combat_attack(delta)
-		elif distance_to_player <= attack_range:
-			handle_combat_attack(delta)
-		elif distance_to_player <= follow_range:
-			handle_combat_chase(delta)
-		else:
-			handle_wandering(delta)
 
 func handle_combat_attack(delta: float) -> void:
 	is_wandering = false
@@ -150,7 +161,7 @@ func perform_random_attack():
 	velocity = Vector2.ZERO
 	move_and_slide()
 
-	var dir = (player.global_position - global_position).normalized()
+	var dir = (target.global_position - global_position).normalized()
 	_play_attack_animation(dir)
 	face_player()
 
@@ -212,7 +223,7 @@ func spawn_dna_wave(dir: Vector2):
 		await get_tree().create_timer(0.2).timeout
 
 func handle_combat_chase(delta: float) -> void:
-	var direction = (player.global_position - global_position).normalized()
+	var direction = (target.global_position - global_position).normalized()
 	velocity = direction * speed
 	velocity += knockback_velocity
 	move_and_slide()
@@ -235,7 +246,7 @@ func attack():
 	velocity = Vector2.ZERO
 	move_and_slide()
 
-	var dir = (player.global_position - global_position).normalized()
+	var dir = (target.global_position - global_position).normalized()
 	_play_attack_animation(dir)
 	face_player()
 
@@ -247,16 +258,17 @@ func attack():
 	var attack_type = randi() % 3
 	match attack_type:
 		0:
-			fire_cone_shot(dir)
+			rpc("fire_cone_shot", dir)
 		1:
-			fire_shotgun_shot(dir)
+			rpc("fire_shotgun_shot", dir)
 		2:
-			fire_dna_shot(dir)
+			rpc("fire_dna_shot", dir)
 
 	is_attacking = false
 	await get_tree().create_timer(attack_cooldown).timeout
 	can_attack = true
 
+@rpc('call_local', "reliable", "authority")
 func fire_cone_shot(base_dir):
 	var angles = [-30, 0, 30]
 	for i in range(3):
@@ -269,11 +281,12 @@ func fire_cone_shot(base_dir):
 		p.wave_phase = (i - 1) * 0.3
 		get_parent().add_child(p)
 
+@rpc('call_local', "reliable", "authority")
 func fire_shotgun_shot(base_dir):
 	for i in range(4):
 		var p = projectile_scene.instantiate()
 		p.global_position = global_position
-		var angle_offset = deg_to_rad(randf_range(-10, 10))
+		var angle_offset = deg_to_rad(5)
 		p.direction = base_dir.rotated(angle_offset)
 		p.source = self
 		p.wave_strength = 4.0
@@ -281,6 +294,7 @@ func fire_shotgun_shot(base_dir):
 		p.wave_phase = randf_range(0.0, TAU)
 		get_parent().add_child(p)
 
+@rpc('call_local', "reliable", "authority")
 func fire_dna_shot(base_dir):
 	for i in range(3):
 		await get_tree().create_timer(0.2).timeout
@@ -296,7 +310,7 @@ func fire_dna_shot(base_dir):
 
 
 func face_player():
-	var dir = (player.global_position - global_position).normalized()
+	var dir = (target.global_position - global_position).normalized()
 
 	# Just update last known direction — don't play animations here
 	if dir.y < 0:
@@ -403,6 +417,7 @@ func _play_attack_animation(direction: Vector2):
 	elif direction.x > 0:
 		last_direction = "right"
 
+@rpc('authority', 'reliable', 'call_local')
 func take_damage(amount):
 	if dying or is_invincible:
 		return

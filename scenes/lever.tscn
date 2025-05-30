@@ -1,7 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://c6cltwx5emln8"]
+[gd_scene load_steps=12 format=3 uid="uid://c6cltwx5emln8"]
 
 [ext_resource type="Script" uid="uid://1cjgn5nixnu7" path="res://scripts/lever.gd" id="1_ncfea"]
-[ext_resource type="Texture2D" uid="uid://ccf77m8eqlxhg" path="res://assets/objects/lever.png" id="2_qxmkn"]
+[ext_resource type="Texture2D" uid="uid://dlav8tn3f3a3m" path="res://assets/objects/lever.png" id="2_qxmkn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8di2w"]
 atlas = ExtResource("2_qxmkn")
@@ -61,6 +61,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hio1q"]
 size = Vector2(12, 3)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ncfea"]
+properties/0/path = NodePath("AnimatedSprite2D:animation")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
 [node name="lever" type="Area2D" groups=["lever"]]
 y_sort_enabled = true
 position = Vector2(0, -4)
@@ -79,5 +84,8 @@ offset = Vector2(0, -6)
 y_sort_enabled = true
 position = Vector2(0, 5.5)
 shape = SubResource("RectangleShape2D_hio1q")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_ncfea")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
