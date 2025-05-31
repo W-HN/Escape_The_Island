@@ -458,22 +458,21 @@ func drown() -> void:
 	is_dashing = false
 	dying = true
 	sprite.play("drown")
-	
 	await get_tree().create_timer(1.8).timeout
 	$"../AudioStreamPlayer2D".play()
-
 	var player_scene = load("res://scenes/player.tscn")
 	var player_instance = player_scene.instantiate()
-	player_instance.health = 6  # Full hearts
-	player_instance.heart_container.update_hearts(6)  # Update heart UI
-	#respawn at SpawnPoint
+	player_instance.health = 6
 	var spawn_point = $"../Island1/SpawnPoint"
 	player_instance.global_position = spawn_point.global_position
 	get_parent().add_child(player_instance)
+	# Wait a frame for onready
+	await get_tree().process_frame
+	if is_instance_valid(player_instance.heart_container):
+		player_instance.heart_container.update_hearts(6)
 	player_instance.call_deferred("reset")
+	queue_free()
 
-		
-	queue_free() #free current player mem and rem
 	
 	
 

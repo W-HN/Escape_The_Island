@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 # MOVEMENT & DASH
 @export var speed: float = 22.0
-@export var follow_range: float = 120.0
+@export var follow_range: float = 200.0
 @export var dash_speed: float = 180.0 
 @export var dash_duration: float = 0.4
 @export var dash_cooldown: float = 2.0
