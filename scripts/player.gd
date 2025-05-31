@@ -582,3 +582,6 @@ func heal(amount: int):
 	health = min(health + amount, 6)  # Don't allow more than 6 health
 	if is_instance_valid(heart_container):
 		heart_container.update_hearts(health)
+		
+func apply_knockback(force: Vector2):
+	knockback_velocity += force

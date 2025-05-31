@@ -1,13 +1,15 @@
 extends Camera2D
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
 @export var pan_factor: float = 0.3
 @export var max_pan_distance: float = 40.0  # Max pixels the camera can be offset from the player
 @export var pan_speed: float = 5.0          # Smoothness of camera movement
+
+var shake_strength: float = 0.0
+var shake_decay: float = 8.0
+var shake_offset: Vector2 = Vector2.ZERO
+
+func shake(amount: float):
+	shake_strength = max(shake_strength, amount)
 
 func _process(delta: float) -> void:
 	if not is_instance_valid(get_parent()):
@@ -28,3 +30,9 @@ func _process(delta: float) -> void:
 
 	# Smooth camera movement
 	global_position = global_position.lerp(clamped_target, pan_speed * delta)
+
+	# --- Screen shake effect ---
+	if shake_strength > 0.01:
+		shake_offset = Vector2(randf_range(-1, 1), randf_range(-1, 1)) * shake_strength
+		global_position += shake_offset
+		shake_strength = lerp(shake_strength, 0.0, shake_decay * delta)

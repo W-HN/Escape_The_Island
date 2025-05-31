@@ -23,6 +23,7 @@ objects=""
 pushable=""
 lever=""
 attack=""
+golem_hitbox=""
 
 [input]
 
