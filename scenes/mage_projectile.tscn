@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://5e2tkyrjy6i5"]
 
-[ext_resource type="Texture2D" uid="uid://dmhmcx54foxwr" path="res://assets/enemies/mage/mage_fireball.png" id="1_tvg7o"]
+[ext_resource type="Texture2D" uid="uid://ornku14kbcyr" path="res://assets/enemies/mage/mage_fireball.png" id="1_tvg7o"]
 [ext_resource type="Script" uid="uid://dmw3vokago2lk" path="res://scripts/mage_projectile.gd" id="2_tps1m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tps1m"]

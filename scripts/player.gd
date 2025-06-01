@@ -217,6 +217,7 @@ func handle_movement(delta: float) -> void:
 		set_collision_layer_value(8, true)
 		set_collision_mask_value(1, true)
 		set_collision_mask_value(2, false)
+		set_collision_layer_value(9, false)
 
 		if dash_timer <= 0:
 			is_dashing = false
@@ -227,6 +228,7 @@ func handle_movement(delta: float) -> void:
 			set_collision_layer_value(1, true)
 			set_collision_layer_value(8, false)
 			set_collision_mask_value(2, true)
+			set_collision_layer_value(9, true)
 
 	elif recovering:
 		direction = get_input_direction()

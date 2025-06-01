@@ -9,8 +9,6 @@ extends Area2D
 func _ready():
 	add_to_group("attack")
 	sprite.play(animation_name)
-	connect("body_entered", _on_body_entered)
-	connect("area_entered", _on_area_entered)
 	await sprite.animation_finished
 	queue_free()
 	
