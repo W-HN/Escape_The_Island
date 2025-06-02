@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://dftffpc1x0d0r"]
+[gd_scene load_steps=19 format=3 uid="uid://dftffpc1x0d0r"]
 
 [ext_resource type="Script" uid="uid://cudy8q31qqpc8" path="res://scripts/slash_effect.gd" id="1_x2cbc"]
-[ext_resource type="Texture2D" uid="uid://dmggg3aq5mqkw" path="res://assets/character/slash.png" id="2_du2j1"]
-[ext_resource type="Texture2D" uid="uid://c120gvnd2r7kl" path="res://assets/character/slash2.png" id="3_evnw6"]
+[ext_resource type="Texture2D" uid="uid://df80bivldv4ru" path="res://assets/character/slash.png" id="2_du2j1"]
+[ext_resource type="Texture2D" uid="uid://h552o1fud7iy" path="res://assets/character/slash2.png" id="3_evnw6"]
+[ext_resource type="AudioStream" uid="uid://bo4s418vbkg1r" path="res://sounds/Slash/hitEnemy.mp3" id="4_e26hf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rkqmt"]
 atlas = ExtResource("2_du2j1")
@@ -121,6 +122,11 @@ y_sort_enabled = true
 position = Vector2(4, 5)
 rotation = -2.27591
 shape = SubResource("CapsuleShape2D_522xy")
+
+[node name="sfx_hitEnemy" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_e26hf")
+volume_db = -17.829
+pitch_scale = 0.81
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

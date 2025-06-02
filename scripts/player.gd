@@ -5,6 +5,15 @@ extends CharacterBody2D
 
 # @onready var Map = get_parent().get_node("Island1/TileMap")
 
+@onready var sound_slash = $sfx_slash
+@onready var sound_roll = $sfx_roll
+@onready var sound_cast = $sfx_cast
+@onready var sound_takedamage = $sfx_takedamage
+@onready var sound_step = $sfx_step
+
+var step_timer := 0.0
+const STEP_INTERVAL := 0.4 
+
 
 @export var knockback_strength: float = 1000.0
 @export var hit_recovery_time: float = 1.0  # Time to recover speed
@@ -184,6 +193,13 @@ func _physics_process(delta: float) -> void:
 			print("Combo timeout. Resetting combo.")
 			combo_step = 0
 
+	if not is_attacking and not is_dashing and velocity.length() > 10:
+		step_timer -= delta
+		if step_timer <= 0:
+			sound_step.play()
+			step_timer = STEP_INTERVAL
+	else:
+		step_timer = 0.0  # Reset if not walking
 
 	update_cursor_pointer()
 
@@ -212,6 +228,7 @@ func handle_movement(delta: float) -> void:
 		if sprite.animation != "roll":
 			sprite.play("roll")
 
+		sound_roll.play()
 		is_invincible = true
 		set_collision_layer_value(1, false)
 		set_collision_layer_value(8, true)
@@ -241,6 +258,7 @@ func handle_movement(delta: float) -> void:
 		velocity = direction * current_speed
 		if direction != Vector2.ZERO:
 			_play_walk_animation(direction)
+			
 		else:
 			_play_idle_animation()
 
@@ -312,6 +330,7 @@ func start_attack() -> void:
 	if dying or is_attacking:
 		return
 
+	sound_slash.play()
 	is_attacking = true
 	velocity = Vector2.ZERO
 	attack_cooldown = ATTACK_COOLDOWN_DURATION
@@ -382,6 +401,7 @@ func cast_fireball():
 	if dying or is_attacking:
 		return  # Don't cast if dead
 
+	sound_cast.play()
 	# Prevent movement during attack
 	is_attacking = true
 	velocity = Vector2.ZERO  
@@ -486,7 +506,8 @@ func _on_collisiondetector_drown() -> void:
 func take_damage(source_position):
 	if is_invincible:
 		return
-
+	
+	sound_takedamage.play()
 	health -= 1
 	heart_container.update_hearts(health)
 
