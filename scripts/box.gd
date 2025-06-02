@@ -5,6 +5,8 @@ extends RigidBody2D
 @export var gold_pickup_scene: PackedScene
 @export var heart_pickup_scene: PackedScene
 
+@onready var sound_breakBox = $sfx_breakBox
+
 var is_broken = false
 
 func _ready():
@@ -12,6 +14,7 @@ func _ready():
 
 func break_box():
 	if not is_broken:
+		sound_breakBox.play()
 		is_broken = true
 		$Sprite2D.hide()
 		$CollisionShape2D.set_deferred("disabled", true)

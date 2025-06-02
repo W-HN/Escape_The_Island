@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://5e2tkyrjy6i5"]
+[gd_scene load_steps=9 format=3 uid="uid://5e2tkyrjy6i5"]
 
-[ext_resource type="Texture2D" uid="uid://ornku14kbcyr" path="res://assets/enemies/mage/mage_fireball.png" id="1_tvg7o"]
+[ext_resource type="Texture2D" uid="uid://bgmsbpmxdvcrq" path="res://assets/enemies/mage/mage_fireball.png" id="1_tvg7o"]
 [ext_resource type="Script" uid="uid://dmw3vokago2lk" path="res://scripts/mage_projectile.gd" id="2_tps1m"]
+[ext_resource type="AudioStream" uid="uid://d04rvho0jo6i1" path="res://sounds/Player/cast1.mp3" id="3_7tf3w"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tps1m"]
 atlas = ExtResource("1_tvg7o")
@@ -52,3 +53,6 @@ frame_progress = 0.283527
 shape = SubResource("CircleShape2D_lb24m")
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="sfx_cast" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_7tf3w")

@@ -15,6 +15,7 @@ var time_alive: float = 0.0
 
 @onready var sprite = $AnimatedSprite2D
 @onready var timer = $Timer
+@onready var sound_cast = $sfx_cast
 
 func _ready():
 	sprite.play("projectile")
@@ -22,6 +23,7 @@ func _ready():
 	timer.start()
 	connect("body_entered", _on_body_entered)
 	$CollisionShape2D.set_deferred("disabled", false)
+	sound_cast.play()
 
 func _process(delta):
 	time_alive += delta

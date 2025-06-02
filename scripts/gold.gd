@@ -2,6 +2,7 @@ extends Area2D
 
 @onready var sprite = $Sprite2D
 @onready var magnet_area = $MagnetArea2D
+@onready var sound_getmoney = $sfx_getmoney
 
 var velocity := Vector2.ZERO
 var friction := 18.0

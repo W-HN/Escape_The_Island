@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://c6cltwx5emln8"]
+[gd_scene load_steps=12 format=3 uid="uid://c6cltwx5emln8"]
 
 [ext_resource type="Script" uid="uid://1cjgn5nixnu7" path="res://scripts/lever.gd" id="1_ncfea"]
-[ext_resource type="Texture2D" uid="uid://ccf77m8eqlxhg" path="res://assets/objects/lever.png" id="2_qxmkn"]
+[ext_resource type="Texture2D" uid="uid://bliq0xb351v4v" path="res://assets/objects/lever.png" id="2_qxmkn"]
+[ext_resource type="AudioStream" uid="uid://hcxjxov4hsee" path="res://sounds/lever.mp3" id="3_qxmkn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8di2w"]
 atlas = ExtResource("2_qxmkn")
@@ -78,5 +79,8 @@ offset = Vector2(0, -6)
 y_sort_enabled = true
 position = Vector2(0, 5.5)
 shape = SubResource("RectangleShape2D_hio1q")
+
+[node name="sfx_lever" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_qxmkn")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

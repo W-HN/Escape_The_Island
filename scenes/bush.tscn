@@ -1,15 +1,16 @@
-[gd_scene load_steps=15 format=3 uid="uid://ddae0ht5i0kkc"]
+[gd_scene load_steps=16 format=3 uid="uid://ddae0ht5i0kkc"]
 
 [ext_resource type="Script" uid="uid://b32wcbsy4gshx" path="res://scripts/bush.gd" id="1_ehqem"]
 [ext_resource type="PackedScene" uid="uid://dkuxhp4vvm43b" path="res://scenes/gold.tscn" id="2_f8bao"]
-[ext_resource type="Texture2D" uid="uid://7ph1wowd6gcr" path="res://assets/objects/bush.png" id="2_tu87o"]
+[ext_resource type="Texture2D" uid="uid://lmeinn13gtuv" path="res://assets/objects/bush.png" id="2_tu87o"]
 [ext_resource type="PackedScene" uid="uid://bcwc4r74fj64g" path="res://scenes/heart.tscn" id="3_bgeb0"]
-[ext_resource type="Texture2D" uid="uid://dponn5dush5mk" path="res://assets/objects/bush_particles/bp1.png" id="3_ch4if"]
-[ext_resource type="Texture2D" uid="uid://duyf44e50fera" path="res://assets/objects/bush_particles/bp2.png" id="4_f8bao"]
-[ext_resource type="Texture2D" uid="uid://dcx24ks2hrh5b" path="res://assets/objects/bush_particles/bp3.png" id="5_bgeb0"]
-[ext_resource type="Texture2D" uid="uid://dsqgqyfmqhmjl" path="res://assets/objects/bush_particles/bp4.png" id="6_wyjij"]
-[ext_resource type="Texture2D" uid="uid://d32as8auvpujy" path="res://assets/objects/bush_particles/bp5.png" id="7_w7cau"]
-[ext_resource type="Texture2D" uid="uid://bi1pp37gpp7rn" path="res://assets/objects/bush_particles/bp6.png" id="8_bnnoo"]
+[ext_resource type="Texture2D" uid="uid://bejbnpvb37q65" path="res://assets/objects/bush_particles/bp1.png" id="3_ch4if"]
+[ext_resource type="Texture2D" uid="uid://da0e4wmfalc2s" path="res://assets/objects/bush_particles/bp2.png" id="4_f8bao"]
+[ext_resource type="Texture2D" uid="uid://riqk3yj3oliv" path="res://assets/objects/bush_particles/bp3.png" id="5_bgeb0"]
+[ext_resource type="Texture2D" uid="uid://x8sd4nglf0l3" path="res://assets/objects/bush_particles/bp4.png" id="6_wyjij"]
+[ext_resource type="Texture2D" uid="uid://bmw18jvtps3qv" path="res://assets/objects/bush_particles/bp5.png" id="7_w7cau"]
+[ext_resource type="Texture2D" uid="uid://c7qpyiv1n3kep" path="res://assets/objects/bush_particles/bp6.png" id="8_bnnoo"]
+[ext_resource type="AudioStream" uid="uid://cmeuyma48qmxa" path="res://sounds/breakables/breakGrass.mp3" id="11_wyjij"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ftm5"]
 radius = 6.0
@@ -99,5 +100,8 @@ texture = ExtResource("8_bnnoo")
 lifetime = 0.5
 one_shot = true
 process_material = SubResource("ParticleProcessMaterial_kno1p")
+
+[node name="sfx_breakGrass" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_wyjij")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

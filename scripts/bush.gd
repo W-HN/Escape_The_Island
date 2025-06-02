@@ -5,6 +5,7 @@ extends Area2D  # or Area2D if you want collision
 @export var gold_pickup_scene: PackedScene
 @export var heart_pickup_scene: PackedScene
 
+@onready var sound_break = $sfx_breakGrass
 
 var is_cut = false
 
@@ -14,6 +15,7 @@ func _ready():
 
 func cut_bush():
 	if not is_cut:
+		sound_break.play()
 		is_cut = true
 		$Sprite2D.texture = bush_cut
 		$Sprite2D.z_index = -1

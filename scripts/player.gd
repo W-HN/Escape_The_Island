@@ -4,6 +4,8 @@ extends CharacterBody2D
 @onready var heart_container = get_node("/root/Game/UI/HeartContainer")
 
 # @onready var Map = get_parent().get_node("Island1/TileMap")
+@onready var tilemap = get_parent().get_node("Island1/Map/Floor0") as TileMapLayer
+
 
 @onready var sound_slash = $sfx_slash
 @onready var sound_roll = $sfx_roll
@@ -193,13 +195,29 @@ func _physics_process(delta: float) -> void:
 			print("Combo timeout. Resetting combo.")
 			combo_step = 0
 
+	#step pitch if on sand
 	if not is_attacking and not is_dashing and velocity.length() > 10:
 		step_timer -= delta
 		if step_timer <= 0:
+
+			var map_coords = tilemap.local_to_map(global_position)
+			var cell_data = tilemap.get_cell_tile_data(map_coords)
+
+			var on_sand := false
+			if cell_data and cell_data.get_custom_data("is_sand"):
+				on_sand = true
+
+			if on_sand: 
+				sound_step.pitch_scale = 5.0
+			else:
+				sound_step.pitch_scale = 1.0
+				
 			sound_step.play()
+
 			step_timer = STEP_INTERVAL
 	else:
-		step_timer = 0.0  # Reset if not walking
+		step_timer = 0.0
+
 
 	update_cursor_pointer()
 

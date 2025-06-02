@@ -2,6 +2,7 @@ extends Area2D
 
 @export var is_on: bool = false
 @export var connected_door: NodePath  # Drag in your Door node
+@onready var sound_lever = $sfx_lever
 
 @export var enemy_scene: PackedScene
 @export var enemy_scene_2: PackedScene
@@ -44,6 +45,7 @@ func toggle():
 		call_deferred("spawn_enemies")
 
 func update_visual():
+	sound_lever.play()
 	if is_on:
 		sprite.play("turn_on")
 	else:
