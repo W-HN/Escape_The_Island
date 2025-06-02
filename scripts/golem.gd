@@ -318,6 +318,16 @@ func die():
 	sprite.play(death_animation)
 	await sprite.animation_finished
 	_fade_out_and_remove()
+	
+	await get_tree().create_timer(1.0).timeout
+	
+	var end_message_control = get_tree().current_scene.get_node("EndMessage/Control")
+	var end_message = get_tree().current_scene.get_node("EndMessage")
+	if end_message_control:
+		end_message.visible = true
+		end_message_control.visible = true
+		get_tree().paused = true
+
 
 func _get_death_animation() -> String:
 	if last_vertical_direction == "up":
