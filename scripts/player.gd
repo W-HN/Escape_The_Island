@@ -1,11 +1,9 @@
 extends CharacterBody2D
 
-@onready var sprite = $AnimatedSprite2D  # Reference to the sprite
+@onready var sprite = $AnimatedSprite2D
 @onready var heart_container = get_node("/root/Game/UI/HeartContainer")
 
-# @onready var Map = get_parent().get_node("Island1/TileMap")
 @onready var tilemap = get_parent().get_node("Island1/Map/Floor0") as TileMapLayer
-
 
 @onready var sound_slash = $sfx_slash
 @onready var sound_roll = $sfx_roll
@@ -21,35 +19,31 @@ extends CharacterBody2D
 var step_timer := 0.0
 const STEP_INTERVAL := 0.4 
 
-
 @export var knockback_strength: float = 1000.0
-@export var hit_recovery_time: float = 1.0  # Time to recover speed
-@export var invincibility_time: float = 1.0  # Time to be invincible
-
-
+@export var hit_recovery_time: float = 1.0 
+@export var invincibility_time: float = 1.0 
 
 var is_pushing = false
 var pushable_object: RigidBody2D = null  
 
 var knockback_velocity := Vector2.ZERO
-const KNOCKBACK_DECAY := 2000.0  # Higher = faster slide stop
+const KNOCKBACK_DECAY := 2000.0 
 
 var SPEED = 35.0
 var DASH_SPEED = 200.0
-const DASH_TIME = 0.2  # Duration of the dash
-const RECOVERY_TIME = 1.0  # Time to recover from 20% speed to full speed
-const MIN_SPEED_FACTOR = 0.2  # 20% of normal speed
-const MAX_VELOCITY := 200.0  # Tune this to feel right
+const DASH_TIME = 0.2  
+const RECOVERY_TIME = 1.0  
+const MIN_SPEED_FACTOR = 0.2 
+const MAX_VELOCITY := 200.0  
 
-# Health
-var health = 6 # number of hits (3 full hearts (2 hits each) )
+var health = 6 
 var is_invincible = false
 var hit_recovery = false
 var hit_recovery_timer = 0.0
 var original_speed = SPEED
 var blink_timer = 0.1  
 
-# attack vars
+
 var slash_scene = preload("res://scenes/slash_effect.tscn")
 var is_attacking = false
 var attack_timer = 0.0
@@ -61,13 +55,9 @@ var attack_velocity := Vector2.ZERO
 const ATTACK_DASH_DURATION := 0.15
 const ATTACK_DASH_SPEED := 100.0
 
-# Attack combo variables
 var combo_step = 0
 var combo_timer = 0.0
-const COMBO_MAX_DELAY = 0.5  # 0.5 seconds window to input next attack
-
-
-
+const COMBO_MAX_DELAY = 0.5 
 
 var dash_timer = 0.0
 var is_dashing = false
@@ -75,14 +65,13 @@ var recovering = false
 var recovery_timer = 0.0
 var dash_direction = Vector2.ZERO
 var current_speed = SPEED
-var last_direction = "right"  # Track last horizontal movement direction
-var last_vertical_direction = "down"  # Track last vertical movement direction
+var last_direction = "right" 
+var last_vertical_direction = "down"  
 
 var first_move = false
 var dying = false
 var current_floor = 1
 
-# fireball
 var fireball_scene = preload("res://scenes/fireball.tscn")
 
 func _ready():
@@ -94,19 +83,15 @@ func reset():
 	if is_instance_valid(heart_container):
 		heart_container.update_hearts(health)
 
-
 func process_tile_collision(collision: KinematicCollision2D) -> bool:
 	if collision.get_collider() is TileMapLayer:
 		var tilemap = collision.get_collider() as TileMapLayer
-		# Convert collision point to tile coordinates.
 		var tile_coords = tilemap.local_to_map(collision.get_position())
-		# get cells tile data (holds custom data)
 		var cell_data = tilemap.get_cell_tile_data(tile_coords)
 		if cell_data:
 			var is_water = cell_data.get_custom_data("is_water")
 			if is_water:
 				
-				print("Water tile collision detected; ignoring collision.")
 				return true
 	return false
 
@@ -118,21 +103,14 @@ func custom_move_and_slide(delta: float) -> void:
 	while collision_count < max_collisions and displacement.length() > 0.01:
 		var collision = move_and_collide(displacement)
 		if collision:
-			
 			var ignore_collision = process_tile_collision(collision)
-			
 			if ignore_collision:
-			
-			
 				collision_count += 1
 				continue
-
 			else:
-			
 				if displacement.dot(collision.get_normal()) < 0:
 					displacement = displacement.slide(collision.get_normal())
 				else:
-			
 					break
 			collision_count += 1
 		else:
@@ -140,20 +118,15 @@ func custom_move_and_slide(delta: float) -> void:
 			break
 
 func _physics_process(delta: float) -> void:
-	
 	var resistance_dir := get_input_direction()
 	if resistance_dir != Vector2.ZERO and knockback_velocity.length() > 0:
 		var opposing_strength: float = resistance_dir.normalized().dot(-knockback_velocity.normalized())
 		if opposing_strength > 0.1:
-	
 			knockback_velocity -= knockback_velocity.normalized() * opposing_strength * 500.0 * delta
-	
 	
 	var knockback_drag := 20.0  
 	knockback_velocity *= pow(0.5, knockback_drag * delta)
 
-
-	
 	var input_dir := get_input_direction()
 	var base_velocity: Vector2 = Vector2.ZERO
 
@@ -165,19 +138,13 @@ func _physics_process(delta: float) -> void:
 	else:
 		base_velocity += input_dir * current_speed
 
-
-	
-	
 	velocity = base_velocity + knockback_velocity
 
-	
 	if velocity.length() > MAX_VELOCITY:
 		velocity = velocity.normalized() * MAX_VELOCITY
 
-	
 	custom_move_and_slide(delta)
 
-	
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
 
@@ -198,14 +165,11 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("fireball") and not is_dashing:
 		cast_fireball()
 		
-	
 	if combo_step > 0 and not is_attacking:
 		combo_timer -= delta
 		if combo_timer <= 0.0:
-			print("Combo timeout. Resetting combo.")
 			combo_step = 0
 
-	
 	if not is_attacking and not is_dashing and velocity.length() > 10:
 		step_timer -= delta
 		if step_timer <= 0:
@@ -222,25 +186,17 @@ func _physics_process(delta: float) -> void:
 			else:
 				sound_step.pitch_scale = randf_range(0.9, 1.1)
 
-				
 			sound_step.play()
-
 			step_timer = STEP_INTERVAL
 	else:
 		step_timer = 0.0
-
-
 	update_cursor_pointer()
-
-
-
 
 func handle_movement(delta: float) -> void:
 	_update_facing_direction()
 	var direction := get_input_direction()
 	var movement_velocity = direction * current_speed
 
-	
 	var collision = move_and_collide(movement_velocity * delta)
 
 	if collision:
@@ -311,8 +267,6 @@ func handle_movement(delta: float) -> void:
 			else:
 				_play_idle_animation()
 
-
-
 func _play_walk_animation(_direction: Vector2) -> void:
 	var mouse_direction = (get_global_mouse_position() - global_position).normalized()
 
@@ -326,7 +280,6 @@ func _play_walk_animation(_direction: Vector2) -> void:
 			sprite.play("walk_down_left")
 		else:
 			sprite.play("walk_down_right")
-
 
 				
 func get_input_direction() -> Vector2:
@@ -378,23 +331,18 @@ func start_attack() -> void:
 		2:
 			anim_suffix = "3"
 
-	print("Attack combo step:", combo_step + 1)
-
 	_play_attack_animation(attack_direction, anim_suffix)
 
 	await get_tree().create_timer(0.2).timeout
 
-	
 	var slash = slash_scene.instantiate()
 
-	# determine if direction should swap effect
 	var should_swap := false
 	if attack_direction.x < 0 and attack_direction.y > 0:
-		should_swap = true  # down-left
+		should_swap = true  
 	elif attack_direction.x > 0 and attack_direction.y < 0:
-		should_swap = true  # up-right
+		should_swap = true  
 
-	#choose animation
 	var slash_anim := "slash_effect"
 	if combo_step == 0:
 		slash_anim = "slash_effect2" if should_swap else "slash_effect"
@@ -407,7 +355,6 @@ func start_attack() -> void:
 	slash.global_position = global_position + (attack_direction * 10) + Vector2(0, -4)
 	slash.rotation = attack_direction.angle() - PI / 4
 	
-	# cale up the third attack effect
 	if combo_step == 2:
 		slash.scale = Vector2(1.4, 1.4)  
 		
@@ -417,50 +364,40 @@ func start_attack() -> void:
 
 	is_attacking = false
 
-	# Combo logic
 	if combo_step < 2:
 		combo_step += 1
 		combo_timer = COMBO_MAX_DELAY
 	else:
-		combo_step = 0  # Reset after third attack
+		combo_step = 0 
 
-	
 func cast_fireball():
 	_update_facing_direction()
 	if dying or is_attacking:
-		return  # Don't cast if dead
+		return 
 
 	sound_cast.play()
-	# Prevent movement during attack
 	is_attacking = true
 	velocity = Vector2.ZERO  
 	
-	# Determine direction towards the mouse
 	var mouse_position = get_global_mouse_position()
 	var attack_direction = (mouse_position - global_position).normalized()
 
-	# Play the correct animation
 	var animation_name = _get_special_attack_animation(attack_direction)
 	sprite.play(animation_name)
 
-	# Wait for 3 frames before spawning fireball
 	await get_tree().create_timer(0.3).timeout
 
-	# Spawn fireball after animation delay
 	var fireball = fireball_scene.instantiate()
 	
-	# Fireball offset
 	var fireball_offset = attack_direction * 8
 	
-	fireball.global_position = global_position + fireball_offset # Spawn at player’s position
-	fireball.direction = attack_direction  # Set direction
-	fireball.source = self  # Set the player as the source of the fireball
+	fireball.global_position = global_position + fireball_offset 
+	fireball.direction = attack_direction 
+	fireball.source = self  
 	get_parent().add_child(fireball)
 	
-	# Wait for the full animation to complete before allowing movement
 	await sprite.animation_finished
 
-	# Reset attack state after fireball is spawned
 	is_attacking = false
 
 func _play_attack_animation(attack_direction: Vector2, suffix := "") -> void:
@@ -473,15 +410,11 @@ func _play_attack_animation(attack_direction: Vector2, suffix := "") -> void:
 
 	sprite.play(anim + suffix)
 
-
 func _get_special_attack_animation(attack_direction: Vector2) -> String:
 	if attack_direction.y < 0:
 		return "attack_special_up_left" if attack_direction.x < 0 else "attack_special_up_right"
 	else:
 		return "attack_special_down_left" if attack_direction.x < 0 else "attack_special_down_right"
-
-
-
 
 func _play_idle_animation() -> void:
 	if is_attacking:
@@ -526,14 +459,9 @@ func drown() -> void:
 
 	queue_free()
 
-	
-	
-
-
 func _on_collisiondetector_drown() -> void:
 	drown()
 	
-
 func take_damage(source_position):
 	if is_invincible:
 		return
@@ -542,72 +470,58 @@ func take_damage(source_position):
 	health -= 1
 	heart_container.update_hearts(health)
 
-
-	# Calculate knockback direction
 	var knockback_direction = (global_position - source_position).normalized()
 	knockback_velocity = knockback_direction * knockback_strength
-
 
 	SPEED *= 0.5
 	hit_recovery = true
 	hit_recovery_timer = hit_recovery_time
 
-	# Invincibility timer
 	is_invincible = true
-	# Disable enemy detection
-	set_collision_mask_value(2, false)
 
+	set_collision_mask_value(2, false)
 
 	_start_invincibility_effect()
 
 	if health <= 0:
 		die()
 
-	move_and_slide()  # Apply knockback movement
+	move_and_slide()  
 	
-	# Flash screen red
-	damage_flash.modulate = Color(1, 0, 0, 0)  # Start fully transparent
+	damage_flash.modulate = Color(1, 0, 0, 0)  
 	var tween = get_tree().create_tween()
 	tween.tween_property(damage_flash, "modulate:a", 0.6, 0.05).set_trans(Tween.TRANS_LINEAR)
 	tween.tween_property(damage_flash, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_LINEAR)
 
-	# Simple screen shake
 	var original_offset = player_camera.offset
 	var shake_strength = 5.0
 	player_camera.offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
 	await get_tree().create_timer(0.1).timeout
 	player_camera.offset = original_offset
 
-	# Restore collisions and invincibility after timeout
 	await get_tree().create_timer(invincibility_time).timeout
 	is_invincible = false
-	# Re-enable enemy detection
 	set_collision_mask_value(2, true)
 	_stop_invincibility_effect()
 
-	
-		
 func die():
 	if dying:
-		return  # Prevent multiple deaths
-	dying = true  # Mark player as dead
+		return  
+	dying = true  
 	is_dashing = false
 	is_attacking = false
-	velocity = Vector2.ZERO  # Stop movement
+	velocity = Vector2.ZERO  
 	damage_flash.modulate.a = 0.0
 
-	# Play the correct death animation
 	if last_direction == "left":
 		sprite.play("death_left")
 	else:
 		sprite.play("death_right")
 
-	# Wait for the death animation to finish
 	await sprite.animation_finished  
 
 	$"../AudioStreamPlayer2D".play()
 
-	# Respawn player at SpawnPoint
 	var player_scene = load("res://scenes/player.tscn")
 	var player_instance = player_scene.instantiate()
 	
@@ -616,8 +530,6 @@ func die():
 	get_parent().add_child(player_instance)
 	player_instance.call_deferred("reset")
 	
-
-	# Remove the current (dead) player instance
 	queue_free()
 	
 func _start_invincibility_effect():
@@ -627,8 +539,7 @@ func _start_invincibility_effect():
 	blink_tween.tween_property($AnimatedSprite2D, "modulate:a", 1.0, blink_timer)
 
 func _stop_invincibility_effect():
-	$AnimatedSprite2D.modulate.a = 1.0  # Reset transparency
-	
+	$AnimatedSprite2D.modulate.a = 1.0 
 	
 func _update_facing_direction():
 	var mouse_direction = (get_global_mouse_position() - global_position).normalized()
@@ -639,11 +550,11 @@ func _update_facing_direction():
 func update_cursor_pointer() -> void:
 	var cursor = get_global_mouse_position()
 	var to_cursor = (cursor - global_position).angle()
-	$CursorPointer.rotation = to_cursor - PI / 4  # or to_cursor - deg2rad(90))
+	$CursorPointer.rotation = to_cursor - PI / 4 
 
 
 func heal(amount: int):
-	health = min(health + amount, 6)  # Don't allow more than 6 health
+	health = min(health + amount, 6)  
 	if is_instance_valid(heart_container):
 		sound_heal.play()
 		heart_container.update_hearts(health)

@@ -25,27 +25,22 @@ var magnet_pending := false
 var tween: Tween = null
 
 func _ready():
-	
 	tween = get_tree().create_tween()
 	tween.set_loops(30) 
 	tween.tween_property(sprite, "scale", Vector2(1.2, 1.2), 0.5).set_trans(Tween.TRANS_SINE)
 	tween.tween_property(sprite, "scale", Vector2(1, 1), 0.5).set_trans(Tween.TRANS_SINE)
-
-	
 	bounce_velocity = randf_range(BOUNCE_INITIAL, BOUNCE_INITIAL * 1.15)
 	bouncing = true
-	# Connect signal for magnet
 	magnet_area.connect("body_entered", _on_magnet_body_entered)
 	magnet_area.connect("body_exited", _on_magnet_body_exited)
 
 func _physics_process(delta):
-	# Handle magnet grace period
 	if magnet_pending and player_ref:
 		magnet_timer += delta
 		if magnet_timer >= magnet_grace_time:
 			magnet_active = true
 			magnet_pending = false
-	# Magnet movement
+
 	if magnet_active and player_ref:
 		var direction = (player_ref.global_position - global_position).normalized()
 		velocity = direction * MAGNET_SPEED

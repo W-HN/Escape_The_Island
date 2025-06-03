@@ -1,6 +1,5 @@
 extends CharacterBody2D
 
-# MOVEMENT & DASH
 @export var speed: float = 22.0
 @export var follow_range: float = 200.0
 @export var dash_speed: float = 180.0 
@@ -9,12 +8,9 @@ extends CharacterBody2D
 @export var bounce_strength: float = 1000.0
 @export var dash_player_knockback: float = 100000.0
 
-
-# STUN & TELEGRAPH
 @export var stun_duration: float = 3.0
 @export var telegraph_duration: float = 1.0
 
-# DAMAGE & DEATH
 @export var invincibility_time: float = 0.5
 @export var health: int = 8
 
@@ -23,8 +19,6 @@ extends CharacterBody2D
 
 @onready var attack_area = $AttackArea
 @onready var sprite = $AnimatedSprite2D
-# Uncomment and add a clang sound if you like:
-# @onready var clang_sound = $ClangSound  # AudioStreamPlayer
 
 @onready var sound_block = $sfx_block
 @onready var sound_hit = $sfx_hit
@@ -61,12 +55,10 @@ func _ready():
 func _physics_process(delta):
 	if dying:
 		return
-
-	# Reacquire player if needed
+		
 	if not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group("Player")
 
-	# Knockback decay
 	knockback_velocity *= pow(0.5, 50.0 * delta)
 	var base_velocity: Vector2 = Vector2.ZERO
 
@@ -129,7 +121,7 @@ func _physics_process(delta):
 
 	var was_dashing = (state == State.DASHING)
 	move_and_slide()
-	# If dashing, and hit something that is NOT player, get stunned
+
 	if was_dashing and get_slide_collision_count() > 0:
 		for i in range(get_slide_collision_count()):
 			var collision = get_slide_collision(i)
@@ -156,9 +148,8 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		var direction = (body.global_position - global_position).normalized()
 		if state == State.STUNNED:
-			# Still apply knockback, but no damage!
 			if body.has_method("apply_knockback"):
-				body.apply_knockback(direction * 500) # or another value
+				body.apply_knockback(direction * 500)
 			return
 		if state == State.DASHING:
 			body.take_damage(global_position)
@@ -167,11 +158,6 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		else:
 			body.take_damage(global_position)
 
-
-
-
-
-# Walking and idle animations
 func _play_walk_animation(direction: Vector2) -> void:
 	if direction.y < 0:
 		last_vertical_direction = "up"
@@ -236,10 +222,8 @@ func _enter_stun():
 	velocity = Vector2.ZERO
 	_stop_telegraph_blink()
 	reset_dash_cooldown_on_unstun = true
-	# Bounce back after hitting obstacle
 	if dash_direction.length() > 0.1:
 		knockback_velocity = -dash_direction.normalized() * bounce_strength
-	# Trigger screen shake
 	var camera = get_viewport().get_camera_2d()
 	if camera and camera.has_method("shake"):
 		camera.shake(16.0) 
@@ -259,8 +243,7 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 		return
 
 	var weak_dir = get_weak_spot_direction()
-	if not is_in_weak_spot(attacker_position, weak_dir, 60.0): # 60 degrees = 1/3 of a circle
-		# Not hitting the weak spot! Clang and knockback player
+	if not is_in_weak_spot(attacker_position, weak_dir, 60.0):
 		sprite.modulate = Color(0.7, 0.7, 0.7, 1)
 		var player = get_tree().get_first_node_in_group("Player")
 		if player and player.has_method("apply_knockback"):
@@ -271,8 +254,6 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 		sound_block.play()
 		return
 
-
-	#only if the attack is from the weak spot
 	sound_hit.play()
 	health -= amount
 	is_invincible = true
@@ -287,7 +268,6 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 
 
 func apply_knockback(force: Vector2):
-	# golem does not get knockback
 	pass
 
 func die():
@@ -297,7 +277,6 @@ func die():
 	velocity = Vector2.ZERO
 	_stop_telegraph_blink()
 
-	# Drop loot
 	if gold_pickup_scene:
 		var num_gold = randi_range(20, 30)
 		for i in num_gold:
@@ -355,19 +334,19 @@ func _start_invincibility_effect():
 	blink_tween.tween_property(sprite, "modulate:a", 1.0, blink_timer)
 
 func _stop_invincibility_effect():
-	sprite.modulate.a = 1.0  # reset transparency
+	sprite.modulate.a = 1.0
 
 		
 func get_weak_spot_direction() -> Vector2:
 	match sprite.animation:
 		"stun_down_left":
-			return Vector2(1, -1).normalized()     # up right
+			return Vector2(1, -1).normalized()
 		"stun_down_right":
-			return Vector2(-1, -1).normalized()    # up left
+			return Vector2(-1, -1).normalized()
 		"stun_up_left":
-			return Vector2(1, 1).normalized()      # down right
+			return Vector2(1, 1).normalized()
 		"stun_up_right":
-			return Vector2(-1, 1).normalized()     # down left
+			return Vector2(-1, 1).normalized()
 	return Vector2.ZERO
 
 func is_in_weak_spot(attack_position: Vector2, weak_spot_direction: Vector2, tolerance_degrees: float = 60.0) -> bool:

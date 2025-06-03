@@ -20,7 +20,6 @@ func _on_area_entered(area):
 			golem.take_damage_knockback(attack_damage, global_position)
 		queue_free()
 
-
 func _on_body_entered(body):
 	if body.is_in_group("enemies"):
 		sound_hitenemy.pitch_scale = randf_range(0.9, 1.2)

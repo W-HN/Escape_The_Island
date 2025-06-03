@@ -31,8 +31,6 @@ var circling_direction := 1
 @export var combat_swap_min: float = 2.0
 @export var combat_swap_max: float = 4.0
 
-
-
 var spawn_position: Vector2
 var is_wandering = false
 var wandering_timer = 0.0
@@ -57,7 +55,6 @@ func _ready():
 	spawn_position = global_position
 	start_idle_wandering()
 
-
 func _physics_process(delta):
 	
 	if not is_instance_valid(player):
@@ -66,7 +63,6 @@ func _physics_process(delta):
 	if dying:
 		return
 
-	# Decay knockback velocity
 	knockback_velocity *= pow(0.5, 50.0 * delta)
 
 	var base_velocity = Vector2.ZERO
@@ -75,7 +71,6 @@ func _physics_process(delta):
 		var distance_to_player = global_position.distance_to(player.global_position)
 
 		if distance_to_player <= follow_range:
-			# Combat mode swap logic
 			mode_timer -= delta
 			if mode_timer <= 0:
 				var next_mode = CombatMode.STALK if randi() % 2 == 0 else CombatMode.CHARGE
@@ -111,16 +106,12 @@ func _physics_process(delta):
 			var push_direction = -to_player.normalized()
 			base_velocity += push_direction * (min_distance - distance) * 10.0
 
-
 	velocity = base_velocity + knockback_velocity
 	move_and_slide()
 
-
-
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
-		body.take_damage(global_position)  # call damage function on player
-
+		body.take_damage(global_position) 
 
 func _play_walk_animation(direction: Vector2) -> void:
 	if direction.y < 0:
@@ -147,7 +138,6 @@ func _play_walk_animation(direction: Vector2) -> void:
 			else:
 				sprite.play("walk_down_right")
 
-	# Update last movement direction
 	if direction.x < 0:
 		last_direction = "left"
 	elif direction.x > 0:
@@ -164,8 +154,7 @@ func _play_idle_animation() -> void:
 			sprite.play("idle_down_left")
 		else:
 			sprite.play("idle_down_right")
-			
-			
+
 func take_damage(amount):
 	if dying or is_invincible:
 		return
@@ -187,30 +176,26 @@ func apply_knockback(force: Vector2):
 		return
 	knockback_velocity = force
 
-	
 func die():
 	if dying:
 		return
 
 	dying = true
 	velocity = Vector2.ZERO
-	
+	var speed = randf_range(20, 30)
+	var angle = randf_range(0, TAU)
 	
 	if gold_pickup_scene:
 		var num_gold = randi_range(1, 3)
 		for i in num_gold:
 			var gold_pickup = gold_pickup_scene.instantiate()
 			gold_pickup.position = position
-			var angle = randf_range(0, TAU)
-			var speed = randf_range(20, 30)
 			gold_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
 			get_parent().call_deferred("add_child", gold_pickup)
 	
 	if heart_pickup_scene and randi_range(1, 5) == 1:
 		var heart_pickup = heart_pickup_scene.instantiate()
 		heart_pickup.position = position
-		var angle = randf_range(0, TAU)
-		var speed = randf_range(20, 30)
 		heart_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
 		heart_pickup.bounce_velocity = randf_range(40.0, 46.0)
 		heart_pickup.bouncing = true
@@ -221,14 +206,11 @@ func die():
 	if attack_area:
 		attack_area.set_deferred("monitoring", false)  # Stop detecting player
 
-
 	var death_animation = _get_death_animation()
 	sprite.play(death_animation)
 
-	
 	await sprite.animation_finished
 
-	
 	_fade_out_and_remove()
 
 func _get_death_animation() -> String:
@@ -256,7 +238,6 @@ func handle_wandering(delta: float) -> void:
 	if dying:
 		return
 
-	
 	if wander_cooldown_timer > 0.0:
 		wander_cooldown_timer -= delta
 		velocity = Vector2.ZERO

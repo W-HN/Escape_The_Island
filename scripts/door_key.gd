@@ -5,6 +5,8 @@ extends Node2D
 @onready var collider = $CollisionShape2D
 @onready var open_area = $OpenArea
 
+@onready var sound_open = $sfx_open
+
 var is_open = false
 
 func _ready():
@@ -17,9 +19,9 @@ func _on_open_area_body_entered(body):
 	if is_open:
 		return
 	if body.is_in_group("Player"):
-		# Check if player has a key
 		var game = get_tree().root.get_node("Game")
 		if game and game.keys > 0:
+			sound_open.play()
 			game.keys -= 1
 			game.emit_signal("keys_changed", game.keys) 
 			set_open(true)

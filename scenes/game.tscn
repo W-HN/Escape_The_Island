@@ -3,32 +3,32 @@
 [ext_resource type="PackedScene" uid="uid://fuuv1pq3m1x3" path="res://scenes/player.tscn" id="1_1lsjk"]
 [ext_resource type="Script" uid="uid://dubrjf22qk8tw" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="PackedScene" uid="uid://bv5daqxy4yf2k" path="res://scenes/heart_container.tscn" id="1_trtic"]
-[ext_resource type="Texture2D" uid="uid://cntf3ymsodn0a" path="res://assets/tileset/elevationMap/elevation_map.png" id="1_vtaks"]
-[ext_resource type="Texture2D" uid="uid://bbyy52egumjxi" path="res://assets/UI/health_heart_full.png" id="2_ir15t"]
+[ext_resource type="Texture2D" uid="uid://coivvgpmki7qt" path="res://assets/tileset/elevationMap/elevation_map.png" id="1_vtaks"]
+[ext_resource type="Texture2D" uid="uid://5cxps6llx4rs" path="res://assets/UI/health_heart_full.png" id="2_ir15t"]
 [ext_resource type="PackedScene" uid="uid://bkb1jw5ceksdv" path="res://scenes/skeleton.tscn" id="2_kvpfn"]
-[ext_resource type="Texture2D" uid="uid://ebg5n35p1y0t" path="res://assets/UI/health_heart_half.png" id="3_ca42v"]
+[ext_resource type="Texture2D" uid="uid://ccpie8fy81vk5" path="res://assets/UI/health_heart_half.png" id="3_ca42v"]
 [ext_resource type="PackedScene" uid="uid://bm41tp5jqd68j" path="res://scenes/box.tscn" id="3_dinhu"]
 [ext_resource type="TileSet" uid="uid://ct88p0f0uh72v" path="res://assets/tileset/floor0_tileset.tres" id="4_0tnpc"]
-[ext_resource type="Texture2D" uid="uid://dwrw1pnsh5uxn" path="res://assets/UI/health_heart_empty.png" id="4_rysoc"]
-[ext_resource type="AudioStream" uid="uid://c80i74tsedbok" path="res://assets/music/Omph.mp3" id="6_p57ef"]
-[ext_resource type="Texture2D" uid="uid://1icfesqcuf0b" path="res://assets/objects/pickups/coin.png" id="7_1kice"]
-[ext_resource type="Script" path="res://scripts/gold_num.gd" id="7_5newe"]
+[ext_resource type="Texture2D" uid="uid://c6p5qms8ck1ns" path="res://assets/UI/health_heart_empty.png" id="4_rysoc"]
+[ext_resource type="AudioStream" uid="uid://d348l2wpflnf4" path="res://assets/music/Omph.mp3" id="6_p57ef"]
+[ext_resource type="Texture2D" uid="uid://c0fy26mxu74uo" path="res://assets/objects/pickups/coin.png" id="7_1kice"]
+[ext_resource type="Script" uid="uid://dpwkt2fds07jl" path="res://scripts/gold_num.gd" id="7_5newe"]
 [ext_resource type="PackedScene" uid="uid://yhqtpruxoadd" path="res://scenes/mage.tscn" id="7_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://dqyjbvk4ue8y6" path="res://scenes/door.tscn" id="8_0tnpc"]
-[ext_resource type="Texture2D" uid="uid://d2h57ksvhxim3" path="res://assets/objects/pickups/key.png" id="8_5newe"]
-[ext_resource type="FontFile" uid="uid://bp5hjch6kdwwg" path="res://assets/UI/fonts/m3x6.ttf" id="8_37s47"]
-[ext_resource type="Script" path="res://scripts/key_num.gd" id="8_bt5mj"]
+[ext_resource type="Texture2D" uid="uid://dabbrlf6llt0x" path="res://assets/objects/pickups/key.png" id="8_5newe"]
+[ext_resource type="FontFile" uid="uid://br4qv7o28fyov" path="res://assets/UI/fonts/m3x6.ttf" id="8_37s47"]
+[ext_resource type="Script" uid="uid://e36et4dnis1t" path="res://scripts/key_num.gd" id="8_bt5mj"]
 [ext_resource type="PackedScene" uid="uid://c6cltwx5emln8" path="res://scenes/lever.tscn" id="9_vtaks"]
 [ext_resource type="PackedScene" uid="uid://ddae0ht5i0kkc" path="res://scenes/bush.tscn" id="15_ir15t"]
 [ext_resource type="PackedScene" uid="uid://j1htna3rwb1l" path="res://scenes/key.tscn" id="22_37s47"]
 [ext_resource type="PackedScene" uid="uid://2205ayior07y" path="res://scenes/door_key.tscn" id="23_bt5mj"]
 [ext_resource type="PackedScene" uid="uid://cna4e6nujwb81" path="res://scenes/golem.tscn" id="24_e1j6l"]
-[ext_resource type="Texture2D" uid="uid://c8rc06yqggjm7" path="res://assets/UI/menu_button.png" id="25_pl11u"]
+[ext_resource type="Texture2D" uid="uid://c887wm3rngwp" path="res://assets/UI/menu_button.png" id="25_pl11u"]
 [ext_resource type="Script" uid="uid://dxsbnl2ibyqh" path="res://scripts/cutscene_overlay.gd" id="26_bhx41"]
 [ext_resource type="Script" uid="uid://b5bunwwhh5oxd" path="res://scripts/control.gd" id="26_qnb83"]
 [ext_resource type="Script" uid="uid://c614w68t1qp0w" path="res://scenes/beach_sound_area.gd" id="28_sww3w"]
-[ext_resource type="AudioStream" uid="uid://cmqrtheynyvc6" path="res://sounds/waves.mp3" id="29_sgl2t"]
-[ext_resource type="AudioStream" uid="uid://cofa4gnfvhvvy" path="res://sounds/getmoney.mp3" id="29_suyxu"]
+[ext_resource type="AudioStream" uid="uid://djwgnfmj4nk6x" path="res://sounds/waves.mp3" id="29_sgl2t"]
+[ext_resource type="AudioStream" uid="uid://dpak08ktck7k7" path="res://sounds/getmoney.mp3" id="29_suyxu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kvpfn"]
 texture = ExtResource("1_vtaks")
@@ -671,6 +671,39 @@ position = Vector2(216, -939)
 [node name="bush85" parent="Bushes" instance=ExtResource("15_ir15t")]
 position = Vector2(177, -947)
 
+[node name="bush116" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1433, -1463)
+
+[node name="bush117" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1418, -1454)
+
+[node name="bush118" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1418, -1436)
+
+[node name="bush119" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1175, -1452)
+
+[node name="bush120" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1176, -1437)
+
+[node name="bush121" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1189, -1421)
+
+[node name="bush122" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1224, -1640)
+
+[node name="bush123" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1208, -1627)
+
+[node name="bush124" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1385, -1629)
+
+[node name="bush125" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1411, -1616)
+
+[node name="bush126" parent="Bushes" instance=ExtResource("15_ir15t")]
+position = Vector2(1393, -1616)
+
 [node name="bush86" parent="Bushes" instance=ExtResource("15_ir15t")]
 position = Vector2(-80, -1086)
 
@@ -766,6 +799,9 @@ position = Vector2(1419, -956)
 
 [node name="bush69" parent="Bushes" instance=ExtResource("15_ir15t")]
 position = Vector2(1015, -1287)
+
+[node name="Key" parent="Bushes" instance=ExtResource("22_37s47")]
+position = Vector2(41, -579)
 
 [node name="PauseMenu" type="CanvasLayer" parent="."]
 visible = false

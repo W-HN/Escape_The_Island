@@ -6,11 +6,11 @@ extends Area2D
 @export var damage: int = 1
 @export var knockback_force: float = 500.0
 
-@export var wave_strength: float = 0.0  # 0 = no wave
+@export var wave_strength: float = 0.0
 @export var wave_speed: float = 1.0
 @export var wave_phase: float = 0.0
 
-var source  # Reference to whoever fired it
+var source
 var time_alive: float = 0.0
 
 @onready var sprite = $AnimatedSprite2D
@@ -28,15 +28,13 @@ func _ready():
 func _process(delta):
 	time_alive += delta
 
-	# Stronger and clearer wave motion
-	var perp = Vector2(-direction.y, direction.x)  # Perpendicular to direction
+	var perp = Vector2(-direction.y, direction.x)
 	var wave_factor = sin((time_alive + wave_phase) * wave_speed * TAU)
 	var wave_offset = perp * wave_factor * wave_strength
 
 	position += (direction * speed * delta) + (wave_offset * delta)
 
 	rotation = direction.angle() + wave_factor * 0.2  
-
 
 func _on_timer_timeout():
 	queue_free()
@@ -50,7 +48,6 @@ func _on_body_entered(body):
 			apply_knockback(body)
 		if body.has_method("take_damage"):
 			body.take_damage(global_position)
-
 	queue_free()
 
 func apply_knockback(enemy):

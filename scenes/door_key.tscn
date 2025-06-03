@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://2205ayior07y"]
+[gd_scene load_steps=7 format=3 uid="uid://2205ayior07y"]
 
 [ext_resource type="Script" uid="uid://c8872rrxwnf4h" path="res://scripts/door_key.gd" id="1_jw4ut"]
-[ext_resource type="Texture2D" uid="uid://b6uomn5flrxm7" path="res://assets/objects/door_stone_key.png" id="1_si2ci"]
-[ext_resource type="Texture2D" uid="uid://whjhnwgkstlh" path="res://assets/objects/door_stone_open.png" id="2_jw4ut"]
+[ext_resource type="Texture2D" uid="uid://ca7uk0qowj6dk" path="res://assets/objects/door_stone_key.png" id="1_si2ci"]
+[ext_resource type="Texture2D" uid="uid://dxvt86njrx3lp" path="res://assets/objects/door_stone_open.png" id="2_jw4ut"]
+[ext_resource type="AudioStream" uid="uid://du3mdene8aaj1" path="res://sounds/lever.mp3" id="4_3hk56"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3hk56"]
 size = Vector2(16, 8)
@@ -30,3 +31,7 @@ shape = SubResource("RectangleShape2D_3hk56")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="OpenArea"]
 shape = SubResource("CircleShape2D_uaa2a")
+
+[node name="sfx_open" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_3hk56")
+volume_db = 20.0

@@ -1,4 +1,4 @@
-extends Area2D  # or Area2D if you want collision
+extends Area2D
 
 @export var bush: Texture2D = preload("res://assets/objects/bush.png")
 @export var bush_cut: Texture2D = preload("res://assets/objects/bush_cut.png")
@@ -10,7 +10,6 @@ extends Area2D  # or Area2D if you want collision
 var is_cut = false
 
 func _ready():
-	# Set to the whole bush at start
 	$Sprite2D.texture = bush
 
 func cut_bush():
@@ -30,7 +29,6 @@ func cut_bush():
 			for i in num_gold:
 				var gold_pickup = gold_pickup_scene.instantiate()
 				gold_pickup.position = position
-				# random direction and speed for topdown scatter
 				var angle = randf_range(0, TAU)
 				var speed = randf_range(20, 30)
 				gold_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed

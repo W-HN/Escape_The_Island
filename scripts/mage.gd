@@ -1,18 +1,18 @@
 extends CharacterBody2D
 
 @export var speed: float = 25.0
-@export var follow_range: float = 100.0  # Distance at which the enemy starts following the player
+@export var follow_range: float = 100.0 
 @export var invincibility_time: float = 0.3
 
 @export var gold_pickup_scene: PackedScene
 @export var heart_pickup_scene: PackedScene
 
-@onready var attack_area = $AttackArea  # Reference to Area2D
+@onready var attack_area = $AttackArea  
 @onready var sprite = $AnimatedSprite2D
 
 @export var attack_cooldown: float = 1.5
 @export var projectile_scene: PackedScene = preload("res://scenes/mage_projectile.tscn")
-@export var attack_range: float = 150.0  # Max range to shoot
+@export var attack_range: float = 150.0  
 
 @export var wander_radius: float = 40.0
 @export var wander_speed: float = 15.0
@@ -25,9 +25,7 @@ extends CharacterBody2D
 @export var reposition_max_delay: float = 2.5
 var player: Node2D = null
 
-
 var wander_target_position: Vector2
-	
 var knockback_velocity := Vector2.ZERO
 const KNOCKBACK_DECAY := 2000.0  
 
@@ -59,24 +57,21 @@ func _ready():
 	spawn_position = global_position
 	if not attack_area.body_entered.is_connected(_on_attack_area_body_entered):
 		attack_area.body_entered.connect(_on_attack_area_body_entered)
-	start_idle_wandering()  #wandering logic on spawn
+	start_idle_wandering()
 
 func _physics_process(delta):
-	# reacquire player if missing or freed
 	if not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group("Player")
 
 	if dying:
 		return
 
-	# Knockback decay
 	if knockback_velocity.length() > 0:
 		var knockback_drag := 50.0  
 		knockback_velocity *= pow(0.5, knockback_drag * delta)
 
 	if player:
 		var distance_to_player = global_position.distance_to(player.global_position)
-
 		if is_attacking:
 			handle_combat_attack(delta)
 		elif distance_to_player <= attack_range:
@@ -104,7 +99,6 @@ func handle_combat_attack(delta: float) -> void:
 	if combat_moving:
 		var move_vector = combat_target_position - global_position
 		var distance = move_vector.length()
-		
 		
 		if abs(distance - last_combat_distance) < 0.2:
 			combat_progress_timer += delta
@@ -293,11 +287,9 @@ func fire_dna_shot(base_dir):
 			p.wave_phase = PI * j
 			get_parent().add_child(p)
 
-
 func face_player():
 	var dir = (player.global_position - global_position).normalized()
 
-	
 	if dir.y < 0:
 		last_vertical_direction = "up"
 	elif dir.y > 0:
@@ -307,7 +299,6 @@ func face_player():
 		last_direction = "left"
 	elif dir.x > 0:
 		last_direction = "right"
-
 
 func _play_idle_animation_from_direction(direction: Vector2):
 	if direction.y < 0:
@@ -322,11 +313,9 @@ func _play_idle_animation_from_direction(direction: Vector2):
 
 	_play_idle_animation()
 
-
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		body.take_damage(global_position)  
-
 
 func _play_walk_animation(direction: Vector2) -> void:
 	if direction.y < 0:
@@ -353,12 +342,10 @@ func _play_walk_animation(direction: Vector2) -> void:
 			else:
 				sprite.play("walk_down_right")
 
-
 	if direction.x < 0:
 		last_direction = "left"
 	elif direction.x > 0:
 		last_direction = "right"
-
 
 func _play_idle_animation() -> void:
 	if last_vertical_direction == "up":
@@ -423,14 +410,12 @@ func apply_knockback(force: Vector2):
 		return
 	knockback_velocity = force
 
-	
 func die():
 	if dying:
 		return
 
 	dying = true
 	velocity = Vector2.ZERO  
-	
 	
 	if gold_pickup_scene:
 		var num_gold = randi_range(1, 3)
@@ -458,14 +443,11 @@ func die():
 	if attack_area:
 		attack_area.set_deferred("monitoring", false)  # Stop detecting player
 
-	
 	var death_animation = _get_death_animation()
 	sprite.play(death_animation)
 
-	
 	await sprite.animation_finished
 
-	
 	_fade_out_and_remove()
 
 func _get_death_animation() -> String:
@@ -499,7 +481,6 @@ func handle_wandering(delta: float) -> void:
 		else:
 			start_move_wandering()
 
-	
 	elif is_wandering:
 		wandering_timer -= delta
 		var move_vector = (wander_target_position - global_position)
@@ -513,7 +494,6 @@ func handle_wandering(delta: float) -> void:
 
 		if wandering_timer <= 0:
 			is_wandering = false
-
 
 	elif is_idle_wandering:
 		wandering_timer -= delta
@@ -532,7 +512,6 @@ func start_move_wandering():
 	var angle = randf() * TAU
 	wandering_direction = Vector2(cos(angle), sin(angle))
 	wander_target_position = spawn_position + wandering_direction * wander_radius
-
 
 func start_idle_wandering():
 	is_idle_wandering = true
