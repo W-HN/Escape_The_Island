@@ -523,6 +523,7 @@ func drown() -> void:
 	if is_instance_valid(player_instance.heart_container):
 		player_instance.heart_container.update_hearts(6)
 	player_instance.call_deferred("reset")
+	get_tree().reload_current_scene()
 	queue_free()
 
 	
@@ -617,7 +618,8 @@ func die():
 	player_instance.global_position = spawn_point.global_position
 	get_parent().add_child(player_instance)
 	player_instance.call_deferred("reset")
-
+	
+	get_tree().reload_current_scene()
 
 	# Remove the current (dead) player instance
 	queue_free()
