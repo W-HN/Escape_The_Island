@@ -12,6 +12,11 @@ extends CharacterBody2D
 @onready var sound_cast = $sfx_cast
 @onready var sound_takedamage = $sfx_takedamage
 @onready var sound_step = $sfx_step
+@onready var sound_heal = $sfx_healthup
+
+@onready var screen_effects = $ScreenEffects
+@onready var damage_flash = $ScreenEffects/DamageFlash
+@onready var player_camera = $Camera2D
 
 var step_timer := 0.0
 const STEP_INTERVAL := 0.4 
@@ -20,6 +25,8 @@ const STEP_INTERVAL := 0.4
 @export var knockback_strength: float = 1000.0
 @export var hit_recovery_time: float = 1.0  # Time to recover speed
 @export var invincibility_time: float = 1.0  # Time to be invincible
+
+
 
 var is_pushing = false
 var pushable_object: RigidBody2D = null  # Store the box reference
@@ -78,8 +85,12 @@ var current_floor = 1
 # fireball
 var fireball_scene = preload("res://scenes/fireball.tscn")
 
+func _ready():
+	damage_flash.modulate.a = 0.0 
+
 func reset():
 	health = 6
+	damage_flash.modulate.a = 0.0
 	if is_instance_valid(heart_container):
 		heart_container.update_hearts(health)
 
@@ -208,9 +219,10 @@ func _physics_process(delta: float) -> void:
 				on_sand = true
 
 			if on_sand: 
-				sound_step.pitch_scale = 5.0
+				sound_step.pitch_scale = randf_range(3.2, 4.0)
 			else:
-				sound_step.pitch_scale = 1.0
+				sound_step.pitch_scale = randf_range(0.9, 1.1)
+
 				
 			sound_step.play()
 
@@ -553,6 +565,19 @@ func take_damage(source_position):
 		die()
 
 	move_and_slide()  # Apply knockback movement
+	
+	# Flash screen red
+	damage_flash.modulate = Color(1, 0, 0, 0)  # Start fully transparent
+	var tween = get_tree().create_tween()
+	tween.tween_property(damage_flash, "modulate:a", 0.6, 0.05).set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(damage_flash, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_LINEAR)
+
+	# Simple screen shake
+	var original_offset = player_camera.offset
+	var shake_strength = 5.0
+	player_camera.offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
+	await get_tree().create_timer(0.1).timeout
+	player_camera.offset = original_offset
 
 	# Restore collisions and invincibility after timeout
 	await get_tree().create_timer(invincibility_time).timeout
@@ -570,6 +595,7 @@ func die():
 	is_dashing = false
 	is_attacking = false
 	velocity = Vector2.ZERO  # Stop movement
+	damage_flash.modulate.a = 0.0
 
 	# Play the correct death animation
 	if last_direction == "left":
@@ -621,6 +647,7 @@ func update_cursor_pointer() -> void:
 func heal(amount: int):
 	health = min(health + amount, 6)  # Don't allow more than 6 health
 	if is_instance_valid(heart_container):
+		sound_heal.play()
 		heart_container.update_hearts(health)
 		
 func apply_knockback(force: Vector2):

@@ -11,10 +11,13 @@ var source  # Reference to the player
 @onready var sprite = $AnimatedSprite2D
 @onready var timer = $Timer
 
+@onready var sound_stop = $sfx_stop
+@onready var sound_hitenemy = $sfx_hitenemy
+
 func _ready():
 	add_to_group("attack")
-	sprite.play("fireball_stage_2")  # Start with default animation
-	
+	sprite.play("fireball_stage_2")
+
 	# Setup and start timer
 	timer.wait_time = lifetime
 	timer.one_shot = true
@@ -22,32 +25,51 @@ func _ready():
 	if not timer.is_connected("timeout", _on_timer_timeout):
 		timer.connect("timeout", _on_timer_timeout)
 
-	# Setup collision signal
 	if not is_connected("body_entered", _on_body_entered):
 		connect("body_entered", _on_body_entered)
 
-	# Ensure collision is active
 	$CollisionShape2D.set_deferred("disabled", false)
 
 
 func _process(delta):
-	# Move fireball forward
 	position += direction * speed * delta
-	sprite.rotation += delta * -5  # Adjust rotation speed as needed
+	sprite.rotation += delta * -5  # Optional rotation
+
 
 func _on_timer_timeout():
-	queue_free()  # Destroy the fireball after a while
+	detach_and_play_sound(sound_stop)
+	queue_free()
+
 
 func _on_body_entered(body):
-	# Fireball hits an enemy
 	if body.is_in_group("enemies"):
 		if body.has_method("apply_knockback"):
-			apply_knockback(body)  # Apply knockback effect
+			apply_knockback(body)
 		if body.has_method("take_damage"):
-			body.take_damage(damage)  # Apply damage
+			body.take_damage(damage)
+			detach_and_play_sound(sound_hitenemy)
 
-	queue_free()  # Destroy fireball on impact
+	detach_and_play_sound(sound_stop)
+	queue_free()
+
 
 func apply_knockback(enemy):
 	var knockback_direction = (enemy.global_position - global_position).normalized()
 	enemy.apply_knockback(knockback_direction * knockback_force)
+
+
+func detach_and_play_sound(sound: AudioStreamPlayer2D):
+	if not sound.stream:
+		return  # Don't try to play if no sound assigned
+
+	var clone = sound.duplicate()
+	clone.global_position = sound.global_position
+	get_tree().current_scene.add_child(clone)
+	clone.play()
+
+	var cleanup_timer = Timer.new()
+	cleanup_timer.wait_time = clone.stream.get_length()
+	cleanup_timer.one_shot = true
+	cleanup_timer.connect("timeout", Callable(clone, "queue_free"))
+	clone.add_child(cleanup_timer)
+	cleanup_timer.start()

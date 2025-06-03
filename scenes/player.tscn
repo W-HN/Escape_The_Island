@@ -1,37 +1,38 @@
-[gd_scene load_steps=289 format=3 uid="uid://fuuv1pq3m1x3"]
+[gd_scene load_steps=290 format=3 uid="uid://fuuv1pq3m1x3"]
 
 [ext_resource type="Script" uid="uid://b8tj6k0jqm80o" path="res://scripts/player.gd" id="1_7da2e"]
-[ext_resource type="Texture2D" uid="uid://bkyaxm2r5b8lr" path="res://assets/character/attack.png" id="2_4ymhu"]
-[ext_resource type="Texture2D" uid="uid://es6mlkvpp6yh" path="res://assets/character/attack2_down_left.png" id="2_31cv2"]
-[ext_resource type="Texture2D" uid="uid://cgpuap0xqbeti" path="res://assets/character/idle_down_left.png" id="2_cwkjf"]
-[ext_resource type="Texture2D" uid="uid://cehk61dudc3k5" path="res://assets/character/attack_down_left.png" id="2_ueluq"]
-[ext_resource type="Texture2D" uid="uid://20d5veonns0r" path="res://assets/character/idle_down_right.png" id="3_b48xk"]
-[ext_resource type="Texture2D" uid="uid://blhb8775fmu0c" path="res://assets/character/attack2_down_right.png" id="3_pf23h"]
-[ext_resource type="Texture2D" uid="uid://dpm11v2pqbomj" path="res://assets/character/attack_down_right.png" id="3_uapiy"]
-[ext_resource type="Texture2D" uid="uid://bpjxlmg4gst0j" path="res://assets/character/walk_down_left.png" id="3_vl1of"]
-[ext_resource type="Texture2D" uid="uid://bcwv73h3c7m41" path="res://assets/character/attack_up_left.png" id="4_c8a31"]
-[ext_resource type="Texture2D" uid="uid://bp2fscj7f6p7h" path="res://assets/character/attack2_up_left.png" id="4_dt7fs"]
-[ext_resource type="Texture2D" uid="uid://34j3mr45e70a" path="res://assets/character/walk_down_right.png" id="4_hls0f"]
-[ext_resource type="Texture2D" uid="uid://1qska1bujdr0" path="res://assets/character/roll.png" id="4_sowig"]
-[ext_resource type="Texture2D" uid="uid://dn3u55dpu3wv5" path="res://assets/character/idle_up_left_right.png" id="4_wbi4v"]
-[ext_resource type="Texture2D" uid="uid://bco2hx8icfyk7" path="res://assets/character/attack_up_right.png" id="5_asgak"]
-[ext_resource type="Texture2D" uid="uid://cjvx0dos3ei3g" path="res://assets/character/attack2_up_right.png" id="5_wqfne"]
-[ext_resource type="Texture2D" uid="uid://by5rny5vkdo7e" path="res://assets/character/death_left.png" id="6_0jd1q"]
-[ext_resource type="Texture2D" uid="uid://cxst47v75su5x" path="res://assets/character/drown.png" id="6_cvvq8"]
-[ext_resource type="Texture2D" uid="uid://bmck7csn5w8se" path="res://assets/character/walk_up_left.png" id="7_jqjkc"]
-[ext_resource type="Texture2D" uid="uid://o3ft6gjqell3" path="res://assets/character/death_right.png" id="7_vjpod"]
-[ext_resource type="Texture2D" uid="uid://c1q7b7giq17df" path="res://assets/character/walk_up_right.png" id="8_0h2xq"]
-[ext_resource type="Texture2D" uid="uid://go6eylosg0pa" path="res://assets/character/laying_left.png" id="12_bmdhk"]
-[ext_resource type="Texture2D" uid="uid://tje3sm02h4kg" path="res://assets/character/laying_right.png" id="13_7qac5"]
+[ext_resource type="Texture2D" uid="uid://ccpt2twmkrto8" path="res://assets/character/attack.png" id="2_4ymhu"]
+[ext_resource type="Texture2D" uid="uid://q0e3xtm0dje0" path="res://assets/character/attack2_down_left.png" id="2_31cv2"]
+[ext_resource type="Texture2D" uid="uid://b8wm7aw22brjx" path="res://assets/character/idle_down_left.png" id="2_cwkjf"]
+[ext_resource type="Texture2D" uid="uid://c4205jl5xihil" path="res://assets/character/attack_down_left.png" id="2_ueluq"]
+[ext_resource type="Texture2D" uid="uid://x5inxpqe7xie" path="res://assets/character/idle_down_right.png" id="3_b48xk"]
+[ext_resource type="Texture2D" uid="uid://csl8g4pxb4an1" path="res://assets/character/attack2_down_right.png" id="3_pf23h"]
+[ext_resource type="Texture2D" uid="uid://rkj8ec3taj1h" path="res://assets/character/attack_down_right.png" id="3_uapiy"]
+[ext_resource type="Texture2D" uid="uid://dtdc2bd6xd2ye" path="res://assets/character/walk_down_left.png" id="3_vl1of"]
+[ext_resource type="Texture2D" uid="uid://ddqd2f06dup3y" path="res://assets/character/attack_up_left.png" id="4_c8a31"]
+[ext_resource type="Texture2D" uid="uid://bln7axdb1o55k" path="res://assets/character/attack2_up_left.png" id="4_dt7fs"]
+[ext_resource type="Texture2D" uid="uid://biaqgrun7g3f" path="res://assets/character/walk_down_right.png" id="4_hls0f"]
+[ext_resource type="Texture2D" uid="uid://d1857aw838gyl" path="res://assets/character/roll.png" id="4_sowig"]
+[ext_resource type="Texture2D" uid="uid://dldotb1vxs028" path="res://assets/character/idle_up_left_right.png" id="4_wbi4v"]
+[ext_resource type="Texture2D" uid="uid://m8b4ebpqmycg" path="res://assets/character/attack_up_right.png" id="5_asgak"]
+[ext_resource type="Texture2D" uid="uid://vv2mpha4ow2x" path="res://assets/character/attack2_up_right.png" id="5_wqfne"]
+[ext_resource type="Texture2D" uid="uid://bdito744lm5qc" path="res://assets/character/death_left.png" id="6_0jd1q"]
+[ext_resource type="Texture2D" uid="uid://daqimaurpy1ei" path="res://assets/character/drown.png" id="6_cvvq8"]
+[ext_resource type="Texture2D" uid="uid://bufd0ncixn30r" path="res://assets/character/walk_up_left.png" id="7_jqjkc"]
+[ext_resource type="Texture2D" uid="uid://bqfeopqwtgsi3" path="res://assets/character/death_right.png" id="7_vjpod"]
+[ext_resource type="Texture2D" uid="uid://bwp71q5oxuijr" path="res://assets/character/walk_up_right.png" id="8_0h2xq"]
+[ext_resource type="Texture2D" uid="uid://clqe1dsgnxgns" path="res://assets/character/laying_left.png" id="12_bmdhk"]
+[ext_resource type="Texture2D" uid="uid://u4pais67gbga" path="res://assets/character/laying_right.png" id="13_7qac5"]
 [ext_resource type="Script" uid="uid://dmwrghhrofh6g" path="res://scenes/camera_2d.gd" id="15_ce4ey"]
-[ext_resource type="Texture2D" uid="uid://dwhfa6e0mkgeu" path="res://assets/particles/z.png" id="20_obhut"]
+[ext_resource type="Texture2D" uid="uid://dl63g2ux5kpi6" path="res://assets/particles/z.png" id="20_obhut"]
 [ext_resource type="PackedScene" uid="uid://dksskfvbvlo8o" path="res://scenes/collision_detector.tscn" id="22_jua2n"]
-[ext_resource type="Texture2D" uid="uid://cd6c4ci4hrp3c" path="res://assets/character/cursor_pointer.png" id="23_4ni07"]
-[ext_resource type="AudioStream" uid="uid://dufo08hrwlccq" path="res://sounds/Player/slash.mp3" id="28_gl8cc"]
-[ext_resource type="AudioStream" uid="uid://d1r8bkeq0i4yi" path="res://sounds/Player/roll.mp3" id="29_487ah"]
-[ext_resource type="AudioStream" uid="uid://bf3lf8ojymcvc" path="res://sounds/Player/cast1.mp3" id="30_md1ol"]
-[ext_resource type="AudioStream" uid="uid://dahelox430ec2" path="res://sounds/Player/takeDamage.mp3" id="31_bj30b"]
-[ext_resource type="AudioStream" uid="uid://bqpnvkwmuijgl" path="res://sounds/Player/step.mp3" id="32_jc3p3"]
+[ext_resource type="Texture2D" uid="uid://bonvp07vbtn5n" path="res://assets/character/cursor_pointer.png" id="23_4ni07"]
+[ext_resource type="AudioStream" uid="uid://jt31mm73eg2h" path="res://sounds/Player/slash.mp3" id="28_gl8cc"]
+[ext_resource type="AudioStream" uid="uid://f7y44cl8dppy" path="res://sounds/Player/roll.mp3" id="29_487ah"]
+[ext_resource type="AudioStream" uid="uid://d04rvho0jo6i1" path="res://sounds/Player/cast1.mp3" id="30_md1ol"]
+[ext_resource type="AudioStream" uid="uid://syuerqjnupc" path="res://sounds/Player/takeDamage.mp3" id="31_bj30b"]
+[ext_resource type="AudioStream" uid="uid://c4468w0to5f25" path="res://sounds/Player/step.mp3" id="32_jc3p3"]
+[ext_resource type="AudioStream" uid="uid://dcneat7xrbcjx" path="res://sounds/Player/healUp.wav" id="33_487ah"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_45pgr"]
 atlas = ExtResource("2_ueluq")
@@ -2091,10 +2092,27 @@ volume_db = 2.972
 
 [node name="sfx_takedamage" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("31_bj30b")
+volume_db = 0.99
+pitch_scale = 4.0
 
 [node name="sfx_step" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("32_jc3p3")
 
 [node name="sfx_healthup" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("33_487ah")
+
+[node name="ScreenEffects" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="DamageFlash" type="ColorRect" parent="ScreenEffects"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 3.24)
+size_flags_horizontal = 4
+color = Color(0.665236, 0, 0.0227281, 1)
+metadata/_edit_use_anchors_ = true
 
 [connection signal="drown" from="Collisiondetector" to="." method="_on_collisiondetector_drown"]

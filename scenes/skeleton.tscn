@@ -1,9 +1,9 @@
 [gd_scene load_steps=65 format=3 uid="uid://bkb1jw5ceksdv"]
 
-[ext_resource type="Texture2D" uid="uid://d3taqm07q5uws" path="res://assets/enemies/skeleton/skeleton_walk.png" id="1_pbvs3"]
+[ext_resource type="Texture2D" uid="uid://rc7rvqbbi0ax" path="res://assets/enemies/skeleton/skeleton_walk.png" id="1_pbvs3"]
 [ext_resource type="Script" uid="uid://cm8r5ggey7tnc" path="res://scripts/skeleton.gd" id="1_txkty"]
 [ext_resource type="PackedScene" uid="uid://dkuxhp4vvm43b" path="res://scenes/gold.tscn" id="2_5pgwy"]
-[ext_resource type="Texture2D" uid="uid://bp58225qd2epr" path="res://assets/enemies/skeleton/skeleton_death.png" id="2_ivqcw"]
+[ext_resource type="Texture2D" uid="uid://5fbyyio2pekj" path="res://assets/enemies/skeleton/skeleton_death.png" id="2_ivqcw"]
 [ext_resource type="PackedScene" uid="uid://bcwc4r74fj64g" path="res://scenes/heart.tscn" id="3_ssl1b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ulcnj"]

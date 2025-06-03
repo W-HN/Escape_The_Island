@@ -1,12 +1,15 @@
-[gd_scene load_steps=83 format=3 uid="uid://cna4e6nujwb81"]
+[gd_scene load_steps=86 format=3 uid="uid://cna4e6nujwb81"]
 
-[ext_resource type="Texture2D" uid="uid://048kivkwsyce" path="res://assets/enemies/golem/golem_death.png" id="1_22jjw"]
+[ext_resource type="Texture2D" uid="uid://c8scwc0gvgy11" path="res://assets/enemies/golem/golem_death.png" id="1_22jjw"]
 [ext_resource type="Script" uid="uid://b71ct17dl1vcy" path="res://scripts/golem.gd" id="1_bko2c"]
 [ext_resource type="PackedScene" uid="uid://dkuxhp4vvm43b" path="res://scenes/gold.tscn" id="2_u0guc"]
-[ext_resource type="Texture2D" uid="uid://chs07ee610xcn" path="res://assets/enemies/golem/golem_idle.png" id="2_w3tsi"]
+[ext_resource type="Texture2D" uid="uid://cl1ysms0tfwi8" path="res://assets/enemies/golem/golem_idle.png" id="2_w3tsi"]
 [ext_resource type="PackedScene" uid="uid://bcwc4r74fj64g" path="res://scenes/heart.tscn" id="3_fxrhl"]
-[ext_resource type="Texture2D" uid="uid://cqe18cgc1ai8w" path="res://assets/enemies/golem/golem_walk.png" id="3_wpr87"]
-[ext_resource type="Texture2D" uid="uid://b7j6vo06qx32n" path="res://assets/enemies/golem/golem_stunned.png" id="4_bko2c"]
+[ext_resource type="Texture2D" uid="uid://dgt3oo503egds" path="res://assets/enemies/golem/golem_walk.png" id="3_wpr87"]
+[ext_resource type="Texture2D" uid="uid://bfith4r81wnmr" path="res://assets/enemies/golem/golem_stunned.png" id="4_bko2c"]
+[ext_resource type="AudioStream" uid="uid://bbkcee0cicbh3" path="res://sounds/Golem/Shield.mp3" id="8_fxrhl"]
+[ext_resource type="AudioStream" uid="uid://darj62e7m6vvw" path="res://sounds/Golem/block.mp3" id="9_rk64f"]
+[ext_resource type="AudioStream" uid="uid://by8xdqumcv80q" path="res://sounds/Golem/dong.wav" id="10_kmjjh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o8duh"]
 atlas = ExtResource("1_22jjw")
@@ -636,3 +639,13 @@ y_sort_enabled = true
 position = Vector2(0, -13)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_yb71v")
+
+[node name="sfx_hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_fxrhl")
+pitch_scale = 1.82
+
+[node name="sfx_block" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_rk64f")
+
+[node name="sfx_dong" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_kmjjh")

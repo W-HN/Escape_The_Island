@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=4 uid="uid://dhtb74enrvkxa"]
+[gd_scene load_steps=6 format=4 uid="uid://dhtb74enrvkxa"]
 
 [ext_resource type="Script" uid="uid://cdkbig14xt6jc" path="res://scripts/title_screen.gd" id="1_fgkus"]
-[ext_resource type="FontFile" uid="uid://bp5hjch6kdwwg" path="res://assets/UI/fonts/m3x6.ttf" id="2_s4lrb"]
-[ext_resource type="Texture2D" uid="uid://c8rc06yqggjm7" path="res://assets/UI/menu_button.png" id="3_mgrm8"]
+[ext_resource type="FontFile" uid="uid://6firr17dekog" path="res://assets/UI/fonts/m3x6.ttf" id="2_s4lrb"]
+[ext_resource type="Texture2D" uid="uid://p5bmuio3tloc" path="res://assets/UI/menu_button.png" id="3_mgrm8"]
 [ext_resource type="TileSet" uid="uid://ct88p0f0uh72v" path="res://assets/tileset/floor0_tileset.tres" id="4_mgrm8"]
+[ext_resource type="AudioStream" uid="uid://jjo8fp7gwqwx" path="res://sounds/button.mp3" id="5_dc4i4"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -101,6 +102,10 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_s4lrb")
 theme_override_font_sizes/font_size = 256
 text = "Escape The Island"
+
+[node name="sfx_button" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_dc4i4")
+volume_db = 24.0
 
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

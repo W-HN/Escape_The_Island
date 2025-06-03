@@ -26,6 +26,10 @@ extends CharacterBody2D
 # Uncomment and add a clang sound if you like:
 # @onready var clang_sound = $ClangSound  # AudioStreamPlayer
 
+@onready var sound_block = $sfx_block
+@onready var sound_hit = $sfx_hit
+@onready var sound_dong = $sfx_dong
+
 var player: Node2D = null
 
 enum State { IDLE, CHASING, TELEGRAPH, DASHING, STUNNED }
@@ -226,6 +230,7 @@ func _play_stun_animation() -> void:
 			sprite.play("stun_down_right")
 
 func _enter_stun():
+	sound_dong.play()
 	state = State.STUNNED
 	stun_timer = stun_duration
 	velocity = Vector2.ZERO
@@ -237,7 +242,7 @@ func _enter_stun():
 	# Trigger screen shake
 	var camera = get_viewport().get_camera_2d()
 	if camera and camera.has_method("shake"):
-		camera.shake(16.0)  # Adjust the strength to your liking
+		camera.shake(16.0) 
 
 func take_damage_knockback(amount: int, attacker_position: Vector2):
 	if dying or is_invincible:
@@ -251,6 +256,7 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 			player.apply_knockback(direction * 600)
 		await get_tree().create_timer(0.08).timeout
 		sprite.modulate = Color(1,1,1,1)
+		sound_block.play()
 		return
 
 	var weak_dir = get_weak_spot_direction()
@@ -263,10 +269,12 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 			player.apply_knockback(direction * 600)
 		await get_tree().create_timer(0.08).timeout
 		sprite.modulate = Color(1,1,1,1)
+		sound_block.play()
 		return
 
 
 	# Only if the attack is from the weak spot:
+	sound_hit.play()
 	health -= amount
 	is_invincible = true
 	_start_invincibility_effect()
