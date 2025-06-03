@@ -1,7 +1,7 @@
 extends Area2D
 
 @export var is_on: bool = false
-@export var connected_door: NodePath  # Drag in your Door node
+@export var connected_door: NodePath  
 @onready var sound_lever = $sfx_lever
 
 @export var enemy_scene: PackedScene

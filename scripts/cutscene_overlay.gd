@@ -16,7 +16,7 @@ var idx := 0
 
 func _ready():
 	label.text = story_texts[idx]
-	get_tree().paused = true  # Freeze the game
+	get_tree().paused = true  
 
 
 func _on_texture_button_pressed() -> void:
@@ -25,4 +25,4 @@ func _on_texture_button_pressed() -> void:
 		label.text = story_texts[idx]
 	else:
 		get_tree().paused = false
-		visible = false  # Or queue_free()
+		visible = false  

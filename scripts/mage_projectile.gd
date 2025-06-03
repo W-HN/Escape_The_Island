@@ -35,11 +35,7 @@ func _process(delta):
 
 	position += (direction * speed * delta) + (wave_offset * delta)
 
-	# Optional: make sprite face forward
-	rotation = direction.angle() + wave_factor * 0.2  # Slight sway
-
-	# Optional: Add rotation spin (for fireball style)
-	# sprite.rotation += delta * 10
+	rotation = direction.angle() + wave_factor * 0.2  
 
 
 func _on_timer_timeout():

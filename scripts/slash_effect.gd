@@ -2,7 +2,7 @@ extends Area2D
 
 @export var attack_damage: int = 1
 @export var knockback_force: float = 1000
-@export var animation_name: String = "slash_effect"  # Set from player script
+@export var animation_name: String = "slash_effect"  
 
 @onready var sprite = $AnimatedSprite2D
 @onready var sound_hitenemy = $sfx_hitEnemy
@@ -15,7 +15,7 @@ func _ready():
 	
 func _on_area_entered(area):
 	if area.is_in_group("golem_hitbox"):
-		var golem = area.get_parent() # Assuming AttackArea is a direct child of Golem
+		var golem = area.get_parent() 
 		if golem and golem.has_method("take_damage_knockback"):
 			golem.take_damage_knockback(attack_damage, global_position)
 		queue_free()

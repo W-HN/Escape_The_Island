@@ -29,7 +29,7 @@ const STEP_INTERVAL := 0.4
 
 
 var is_pushing = false
-var pushable_object: RigidBody2D = null  # Store the box reference
+var pushable_object: RigidBody2D = null  
 
 var knockback_velocity := Vector2.ZERO
 const KNOCKBACK_DECAY := 2000.0  # Higher = faster slide stop
@@ -47,15 +47,15 @@ var is_invincible = false
 var hit_recovery = false
 var hit_recovery_timer = 0.0
 var original_speed = SPEED
-var blink_timer = 0.1  # Time between each blink (adjust as needed)
+var blink_timer = 0.1  
 
-# Attack variables
+# attack vars
 var slash_scene = preload("res://scenes/slash_effect.tscn")
 var is_attacking = false
 var attack_timer = 0.0
 var attack_cooldown = 0.0
-const ATTACK_DURATION = 0.3  # Adjust as needed
-const ATTACK_COOLDOWN_DURATION = 0.5  # Adjust as needed
+const ATTACK_DURATION = 0.3 
+const ATTACK_COOLDOWN_DURATION = 0.5 
 var attack_dash_timer := 0.0
 var attack_velocity := Vector2.ZERO
 const ATTACK_DASH_DURATION := 0.15
@@ -98,17 +98,16 @@ func reset():
 func process_tile_collision(collision: KinematicCollision2D) -> bool:
 	if collision.get_collider() is TileMapLayer:
 		var tilemap = collision.get_collider() as TileMapLayer
-		# Convert the collision point to tile coordinates.
+		# Convert collision point to tile coordinates.
 		var tile_coords = tilemap.local_to_map(collision.get_position())
-		# Get the cell’s tile data (which holds custom data)
+		# get cells tile data (holds custom data)
 		var cell_data = tilemap.get_cell_tile_data(tile_coords)
 		if cell_data:
-			# Retrieve the custom data; adjust the key name as needed.
 			var is_water = cell_data.get_custom_data("is_water")
 			if is_water:
 				
 				print("Water tile collision detected; ignoring collision.")
-				return true  # Tell the caller to ignore this collision.
+				return true
 	return false
 
 func custom_move_and_slide(delta: float) -> void:
@@ -119,42 +118,42 @@ func custom_move_and_slide(delta: float) -> void:
 	while collision_count < max_collisions and displacement.length() > 0.01:
 		var collision = move_and_collide(displacement)
 		if collision:
-			# 1) Ask if we should ignore this collision
+			
 			var ignore_collision = process_tile_collision(collision)
 			
 			if ignore_collision:
-				# Simply ignore the collision: we do not slide, nor do we add the collision normal.
-				# But we increment collision_count so we don’t get stuck repeating this infinitely.
+			
+			
 				collision_count += 1
 				continue
 
 			else:
-				# Normal collision and slide
+			
 				if displacement.dot(collision.get_normal()) < 0:
 					displacement = displacement.slide(collision.get_normal())
 				else:
-					# Not moving into the surface anymore
+			
 					break
 			collision_count += 1
 		else:
-			# No collision => we can safely exit
+			
 			break
 
 func _physics_process(delta: float) -> void:
-	# === 1. Decay knockback naturally
+	
 	var resistance_dir := get_input_direction()
 	if resistance_dir != Vector2.ZERO and knockback_velocity.length() > 0:
 		var opposing_strength: float = resistance_dir.normalized().dot(-knockback_velocity.normalized())
 		if opposing_strength > 0.1:
-			# Reduce knockback more if walking against it
+	
 			knockback_velocity -= knockback_velocity.normalized() * opposing_strength * 500.0 * delta
 	
-	# Faster at start, slower at end (tunable factor)
-	var knockback_drag := 20.0  # Higher = faster decay at start, lower = more slide
+	
+	var knockback_drag := 20.0  
 	knockback_velocity *= pow(0.5, knockback_drag * delta)
 
 
-	# === 2. Handle base movement
+	
 	var input_dir := get_input_direction()
 	var base_velocity: Vector2 = Vector2.ZERO
 
@@ -168,17 +167,17 @@ func _physics_process(delta: float) -> void:
 
 
 	
-	# === 3. Combine everything into final velocity
+	
 	velocity = base_velocity + knockback_velocity
 
-	# Clamp if needed
+	
 	if velocity.length() > MAX_VELOCITY:
 		velocity = velocity.normalized() * MAX_VELOCITY
 
-	# === 4. Apply movement
+	
 	custom_move_and_slide(delta)
 
-	# === 5. Handle animations and state timers
+	
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
 
@@ -199,14 +198,14 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("fireball") and not is_dashing:
 		cast_fireball()
 		
-	# Handle combo timeout
+	
 	if combo_step > 0 and not is_attacking:
 		combo_timer -= delta
 		if combo_timer <= 0.0:
 			print("Combo timeout. Resetting combo.")
 			combo_step = 0
 
-	#step pitch if on sand
+	
 	if not is_attacking and not is_dashing and velocity.length() > 10:
 		step_timer -= delta
 		if step_timer <= 0:
@@ -241,7 +240,7 @@ func handle_movement(delta: float) -> void:
 	var direction := get_input_direction()
 	var movement_velocity = direction * current_speed
 
-	# Check for collisions BEFORE moving the player
+	
 	var collision = move_and_collide(movement_velocity * delta)
 
 	if collision:
@@ -385,17 +384,17 @@ func start_attack() -> void:
 
 	await get_tree().create_timer(0.2).timeout
 
-	# Instantiate slash effect
+	
 	var slash = slash_scene.instantiate()
 
-	# Determine if direction should swap effect
+	# determine if direction should swap effect
 	var should_swap := false
 	if attack_direction.x < 0 and attack_direction.y > 0:
 		should_swap = true  # down-left
 	elif attack_direction.x > 0 and attack_direction.y < 0:
 		should_swap = true  # up-right
 
-	# Choose animation
+	#choose animation
 	var slash_anim := "slash_effect"
 	if combo_step == 0:
 		slash_anim = "slash_effect2" if should_swap else "slash_effect"
@@ -408,9 +407,9 @@ func start_attack() -> void:
 	slash.global_position = global_position + (attack_direction * 10) + Vector2(0, -4)
 	slash.rotation = attack_direction.angle() - PI / 4
 	
-	# Scale up the third attack effect
+	# cale up the third attack effect
 	if combo_step == 2:
-		slash.scale = Vector2(1.4, 1.4)  # Adjust scale as needed
+		slash.scale = Vector2(1.4, 1.4)  
 		
 	get_parent().add_child(slash)
 
@@ -507,6 +506,7 @@ func _play_idle_animation() -> void:
 func drown() -> void:
 	if dying:
 		return
+	sound_takedamage.play()
 	is_dashing = false
 	dying = true
 	sprite.play("drown")
@@ -523,7 +523,7 @@ func drown() -> void:
 	if is_instance_valid(player_instance.heart_container):
 		player_instance.heart_container.update_hearts(6)
 	player_instance.call_deferred("reset")
-	get_tree().reload_current_scene()
+
 	queue_free()
 
 	
@@ -558,10 +558,8 @@ func take_damage(source_position):
 	set_collision_mask_value(2, false)
 
 
-	# Optional: Flash effect during invincibility
 	_start_invincibility_effect()
 
-	# If the player dies, call die()
 	if health <= 0:
 		die()
 
@@ -607,7 +605,6 @@ func die():
 	# Wait for the death animation to finish
 	await sprite.animation_finished  
 
-	# Play death sound effect (optional)
 	$"../AudioStreamPlayer2D".play()
 
 	# Respawn player at SpawnPoint
@@ -619,7 +616,6 @@ func die():
 	get_parent().add_child(player_instance)
 	player_instance.call_deferred("reset")
 	
-	get_tree().reload_current_scene()
 
 	# Remove the current (dead) player instance
 	queue_free()

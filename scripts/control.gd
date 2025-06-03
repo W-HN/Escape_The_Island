@@ -12,8 +12,7 @@ func _ready():
 func _on_resume_pressed():
 	get_tree().paused = false
 	visible = false
-	# Optionally reload, start new game, etc.
 
 func _on_quit_pressed():
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://TitleScreen.tscn") # Or your main menu
+	get_tree().change_scene_to_file("res://TitleScreen.tscn") 

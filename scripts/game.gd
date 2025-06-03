@@ -6,12 +6,12 @@ var keys: int = 0
 signal gold_changed(new_gold)
 signal keys_changed(new_keys)
 
-@onready var pause_menu = $PauseMenu  # Path to your pause menu CanvasLayer
+@onready var pause_menu = $PauseMenu 
 @onready var sound_getmoney = $sfx_getMoney
 
 func _ready():
 	pause_menu.visible = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  # Show mouse for pause menu
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  
 
 func add_gold(amount: int):
 	sound_getmoney.pitch_scale = randf_range(0.9, 1.2)

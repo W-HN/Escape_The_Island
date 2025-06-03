@@ -30,20 +30,20 @@ func cut_bush():
 			for i in num_gold:
 				var gold_pickup = gold_pickup_scene.instantiate()
 				gold_pickup.position = position
-				# Random direction and speed for top-down scatter
+				# random direction and speed for topdown scatter
 				var angle = randf_range(0, TAU)
 				var speed = randf_range(20, 30)
 				gold_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
 				get_parent().call_deferred("add_child", gold_pickup)
-		# Heart drop (1 in 5 chance)
+				
 		if heart_pickup_scene and randi_range(1, 5) == 1:
 			var heart_pickup = heart_pickup_scene.instantiate()
 			heart_pickup.position = position
-			# Give it a random scatter and pop, just like gold!
+
 			var angle = randf_range(0, TAU)
 			var speed = randf_range(20, 30)
 			heart_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
-			heart_pickup.bounce_velocity = randf_range(40.0, 46.0)  # Or whatever your gold uses
+			heart_pickup.bounce_velocity = randf_range(40.0, 46.0)  
 			heart_pickup.bouncing = true
 			get_parent().call_deferred("add_child", heart_pickup)
 

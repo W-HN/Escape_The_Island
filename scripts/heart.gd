@@ -8,7 +8,6 @@ var friction := 18.0
 var magnet_active := false
 var player_ref : CharacterBody2D = null
 
-# Bounce variables
 var bounce_offset := 0.0
 var bounce_velocity := 0.0
 var bouncing := true
@@ -19,7 +18,6 @@ const BOUNCE_DAMPING = 0.55
 
 const MAGNET_SPEED = 100.0
 
-# Magnet grace period
 var magnet_grace_time := 0.25
 var magnet_timer := 0.0
 var magnet_pending := false

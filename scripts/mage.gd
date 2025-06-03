@@ -29,7 +29,7 @@ var player: Node2D = null
 var wander_target_position: Vector2
 	
 var knockback_velocity := Vector2.ZERO
-const KNOCKBACK_DECAY := 2000.0  # Similar to player
+const KNOCKBACK_DECAY := 2000.0  
 
 var reposition_timer: float = 0.0
 var combat_moving = false
@@ -52,17 +52,17 @@ var dying = false
 var is_invincible = false
 var blink_timer = 0.05
 
-var last_direction = "right"  # Track last horizontal movement direction
-var last_vertical_direction = "down"  # Track last vertical movement direction
+var last_direction = "right"  
+var last_vertical_direction = "down"
 
 func _ready():
 	spawn_position = global_position
 	if not attack_area.body_entered.is_connected(_on_attack_area_body_entered):
 		attack_area.body_entered.connect(_on_attack_area_body_entered)
-	start_idle_wandering()  # Begin wandering logic on spawn
+	start_idle_wandering()  #wandering logic on spawn
 
 func _physics_process(delta):
-	# Reacquire player if missing or freed
+	# reacquire player if missing or freed
 	if not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group("Player")
 
@@ -71,7 +71,7 @@ func _physics_process(delta):
 
 	# Knockback decay
 	if knockback_velocity.length() > 0:
-		var knockback_drag := 50.0  # Same as player
+		var knockback_drag := 50.0  
 		knockback_velocity *= pow(0.5, knockback_drag * delta)
 
 	if player:
@@ -105,18 +105,17 @@ func handle_combat_attack(delta: float) -> void:
 		var move_vector = combat_target_position - global_position
 		var distance = move_vector.length()
 		
-		# -- Progress check: if we're not getting closer, increment stuck timer
+		
 		if abs(distance - last_combat_distance) < 0.2:
 			combat_progress_timer += delta
 		else:
 			combat_progress_timer = 0.0
 		last_combat_distance = distance
 		
-		# -- If stuck >0.5s, abort and pick a new reposition
 		if combat_progress_timer > 0.5:
 			combat_moving = false
 			combat_progress_timer = 0.0
-			# Optional: Pick a new reposition target immediately or just wait for next cycle
+		
 			return
 
 		if distance < 1.0:
@@ -298,7 +297,7 @@ func fire_dna_shot(base_dir):
 func face_player():
 	var dir = (player.global_position - global_position).normalized()
 
-	# Just update last known direction — don't play animations here
+	
 	if dir.y < 0:
 		last_vertical_direction = "up"
 	elif dir.y > 0:
@@ -326,9 +325,9 @@ func _play_idle_animation_from_direction(direction: Vector2):
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
-		body.take_damage(global_position)  # Call damage function on player
+		body.take_damage(global_position)  
 
-# Function to handle walking animations
+
 func _play_walk_animation(direction: Vector2) -> void:
 	if direction.y < 0:
 		last_vertical_direction = "up"
@@ -354,13 +353,13 @@ func _play_walk_animation(direction: Vector2) -> void:
 			else:
 				sprite.play("walk_down_right")
 
-	# Update last movement direction
+
 	if direction.x < 0:
 		last_direction = "left"
 	elif direction.x > 0:
 		last_direction = "right"
 
-# Function to handle idle animations
+
 func _play_idle_animation() -> void:
 	if last_vertical_direction == "up":
 		if last_direction == "left":
@@ -427,12 +426,12 @@ func apply_knockback(force: Vector2):
 	
 func die():
 	if dying:
-		return  # Prevent multiple deaths
+		return
 
-	dying = true  # Mark skeleton as dead
-	velocity = Vector2.ZERO  # Stop movement
+	dying = true
+	velocity = Vector2.ZERO  
 	
-	# --- DROP GOLD (1-3) ---
+	
 	if gold_pickup_scene:
 		var num_gold = randi_range(1, 3)
 		for i in num_gold:
@@ -442,7 +441,7 @@ func die():
 			var speed = randf_range(20, 30)
 			gold_pickup.velocity = Vector2.RIGHT.rotated(angle) * speed
 			get_parent().call_deferred("add_child", gold_pickup)
-	# --- DROP HEART (1 in 5 chance) ---
+	
 	if heart_pickup_scene and randi_range(1, 5) == 1:
 		var heart_pickup = heart_pickup_scene.instantiate()
 		heart_pickup.position = position
@@ -453,20 +452,20 @@ func die():
 		heart_pickup.bouncing = true
 		get_parent().call_deferred("add_child", heart_pickup)
 
-	# Disable collisions so no more hits can register
+	
 	$CollisionShape2D.set_deferred("disabled", true)
 	
 	if attack_area:
 		attack_area.set_deferred("monitoring", false)  # Stop detecting player
 
-	# Select the correct death animation based on movement direction
+	
 	var death_animation = _get_death_animation()
 	sprite.play(death_animation)
 
-	# Wait for animation to finish
+	
 	await sprite.animation_finished
 
-	# Start fade-out effect
+	
 	_fade_out_and_remove()
 
 func _get_death_animation() -> String:
@@ -477,9 +476,9 @@ func _get_death_animation() -> String:
 		
 func _fade_out_and_remove():
 	var fade_tween = get_tree().create_tween()
-	fade_tween.tween_property(sprite, "modulate:a", 0.0, 1.5)  # Fade out over 1.5 seconds
+	fade_tween.tween_property(sprite, "modulate:a", 0.0, 1.5)  
 	await fade_tween.finished
-	queue_free()  # Remove skeleton from scene
+	queue_free()  
 	
 func _start_invincibility_effect():
 	var blink_tween = get_tree().create_tween()
@@ -488,7 +487,7 @@ func _start_invincibility_effect():
 	blink_tween.tween_property(sprite, "modulate:a", 1.0, blink_timer)
 
 func _stop_invincibility_effect():
-	sprite.modulate.a = 1.0  # Reset transparency
+	sprite.modulate.a = 1.0  
 	
 func handle_wandering(delta: float) -> void:
 	if dying:
@@ -500,7 +499,7 @@ func handle_wandering(delta: float) -> void:
 		else:
 			start_move_wandering()
 
-	# Wandering by moving
+	
 	elif is_wandering:
 		wandering_timer -= delta
 		var move_vector = (wander_target_position - global_position)
@@ -515,7 +514,7 @@ func handle_wandering(delta: float) -> void:
 		if wandering_timer <= 0:
 			is_wandering = false
 
-	# Wandering by idling
+
 	elif is_idle_wandering:
 		wandering_timer -= delta
 		velocity = Vector2.ZERO

@@ -248,7 +248,6 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 	if dying or is_invincible:
 		return
 	if state != State.STUNNED:
-		# clang logic (same as before)
 		sprite.modulate = Color(0.7, 0.7, 0.7, 1)
 		var player = get_tree().get_first_node_in_group("Player")
 		if player and player.has_method("apply_knockback"):
@@ -260,7 +259,7 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 		return
 
 	var weak_dir = get_weak_spot_direction()
-	if not is_in_weak_spot(attacker_position, weak_dir, 60.0): # 60 degrees = 1/3 of a circle; adjust for difficulty
+	if not is_in_weak_spot(attacker_position, weak_dir, 60.0): # 60 degrees = 1/3 of a circle
 		# Not hitting the weak spot! Clang and knockback player
 		sprite.modulate = Color(0.7, 0.7, 0.7, 1)
 		var player = get_tree().get_first_node_in_group("Player")
@@ -273,7 +272,7 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 		return
 
 
-	# Only if the attack is from the weak spot:
+	#only if the attack is from the weak spot
 	sound_hit.play()
 	health -= amount
 	is_invincible = true
@@ -288,7 +287,7 @@ func take_damage_knockback(amount: int, attacker_position: Vector2):
 
 
 func apply_knockback(force: Vector2):
-	# Golem does not get knockback
+	# golem does not get knockback
 	pass
 
 func die():
@@ -356,7 +355,7 @@ func _start_invincibility_effect():
 	blink_tween.tween_property(sprite, "modulate:a", 1.0, blink_timer)
 
 func _stop_invincibility_effect():
-	sprite.modulate.a = 1.0  # Reset transparency
+	sprite.modulate.a = 1.0  # reset transparency
 
 		
 func get_weak_spot_direction() -> Vector2:

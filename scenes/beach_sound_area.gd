@@ -31,7 +31,7 @@ func _on_body_exited(body: Node2D) -> void:
 
 func _process(delta: float) -> void:
 	if is_fading_in and sound_waves.playing:
-		sound_waves.volume_db += fade_speed * delta * 40
+		sound_waves.volume_db += fade_speed * delta * 10
 		if sound_waves.volume_db >= target_volume_db:
 			sound_waves.volume_db = target_volume_db
 			is_fading_in = false

@@ -187,14 +187,14 @@ theme_override_fonts/font = ExtResource("8_37s47")
 text = "Continue"
 
 [node name="Player" parent="." instance=ExtResource("1_1lsjk")]
-position = Vector2(337, -583)
+position = Vector2(333, -377)
 
 [node name="Island1" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="SpawnPoint" type="Marker2D" parent="Island1"]
 y_sort_enabled = true
-position = Vector2(344, -586)
+position = Vector2(335, -378)
 scale = Vector2(0.489472, 1.93139)
 
 [node name="Map" type="Node2D" parent="Island1"]
