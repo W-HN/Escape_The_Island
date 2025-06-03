@@ -1,6 +1,8 @@
 extends Area2D
 
 @onready var sprite = $Sprite2D
+@onready var sound_getkey = $sfx_getkey
+
 
 func _ready():
 	pass

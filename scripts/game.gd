@@ -8,6 +8,7 @@ signal keys_changed(new_keys)
 
 @onready var pause_menu = $PauseMenu 
 @onready var sound_getmoney = $sfx_getMoney
+@onready var sound_getkey = $sfx_getkey
 
 func _ready():
 	pause_menu.visible = false
@@ -20,6 +21,8 @@ func add_gold(amount: int):
 	emit_signal("gold_changed", gold)
 
 func add_key():
+	sound_getkey.pitch_scale = randf_range(0.9, 1.2)
+	sound_getkey.play()
 	keys += 1
 	emit_signal("keys_changed", keys)
 

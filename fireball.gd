@@ -37,7 +37,7 @@ func _process(delta):
 
 
 func _on_timer_timeout():
-	detach_and_play_sound(sound_stop)
+	#detach_and_play_sound(sound_stop)
 	queue_free()
 
 

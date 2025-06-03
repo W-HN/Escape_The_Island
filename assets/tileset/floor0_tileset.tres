@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=8 format=3 uid="uid://ct88p0f0uh72v"]
 
-[ext_resource type="Texture2D" uid="uid://bdv6pa1m6hiug" path="res://assets/tileset/our_tileset.png" id="1_3fj1k"]
+[ext_resource type="Texture2D" uid="uid://dml2jvtg84yl7" path="res://assets/tileset/our_tileset.png" id="1_3fj1k"]
 [ext_resource type="PackedScene" uid="uid://c53eneif17hye" path="res://scenes/directional_barrier_scenes/no_down.tscn" id="2_bg3s1"]
 [ext_resource type="PackedScene" uid="uid://cwxq5rv2odh1i" path="res://scenes/directional_barrier_scenes/no_up.tscn" id="3_xww01"]
 [ext_resource type="PackedScene" uid="uid://sh2skmnlbnta" path="res://scenes/directional_barrier_scenes/no_left.tscn" id="4_ny21r"]
@@ -654,6 +654,10 @@ texture = ExtResource("1_3fj1k")
 14:10/0 = 0
 14:10/0/y_sort_origin = 8
 14:10/0/physics_layer_2/polygon_0/points = PackedVector2Array(-6, 4, 6, 4, 6, 8, 7, 8, 7, 12, 6, 12, 6, 13, 3, 13, 3, 14, -3, 14, -3, 13, -6, 13, -6, 12, -7, 12, -7, 8, -6, 8)
+3:10/0 = 0
+3:10/0/y_sort_origin = 3
+3:11/0 = 0
+3:11/0/y_sort_origin = -1
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_yobj0"]
 resource_name = "directionalCollision"

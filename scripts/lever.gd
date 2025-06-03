@@ -29,7 +29,7 @@ extends Area2D
 @onready var sprite = $AnimatedSprite2D
 
 func _ready():
-	update_visual()
+	pass
 
 func toggle():
 	if is_on:

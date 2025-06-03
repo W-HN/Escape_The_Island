@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dkuxhp4vvm43b"]
 
 [ext_resource type="Script" uid="uid://bpbbjy14yd0i5" path="res://scripts/gold.gd" id="1_yna14"]
-[ext_resource type="Texture2D" uid="uid://ck4fnofqpv2wq" path="res://assets/objects/pickups/coin.png" id="2_afqnf"]
-[ext_resource type="AudioStream" uid="uid://mwcxow5prfhn" path="res://sounds/getmoney.mp3" id="3_afqnf"]
+[ext_resource type="Texture2D" uid="uid://1icfesqcuf0b" path="res://assets/objects/pickups/coin.png" id="2_afqnf"]
+[ext_resource type="AudioStream" uid="uid://cofa4gnfvhvvy" path="res://sounds/getmoney.mp3" id="3_afqnf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wgxkh"]
 radius = 3.16228

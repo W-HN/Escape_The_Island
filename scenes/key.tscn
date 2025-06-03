@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://j1htna3rwb1l"]
+[gd_scene load_steps=7 format=3 uid="uid://j1htna3rwb1l"]
 
 [ext_resource type="Script" uid="uid://c8bovmyp7365x" path="res://scripts/key.gd" id="1_fttkb"]
 [ext_resource type="Texture2D" uid="uid://d2h57ksvhxim3" path="res://assets/objects/pickups/key.png" id="1_yk2u2"]
 [ext_resource type="Shader" uid="uid://d0uqguahud07t" path="res://scripts/shaders/key.gdshader" id="2_wy8tx"]
+[ext_resource type="AudioStream" uid="uid://cofa4gnfvhvvy" path="res://sounds/getmoney.mp3" id="4_brs3p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_brs3p"]
 shader = ExtResource("2_wy8tx")
@@ -23,5 +24,8 @@ texture = ExtResource("1_yk2u2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_yk2u2")
+
+[node name="sfx_getkey" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_brs3p")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
