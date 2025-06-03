@@ -5,7 +5,6 @@ extends Area2D
 @export var gold_pickup_scene: PackedScene
 @export var heart_pickup_scene: PackedScene
 
-# single RNG we’ll use on the authority
 var rng := RandomNumberGenerator.new()
 var is_cut = false
 
@@ -20,7 +19,7 @@ func request_cut():
 	if is_cut:
 		return
 
-	# --- AUTHORITY ONLY: package up all randomness ---
+	#auth only
 	rng.seed = randi()
 	# how many gold? 0–1
 	var gold_count = rng.randi_range(0, 1)
@@ -49,7 +48,7 @@ func cut_bush(gold_datas: Array, heart_data: Dictionary) -> void:
 		return
 	is_cut = true
 
-	# swap sprite and play particles
+	#swap sprite and play particles
 	$Sprite2D.texture = bush_cut
 	$Sprite2D.z_index = -1
 	for p in [$Bp1, $Bp2, $Bp3, $Bp4, $Bp5, $Bp6]:

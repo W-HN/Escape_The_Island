@@ -1,8 +1,8 @@
 [gd_scene load_steps=39 format=3 uid="uid://cna4e6nujwb81"]
 
-[ext_resource type="Texture2D" uid="uid://uqykltkxugl5" path="res://assets/enemies/golem/golem.png" id="1_gnfrb"]
-[ext_resource type="Texture2D" uid="uid://chs07ee610xcn" path="res://assets/enemies/golem/golem_idle.png" id="2_w3tsi"]
-[ext_resource type="Texture2D" uid="uid://cqe18cgc1ai8w" path="res://assets/enemies/golem/golem_walk.png" id="3_wpr87"]
+[ext_resource type="Texture2D" uid="uid://cfinigjgjvq7c" path="res://assets/enemies/golem/golem.png" id="1_gnfrb"]
+[ext_resource type="Texture2D" uid="uid://cl1ysms0tfwi8" path="res://assets/enemies/golem/golem_idle.png" id="2_w3tsi"]
+[ext_resource type="Texture2D" uid="uid://dgt3oo503egds" path="res://assets/enemies/golem/golem_walk.png" id="3_wpr87"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_22jjw"]
 atlas = ExtResource("1_gnfrb")

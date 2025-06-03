@@ -9,7 +9,6 @@ extends Area2D
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready():
-	# use your exported animation_name here
 	sprite.play(animation_name)
 	add_to_group("attack")
 	connect("body_entered", _on_body_entered)

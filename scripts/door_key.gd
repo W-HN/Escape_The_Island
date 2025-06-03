@@ -17,15 +17,15 @@ func _on_open_area_body_entered(body):
 	if is_open:
 		return
 	if body.is_in_group("Player"):
-		# Check if player has a key
+
 		var game = get_tree().root.get_node("Game")
 		if game and game.keys > 0:
 			game.keys -= 1
-			game.emit_signal("keys_changed", game.keys) # Update UI
+			game.emit_signal("keys_changed", game.keys) 
 			set_open(true)
 
 func _on_open_area_body_exited(body):
-	pass # You can leave this empty, or use for sound/effects if you want
+	pass 
 
 func set_open(state: bool) -> void:
 	is_open = state

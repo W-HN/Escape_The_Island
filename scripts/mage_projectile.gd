@@ -10,7 +10,7 @@ extends Area2D
 @export var wave_speed: float = 1.0
 @export var wave_phase: float = 0.0
 
-var source  # Reference to whoever fired it
+var source
 var time_alive: float = 0.0
 
 @onready var sprite = $AnimatedSprite2D
@@ -26,18 +26,14 @@ func _ready():
 func _process(delta):
 	time_alive += delta
 
-	# Stronger and clearer wave motion
-	var perp = Vector2(-direction.y, direction.x)  # Perpendicular to direction
+	var perp = Vector2(-direction.y, direction.x)  
 	var wave_factor = sin((time_alive + wave_phase) * wave_speed * TAU)
 	var wave_offset = perp * wave_factor * wave_strength
 
 	position += (direction * speed * delta) + (wave_offset * delta)
 
-	# Optional: make sprite face forward
 	rotation = direction.angle() + wave_factor * 0.2  # Slight sway
 
-	# Optional: Add rotation spin (for fireball style)
-	# sprite.rotation += delta * 10
 
 
 func _on_timer_timeout():
