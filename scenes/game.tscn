@@ -1,34 +1,38 @@
-[gd_scene load_steps=34 format=4 uid="uid://ch2atmvjook07"]
+[gd_scene load_steps=38 format=4 uid="uid://ch2atmvjook07"]
 
 [ext_resource type="PackedScene" uid="uid://fuuv1pq3m1x3" path="res://scenes/player.tscn" id="1_1lsjk"]
 [ext_resource type="Script" uid="uid://dubrjf22qk8tw" path="res://scripts/game.gd" id="1_ca42v"]
 [ext_resource type="PackedScene" uid="uid://bv5daqxy4yf2k" path="res://scenes/heart_container.tscn" id="1_trtic"]
-[ext_resource type="Texture2D" uid="uid://coivvgpmki7qt" path="res://assets/tileset/elevationMap/elevation_map.png" id="1_vtaks"]
-[ext_resource type="Texture2D" uid="uid://5cxps6llx4rs" path="res://assets/UI/health_heart_full.png" id="2_ir15t"]
+[ext_resource type="Texture2D" uid="uid://orgi21a8b1rc" path="res://assets/tileset/elevationMap/elevation_map.png" id="1_vtaks"]
+[ext_resource type="Texture2D" uid="uid://jqtfvird4m8t" path="res://assets/UI/health_heart_full.png" id="2_ir15t"]
 [ext_resource type="PackedScene" uid="uid://bkb1jw5ceksdv" path="res://scenes/skeleton.tscn" id="2_kvpfn"]
-[ext_resource type="Texture2D" uid="uid://ccpie8fy81vk5" path="res://assets/UI/health_heart_half.png" id="3_ca42v"]
+[ext_resource type="Texture2D" uid="uid://cio34whq6rvay" path="res://assets/UI/health_heart_half.png" id="3_ca42v"]
 [ext_resource type="PackedScene" uid="uid://bm41tp5jqd68j" path="res://scenes/box.tscn" id="3_dinhu"]
 [ext_resource type="TileSet" uid="uid://ct88p0f0uh72v" path="res://assets/tileset/floor0_tileset.tres" id="4_0tnpc"]
-[ext_resource type="Texture2D" uid="uid://c6p5qms8ck1ns" path="res://assets/UI/health_heart_empty.png" id="4_rysoc"]
-[ext_resource type="AudioStream" uid="uid://d348l2wpflnf4" path="res://assets/music/Omph.mp3" id="6_p57ef"]
-[ext_resource type="Texture2D" uid="uid://c0fy26mxu74uo" path="res://assets/objects/pickups/coin.png" id="7_1kice"]
+[ext_resource type="Texture2D" uid="uid://11xmyqlug0ec" path="res://assets/UI/health_heart_empty.png" id="4_rysoc"]
+[ext_resource type="AudioStream" uid="uid://cf0cb5omtclkq" path="res://assets/music/Omph.mp3" id="6_p57ef"]
+[ext_resource type="Texture2D" uid="uid://bq6w1wlt3mnpx" path="res://assets/objects/pickups/coin.png" id="7_1kice"]
 [ext_resource type="Script" uid="uid://dpwkt2fds07jl" path="res://scripts/gold_num.gd" id="7_5newe"]
 [ext_resource type="PackedScene" uid="uid://yhqtpruxoadd" path="res://scenes/mage.tscn" id="7_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://dqyjbvk4ue8y6" path="res://scenes/door.tscn" id="8_0tnpc"]
-[ext_resource type="Texture2D" uid="uid://dabbrlf6llt0x" path="res://assets/objects/pickups/key.png" id="8_5newe"]
-[ext_resource type="FontFile" uid="uid://br4qv7o28fyov" path="res://assets/UI/fonts/m3x6.ttf" id="8_37s47"]
+[ext_resource type="Texture2D" uid="uid://cl6r0vqjafwfr" path="res://assets/objects/pickups/key.png" id="8_5newe"]
+[ext_resource type="FontFile" uid="uid://bjwyp6acjm5sm" path="res://assets/UI/fonts/m3x6.ttf" id="8_37s47"]
 [ext_resource type="Script" uid="uid://e36et4dnis1t" path="res://scripts/key_num.gd" id="8_bt5mj"]
 [ext_resource type="PackedScene" uid="uid://c6cltwx5emln8" path="res://scenes/lever.tscn" id="9_vtaks"]
+[ext_resource type="AudioStream" uid="uid://ct42e2fp7ciy6" path="res://sounds/button.mp3" id="13_v2yb1"]
 [ext_resource type="PackedScene" uid="uid://ddae0ht5i0kkc" path="res://scenes/bush.tscn" id="15_ir15t"]
 [ext_resource type="PackedScene" uid="uid://j1htna3rwb1l" path="res://scenes/key.tscn" id="22_37s47"]
 [ext_resource type="PackedScene" uid="uid://2205ayior07y" path="res://scenes/door_key.tscn" id="23_bt5mj"]
 [ext_resource type="PackedScene" uid="uid://cna4e6nujwb81" path="res://scenes/golem.tscn" id="24_e1j6l"]
-[ext_resource type="Texture2D" uid="uid://c887wm3rngwp" path="res://assets/UI/menu_button.png" id="25_pl11u"]
+[ext_resource type="Texture2D" uid="uid://8rclfo4svncp" path="res://assets/UI/menu_button.png" id="25_pl11u"]
 [ext_resource type="Script" uid="uid://dxsbnl2ibyqh" path="res://scripts/cutscene_overlay.gd" id="26_bhx41"]
 [ext_resource type="Script" uid="uid://b5bunwwhh5oxd" path="res://scripts/control.gd" id="26_qnb83"]
 [ext_resource type="Script" uid="uid://c614w68t1qp0w" path="res://scenes/beach_sound_area.gd" id="28_sww3w"]
-[ext_resource type="AudioStream" uid="uid://djwgnfmj4nk6x" path="res://sounds/waves.mp3" id="29_sgl2t"]
-[ext_resource type="AudioStream" uid="uid://dpak08ktck7k7" path="res://sounds/getmoney.mp3" id="29_suyxu"]
+[ext_resource type="Script" uid="uid://dbdi4rgvtaaxk" path="res://scenes/music_player.gd" id="29_qouja"]
+[ext_resource type="AudioStream" uid="uid://cwiftkbkcbn4k" path="res://sounds/waves.mp3" id="29_sgl2t"]
+[ext_resource type="AudioStream" uid="uid://c0pdjxohfjpkl" path="res://sounds/getmoney.mp3" id="29_suyxu"]
+[ext_resource type="AudioStream" uid="uid://1k8ss3bmq6k7" path="res://sounds/chirps.mp3" id="29_wljb1"]
+[ext_resource type="AudioStream" uid="uid://soehn2e1wddm" path="res://sounds/cozytheme.mp3" id="30_sgl2t"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kvpfn"]
 texture = ExtResource("1_vtaks")
@@ -186,6 +190,10 @@ offset_bottom = 22.8
 theme_override_fonts/font = ExtResource("8_37s47")
 text = "Continue"
 
+[node name="sfx_button" type="AudioStreamPlayer2D" parent="UI/CutsceneOverlay"]
+stream = ExtResource("13_v2yb1")
+volume_db = 21.79
+
 [node name="Player" parent="." instance=ExtResource("1_1lsjk")]
 position = Vector2(333, -377)
 
@@ -247,11 +255,6 @@ color = Color(0.862522, 0.862522, 0.862522, 1)
 visible = false
 position = Vector2(70.6482, 150.394)
 occluder = SubResource("OccluderPolygon2D_ngrsp")
-
-[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("6_p57ef")
-autoplay = true
-parameters/looping = true
 
 [node name="Enemies" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -1002,17 +1005,40 @@ volume_db = -0.99
 stream = ExtResource("29_suyxu")
 
 [node name="beachSounds" type="Area2D" parent="."]
-visible = false
+collision_layer = 255
+collision_mask = 255
 script = ExtResource("28_sww3w")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="beachSounds"]
-polygon = PackedVector2Array(135, -1122, 137, -958, 64, -962, 64, -488, 326, -438, 635, -478, 632, -944, 822, -939, 873, -207, -510, -235, -453, -1255, 1157, -1353, 1141, -1117)
+polygon = PackedVector2Array(219, -1116, 180, -962, 171, -903, 108, -532, 328, -500, 578, -501, 577, -941, 900, -957, 873, -207, -510, -235, -453, -1255, 1157, -1353, 1225, -1108)
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="beachSounds"]
-polygon = PackedVector2Array(842, -829, 971, -826, 986, -679, 987, -677, 989, -598, 1154, -597, 1163, -539, 1357, -542, 1357, -640, 1404, -642, 1404, -788, 1434, -1010, 1432, -1188, 1353, -1284, 1661, -1371, 1581, -369, 861, -351)
+polygon = PackedVector2Array(842, -829, 971, -826, 986, -679, 987, -677, 1007, -647, 1139, -663, 1196, -615, 1314, -599, 1327, -655, 1357, -695, 1365, -792, 1379, -1007, 1370, -1189, 1160, -1294, 952, -1676, 1610, -1780, 1581, -369, 861, -351)
 
 [node name="sfx_waves" type="AudioStreamPlayer2D" parent="beachSounds"]
 stream = ExtResource("29_sgl2t")
+
+[node name="MusicPlayer" type="Node" parent="."]
+script = ExtResource("29_qouja")
+
+[node name="omphTheme3" type="AudioStreamPlayer" parent="MusicPlayer"]
+stream = ExtResource("6_p57ef")
+parameters/looping = true
+
+[node name="cozyTheme" type="AudioStreamPlayer2D" parent="MusicPlayer"]
+stream = ExtResource("30_sgl2t")
+volume_db = 7.429
+
+[node name="omphTheme" type="AudioStreamPlayer2D" parent="MusicPlayer"]
+stream = ExtResource("6_p57ef")
+
+[node name="sfx_chirps" type="AudioStreamPlayer2D" parent="MusicPlayer"]
+stream = ExtResource("29_wljb1")
+volume_db = 0.724
+autoplay = true
+
+[node name="ChirpTimer" type="Timer" parent="MusicPlayer"]
+one_shot = true
 
 [connection signal="pressed" from="UI/CutsceneOverlay/VBoxContainer/TextureButton" to="UI/CutsceneOverlay" method="_on_texture_button_pressed"]
 [connection signal="pressed" from="PauseMenu/Control/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
@@ -1021,3 +1047,6 @@ stream = ExtResource("29_sgl2t")
 [connection signal="pressed" from="EndMessage/Control/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="body_entered" from="beachSounds" to="beachSounds" method="_on_body_entered"]
 [connection signal="body_exited" from="beachSounds" to="beachSounds" method="_on_body_exited"]
+[connection signal="finished" from="MusicPlayer/cozyTheme" to="MusicPlayer" method="_on_cozy_theme_finished"]
+[connection signal="finished" from="MusicPlayer/omphTheme" to="MusicPlayer" method="_on_omph_theme_finished"]
+[connection signal="timeout" from="MusicPlayer/ChirpTimer" to="MusicPlayer" method="_on_chirp_timer_timeout"]

@@ -8,21 +8,21 @@ extends Control
 	"Danger lies ahead, but so do discoveries that may reveal your path..."
 ]
 
-
-
+@onready var sound_button := $sfx_button
 @onready var label := $RichTextLabel
 
 var idx := 0
 
 func _ready():
+	sound_button.process_mode = Node.PROCESS_MODE_ALWAYS  
 	label.text = story_texts[idx]
-	get_tree().paused = true  
-
+	get_tree().paused = true
 
 func _on_texture_button_pressed() -> void:
+	sound_button.play()
 	idx += 1
 	if idx < story_texts.size():
 		label.text = story_texts[idx]
 	else:
 		get_tree().paused = false
-		visible = false  
+		visible = false
