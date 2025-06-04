@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=4 uid="uid://dhtb74enrvkxa"]
 
 [ext_resource type="Script" uid="uid://cdkbig14xt6jc" path="res://scripts/title_screen.gd" id="1_fgkus"]
-[ext_resource type="FontFile" uid="uid://bjwyp6acjm5sm" path="res://assets/UI/fonts/m3x6.ttf" id="2_s4lrb"]
-[ext_resource type="Texture2D" uid="uid://8rclfo4svncp" path="res://assets/UI/menu_button.png" id="3_mgrm8"]
+[ext_resource type="FontFile" uid="uid://br4qv7o28fyov" path="res://assets/UI/fonts/m3x6.ttf" id="2_s4lrb"]
+[ext_resource type="Texture2D" uid="uid://c887wm3rngwp" path="res://assets/UI/menu_button.png" id="3_mgrm8"]
 [ext_resource type="TileSet" uid="uid://ct88p0f0uh72v" path="res://assets/tileset/floor0_tileset.tres" id="4_mgrm8"]
-[ext_resource type="AudioStream" uid="uid://ct42e2fp7ciy6" path="res://sounds/button.mp3" id="5_dc4i4"]
+[ext_resource type="AudioStream" uid="uid://bv8qmg78nn6lf" path="res://sounds/button.mp3" id="5_dc4i4"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -105,7 +105,6 @@ text = "Escape The Island"
 
 [node name="sfx_button" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_dc4i4")
-volume_db = 24.0
 
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

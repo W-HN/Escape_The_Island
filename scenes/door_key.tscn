@@ -34,4 +34,4 @@ shape = SubResource("CircleShape2D_uaa2a")
 
 [node name="sfx_open" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_3hk56")
-volume_db = 20.0
+volume_db = 10.0
